@@ -1,7 +1,10 @@
 module.exports = {
   root: true,
   env: {
+    browser: true,
+    es6: true,
     node: true,
+    jest: true,
   },
   plugins: ['vue'],
   extends: ['plugin:vue/essential', '@vue/airbnb'],
@@ -35,6 +38,7 @@ module.exports = {
     'comma-dangle': ['error', 'only-multiline'],
     'no-param-reassign': ['error', { props: false }],
     'max-len': 0,
+    'linebreak-style': 'off',
   },
   parserOptions: {
     parser: 'babel-eslint',
