@@ -8,7 +8,7 @@
             <div class="title">用户信息</div>
             <div class="content">
               <div class="name-wrapper">
-                <div class="label">昵称</div>
+                <div class="label">姓名</div>
                 <div class="name">
                   <el-input
                     placeholder="请输入内容"
@@ -17,6 +17,7 @@
                     suffix-icon="el-icon-edit"
                     ref="input"
                     @blur="blur"
+                    disabled
                   ></el-input>
                 </div>
               </div>

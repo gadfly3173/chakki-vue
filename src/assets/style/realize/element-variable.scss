@@ -535,8 +535,7 @@ thead tr {
 }
 
 .el-menu--popup-right-start {
-  margin-top: 5px;
-  padding-bottom: 0px;
+  margin-top: 0px;
 
   .el-menu-item-group {
     background: red;
@@ -683,7 +682,7 @@ $typeMap: (primary:#3963BC,
   height: 24px;;
   line-height: 22px;
   color:rgba(255,255,255,1);
-  border-radius: 12px;
+  border-radius: 2px;
   border: 1px solid #3963BC;
   .el-icon-close {
     border-radius: 50%;
@@ -901,11 +900,11 @@ $typeMap: (primary:#3963BC,
 
 /* dialog */
 @include b(dialog) {
-  box-shadow:0px 0px 14px 0px rgba(38,38,38,0.5);
-  border-radius:12px;
+  box-shadow: 0px 0px 14px 0px rgba(38,38,38,0.5);
+  border-radius: 2px;
   @include e(header) {
-    border-top-left-radius:12px;
-    border-top-right-radius:12px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
     // background:rgba(206,218,240,1);
   }
   @include e(title) {

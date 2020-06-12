@@ -1,20 +1,9 @@
 <template>
   <div class="container">
-    <div class="title">编辑分组权限</div>
+    <div class="title">编辑班级人员</div>
     <div class="content">
       <el-row>
         <el-col :lg="16" :md="20" :sm="24" :xs="24">
-          <div class="content">
-            <group-permissions
-              :id="$route.query.id"
-              ref="groupPermissions"
-              @updatePermissions="updatePermissions"
-              @getCacheAuthIds="getCacheAuthIds"
-              @updateAllPermissions="updateAllPermissions"
-              style="margin-right:-30px;margin-left:-25px;margin-bottom:-10px;"
-            >
-            </group-permissions>
-          </div>
           <div style="padding-left:5px;margin-top: 30px;">
             <el-button type="primary" @click="confirmEdit">确 定</el-button>
             <el-button @click="goBack">返回</el-button>
@@ -27,12 +16,8 @@
 
 <script>
 import Admin from '@/lin/model/admin'
-import GroupPermissions from './group-permission'
 
 export default {
-  components: {
-    GroupPermissions,
-  },
   inject: ['eventBus'],
   data() {
     return {
@@ -55,7 +40,7 @@ export default {
     async confirmEdit() {
       let addRes = 0
       let delRes = 0
-      // 判断是否更改了分组权限
+      // 判断是否更改了班级权限
       if (this.permissions.sort().toString() !== this.cachePermissions.sort().toString()) {
         const deletePermissions = this.cachePermissions
           .concat(this.permissions)

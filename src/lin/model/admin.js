@@ -108,7 +108,56 @@ export default class Admin {
   }
 
   static async deleteOneGroup(id) {
-    const res = await _delete(`cms/admin/group/${id}`)
+    const res = await _delete(`cms/admin/class/${id}`)
+    return res
+  }
+
+  async getClasses({ count = this.uCount, page = this.uPag }) {
+    const res = await get('cms/admin/classes', {
+      count,
+      page,
+    })
+    return res
+  }
+
+  async nextClassesPage() {
+    await this.increaseGPage()
+    return this.getClasses({})
+  }
+
+  async preClassesPage() {
+    await this.decreaseGPage()
+    return this.getClasses({})
+  }
+
+  static async getAllClasses() {
+    const groups = await get('cms/admin/class/all')
+    return groups
+  }
+
+  static async getOneClass(id) {
+    const group = await get(`cms/admin/class/${id}`)
+    return group
+  }
+
+  static async createOneClass(name, info) {
+    const res = await post('cms/admin/class', {
+      name,
+      info,
+    })
+    return res
+  }
+
+  static async updateOneClass(name, info, id) {
+    const res = await put(`cms/admin/class/${id}`, {
+      name,
+      info,
+    })
+    return res
+  }
+
+  static async deleteOneClass(id) {
+    const res = await _delete(`cms/admin/class/${id}`)
     return res
   }
 

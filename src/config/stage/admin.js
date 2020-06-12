@@ -81,6 +81,47 @@ const adminRouter = {
         },
       ],
     },
+    {
+      route: '/admin/class/list',
+      name: null,
+      title: '班级管理',
+      type: 'tab', // 取 route 为默认加载页
+      icon: null,
+      filePath: 'view/admin/class',
+      inNav: true,
+      children: [
+        {
+          route: '/admin/class/list',
+          type: 'view',
+          name: 'classList',
+          inNav: true,
+          filePath: 'view/admin/class/class-list.vue',
+          title: '班级列表',
+          icon: 'iconfont icon-huiyuanguanli',
+          permission: ['超级管理员独有权限'],
+        },
+        {
+          route: '/admin/class/add',
+          type: 'view',
+          name: 'ClassCreate',
+          filePath: 'view/admin/class/class-create.vue',
+          inNav: true,
+          title: '添加班级',
+          icon: 'iconfont icon-add',
+          permission: ['超级管理员独有权限'],
+        },
+        {
+          route: '/admin/class/edit',
+          type: 'view',
+          name: 'ClassEdit',
+          filePath: 'view/admin/class/class-edit.vue',
+          inNav: false,
+          title: '修改班级',
+          icon: 'iconfont icon-add',
+          permission: ['超级管理员独有权限'],
+        },
+      ],
+    },
   ],
 }
 
