@@ -139,7 +139,7 @@ export default {
         selectedData = val
       }
       this.id = selectedData.id
-      this.$router.push({ path: '/admin/class/edit', query: { id: selectedData.id } })
+      this.$router.push({ path: '/admin/class/edit', query: { id: selectedData.id, name: selectedData.name } })
     },
     handleDelete(val) {
       let res
@@ -191,7 +191,10 @@ export default {
   },
   async created() {
     await this.getAllClasses()
-    this.tableColumn = [{ prop: 'name', label: '名称' }, { prop: 'info', label: '信息' }] // 设置表头信息
+    this.tableColumn = [
+      { prop: 'name', label: '名称' },
+      { prop: 'info', label: '信息' },
+    ] // 设置表头信息
     this.operate = [
       { name: '信息', func: 'handleEdit', type: 'primary' },
       { name: '人员', func: 'goToGroupEditPage', type: 'info' },

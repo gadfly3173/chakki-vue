@@ -1,8 +1,9 @@
 <template>
   <div class="container">
-    <div class="title">编辑班级人员</div>
+    <div class="title">编辑 {{ this.$route.query.name }} 班级人员</div>
     <div class="content">
-      <el-table :data="tableData" style="width: 100%">
+      <el-button type="primary" icon="el-icon-circle-plus-outline">在班级内新增学生</el-button>
+      <el-table :data="tableData" style="width: 100%;margin-top:10px">
         <el-table-column fixed prop="username" label="学号" width="200"></el-table-column>
         <el-table-column prop="nickname" label="姓名"></el-table-column>
         <el-table-column label="操作" width="200">
@@ -26,7 +27,6 @@
       <el-row>
         <el-col :lg="16" :md="20" :sm="24" :xs="24">
           <div style="padding-left:5px;margin-top: 30px;">
-            <el-button type="primary" @click="confirmEdit">确 定</el-button>
             <el-button @click="goBack">返回</el-button>
           </div>
         </el-col>
@@ -66,40 +66,8 @@ export default {
         console.log(e)
       }
     },
-    async confirmEdit() {
-      let addRes = 0
-      let delRes = 0
-      // 判断是否更改了班级班级
-      if (this.permissions.sort().toString() !== this.cachePermissions.sort().toString()) {
-        const deletePermissions = this.cachePermissions
-          .concat(this.permissions)
-          .filter(v => !this.permissions.includes(v))
-        const addPermissions = this.cachePermissions
-          .concat(this.permissions)
-          .filter(v => !this.cachePermissions.includes(v))
-
-        if (addPermissions.length > 0) {
-          addRes = await Admin.dispatchPermissions(this.$route.query.id, addPermissions)
-        }
-        if (deletePermissions.length > 0) {
-          delRes = await Admin.removePermissions(this.$route.query.id, deletePermissions)
-        }
-        if (addRes.code < window.MAX_SUCCESS_CODE || delRes.code < window.MAX_SUCCESS_CODE) {
-          this.$message.success('班级修改成功')
-        }
-      }
-    },
     shuffleList(users) {
-      const list = []
-      users.forEach(element => {
-        const groups = []
-        element.groups.forEach(item => {
-          groups.push(item.name)
-        })
-        element.groupNames = groups.join(',')
-        list.push(element)
-      })
-      return list
+      return users
     },
     // 下拉框选择分组
     async handleChange() {
@@ -173,6 +141,12 @@ export default {
     margin-top: 10px;
     padding-left: 33px;
     padding-right: 40px;
+    .pagination {
+      display: flex;
+      justify-content: flex-end;
+      margin-right: -10px;
+      margin-top: 15px;
+    }
   }
 
   .submit {
