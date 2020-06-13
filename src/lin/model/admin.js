@@ -161,6 +161,15 @@ export default class Admin {
     return res
   }
 
+  static async getAllStudents({ class_id, count = this.uCount, page = this.uPag }) {
+    const students = await get('cms/admin/students', {
+      count,
+      page,
+      class_id,
+    })
+    return students
+  }
+
   static async deleteOneUser(id) {
     const res = await _delete(`cms/admin/user/${id}`)
     return res

@@ -65,8 +65,10 @@ export default {
       }
       const ele = {}
       ele.stageId = to.name
+      // ele.path = to.fullPath
       ele.path = to.path
       ele.routePath = to.matched[to.matched.length - 1].path
+      // console.log(this.$route)
       this.histories = [ele, ...histories]
     },
     logined(val) {

@@ -25,7 +25,7 @@
                 <img :src="user.avatar || defaultAvatar" alt="头像" />
                 <label class="mask">
                   <i class="iconfont icon-icon-test" style="font-size: 20px;"></i>
-                  <input ref="avatarInput" type="file" accept="image/*" @change="fileChange" />
+                  <input ref="avatarInput" type="file" accept="image/*" @change="fileChange" disabled />
                 </label>
               </div>
             </div>
