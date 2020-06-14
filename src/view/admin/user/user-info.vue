@@ -11,16 +11,23 @@
       @submit.native.prevent
     >
       <el-form-item label="用户名" prop="username">
-        <el-input size="medium" clearable v-model="form.username" :disabled="isEdited"></el-input>
+        <!-- <el-input size="medium" clearable v-model="form.username" :disabled="isEdited"></el-input> -->
+        <el-input size="medium" clearable v-model="form.username"></el-input>
       </el-form-item>
-      <el-form-item label="邮箱" prop="email">
+      <el-form-item label="昵称/姓名" prop="nickname">
         <el-input
+          size="medium"
+          clearable
+          v-model="form.nickname"
+          auto-complete="nickname"
+        ></el-input>
+        <!-- <el-input
           size="medium"
           clearable
           v-model="form.email"
           :disabled="isEdited"
           auto-complete="new-password"
-        ></el-input>
+        ></el-input> -->
       </el-form-item>
       <el-form-item v-if="pageType === 'add'" label="密码" prop="password">
         <el-input
@@ -129,6 +136,7 @@ export default {
       isEdited: false, // 能否编辑
       form: {
         username: '',
+        nickname: '',
         password: '',
         confirm_password: '',
         email: '',
@@ -185,7 +193,7 @@ export default {
           } else {
             // 更新用户信息
             if (
-              this.form.email === this.info.email
+              this.form.nickname === this.info.nickname
               && this.form.group_ids.sort().toString() === this.info.group_ids.sort().toString()
             ) {
               this.$emit('handleInfoResult', false)
@@ -193,7 +201,7 @@ export default {
             }
             try {
               this.loading = true
-              res = await Admin.updateOneUser(this.form.email, this.form.group_ids, this.id)
+              res = await Admin.updateOneUser(this.form.username, this.form.nickname, this.form.group_ids, this.id)
             } catch (e) {
               this.loading = false
               console.log(e)
@@ -224,7 +232,7 @@ export default {
     },
     setInfo() {
       this.form.username = this.info.username
-      this.form.email = this.info.email
+      this.form.nickname = this.info.nickname
       const temp = []
       this.info.group_ids.forEach(item => {
         temp.push(item.id)

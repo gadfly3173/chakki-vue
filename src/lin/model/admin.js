@@ -175,9 +175,10 @@ export default class Admin {
     return res
   }
 
-  static async updateOneUser(email, group_ids, id) {
+  static async updateOneUser(username, nickname, group_ids, id) {
     const res = await put(`cms/admin/user/${id}`, {
-      email,
+      username,
+      nickname,
       group_ids,
     })
     return res
@@ -203,6 +204,32 @@ export default class Admin {
     const res = await post('cms/admin/permission/remove', {
       group_id,
       permission_ids,
+    })
+    return res
+  }
+
+  static async dispatchStudentClass(user_id, class_ids) {
+    const res = await post('cms/admin/students/del', {
+      user_id,
+      class_ids,
+    })
+    return res
+  }
+
+  static async addStudentClass(class_id, user_ids) {
+    const res = await post('cms/admin/students/add', {
+      class_id,
+      user_ids,
+    })
+    return res
+  }
+
+  static async getFreshStudentByName(class_id, name, count, page) {
+    const res = await get('cms/admin/students/fresh_by_name', {
+      class_id,
+      name,
+      count,
+      page,
     })
     return res
   }

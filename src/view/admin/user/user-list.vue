@@ -138,7 +138,7 @@ export default {
       }
       this.id = selectedData.id
       this.form.username = selectedData.username
-      this.form.email = selectedData.email
+      this.form.nickname = selectedData.nickname
       this.form.group_ids = selectedData.groups
       this.dialogFormVisible = true
     },
@@ -299,13 +299,13 @@ export default {
 }
 
 .info {
-  margin-left: -55px;
+  margin-left: -5px;
   margin-bottom: -30px;
 }
 
 .password {
   margin-top: 20px;
-  margin-left: -55px;
+  margin-left: -5px;
   margin-bottom: -20px;
 }
 </style>
