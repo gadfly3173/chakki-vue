@@ -1,5 +1,6 @@
 import adminConfig from './admin'
 import bookConfig from './book' // 引入图书管理路由文件
+import classConfig from './class' // 引入班级路由文件
 import pluginsConfig from './plugin'
 import Utils from '@/lin/util/util'
 
@@ -27,6 +28,15 @@ let homeRouter = [
     permission: ['查询所有日志'],
   },
   {
+    title: '班级页面',
+    type: 'view',
+    name: Symbol('room'),
+    route: '/class/room',
+    filePath: 'view/class/class-list.vue',
+    inNav: false,
+    icon: null,
+  },
+  {
     title: '个人中心',
     type: 'view',
     name: Symbol('center'),
@@ -44,6 +54,7 @@ let homeRouter = [
     inNav: false,
     icon: 'iconfont icon-rizhiguanli',
   },
+  classConfig,
   bookConfig,
   adminConfig,
 ]

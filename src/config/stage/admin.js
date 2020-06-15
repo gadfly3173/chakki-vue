@@ -38,6 +38,16 @@ const adminRouter = {
           filePath: 'view/admin/user/user-create.vue',
           permission: ['超级管理员独有权限'],
         },
+        {
+          title: '批量添加用户',
+          type: 'view',
+          inNav: true,
+          route: '/admin/user/addBatch',
+          icon: 'iconfont icon-add',
+          name: 'UserCreateBatch',
+          filePath: 'view/admin/user/user-create-batch.vue',
+          permission: ['超级管理员独有权限'],
+        },
       ],
     },
     {

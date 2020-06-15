@@ -64,7 +64,7 @@ export default {
           let res
           try {
             this.loading = true
-            res = await Admin.createOneClass(this.form.name, this.form.info, finalPermissions, this.id) // eslint-disable-line
+            res = await Admin.createOneClass(this.form.name, this.form.info) // eslint-disable-line
           } catch (e) {
             this.loading = false
             console.log(e)

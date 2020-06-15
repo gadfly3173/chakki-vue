@@ -17,6 +17,18 @@ export default class User {
   }
 
   /**
+   * 分配用户
+   * @param {object} data 注册信息
+   */
+  static createBatchUser(data) {
+    return _axios({
+      method: 'post',
+      url: 'cms/user/register/batch',
+      data
+    })
+  }
+
+  /**
    * 登陆获取tokens
    * @param {string} username 用户名
    * @param {string} password 密码

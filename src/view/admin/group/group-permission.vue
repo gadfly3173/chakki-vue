@@ -207,7 +207,7 @@ export default {
         margin-bottom: 20px;
 
         .permissions-li {
-          width: 150px;
+          width: 250px;
           height: 20px;
           line-height: 20px;
           margin-bottom: 20px;

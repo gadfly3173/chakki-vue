@@ -32,7 +32,7 @@
         </el-col>
       </el-row>
       <el-dialog
-        title="班级信息"
+        title="向班级内添加学生"
         :append-to-body="true"
         :visible.sync="dialogFormVisible"
         :before-close="handleClose"
