@@ -31,7 +31,7 @@ let homeRouter = [
     title: '班级页面',
     type: 'view',
     name: Symbol('room'),
-    route: '/class/room',
+    route: '/class/room/:id',
     filePath: 'view/class/class-list.vue',
     inNav: false,
     icon: null,

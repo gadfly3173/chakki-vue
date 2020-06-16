@@ -1,16 +1,24 @@
 <template>
   <div>
     <!-- 列表页面 -->
-    <div class="container">
+    <div class="container" v-loading="loading">
       <div class="header">
         <div class="title">已加入班级列表</div>
       </div>
       <div class="wrapper">
+        <!-- 循环渲染 -->
         <el-card class="box-card" shadow="hover" v-for="item in classList" :key="item.id" @click.native="handleClick(item.id)">
           <div slot="header" class="clearfix">
-            <span>{{ item.name }}</span>
+            <span class="box-header">{{ item.name }}</span>
           </div>
           <div class="text item">{{ item.info }}</div>
+        </el-card>
+        <!-- 无内容显示 -->
+        <el-card class="box-card" shadow="hover" v-show="classList.length == 0">
+          <div slot="header" class="clearfix">
+            <span class="box-header">暂未加入任何班级</span>
+          </div>
+          <div class="text item">请联系教师或管理员</div>
         </el-card>
       </div>
     </div>
@@ -24,8 +32,6 @@ export default {
   data() {
     return {
       classList: [],
-      operate: [],
-      editBookID: 1,
     }
   },
   async created() {
@@ -45,32 +51,6 @@ export default {
     },
     handleClick(id) {
       this.$router.push({ path: `/class/room/${id}` })
-    },
-    handleEdit(val) {
-      console.log('val', val)
-      this.showEdit = true
-      this.editBookID = val.row.id
-    },
-    handleDelete() {
-      // this.$confirm('此操作将永久删除该图书, 是否继续?', '提示', {
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      //   type: 'warning',
-      // }).then(async () => {
-      //   const res = await book.delectBook(val.row.id)
-      //   if (res.code < window.MAX_SUCCESS_CODE) {
-      //     this.getBooks()
-      //     this.$message({
-      //       type: 'success',
-      //       message: `${res.message}`,
-      //     })
-      //   }
-      // })
-    },
-    rowClick() {},
-    editClose() {
-      this.showEdit = false
-      this.getBooks()
     },
   },
 }
@@ -122,6 +102,9 @@ export default {
     width: 300px;
     user-select: none;
     cursor: pointer;
+    .box-header {
+      font-weight: 700;
+    }
   }
 
   .box-card:after {
