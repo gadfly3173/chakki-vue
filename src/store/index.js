@@ -16,6 +16,7 @@ const vuexLocal = new VuexPersistence({
     logined: stateData.logined,
     user: stateData.user,
     permissions: stateData.permissions,
+    currentClassId: stateData.currentClassId,
   }),
 })
 

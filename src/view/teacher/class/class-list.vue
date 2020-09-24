@@ -32,15 +32,17 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import Class from '@/model/class'
 
 export default {
   data() {
     return {
       classList: [],
+      loading: false,
     }
   },
-  async created() {
+  async mounted() {
     await this.getClassList()
   },
   methods: {
@@ -56,8 +58,12 @@ export default {
       }
     },
     handleClick(id) {
-      this.$router.push({ path: `/teacher/class/room/${id}` })
+      this.setCurrentClassId(id)
+      this.$router.push({ path: '/teacher/class/room/sign' })
     },
+    ...mapMutations({
+      setCurrentClassId: 'SET_CURRENT_CLASS_ID',
+    }),
   },
 }
 </script>

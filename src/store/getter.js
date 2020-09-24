@@ -23,6 +23,8 @@ export const logined = state => state.logined
 
 export const user = state => state.user
 
+export const currentClassId = state => state.currentClassId
+
 export const readedMessages = state => state.readedMessages
 
 export const unreadMessages = state => state.unreadMessages

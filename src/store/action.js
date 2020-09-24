@@ -18,4 +18,8 @@ export default {
     commit(types.REMOVE_UNREAD_MESSAGE, message.id)
     commit(types.ADD_READED_MESSAGE, message)
   },
+
+  setCurrentClassId({ commit }, id) {
+    commit(types.SET_CURRENT_CLASS_ID, id)
+  },
 }

@@ -73,6 +73,7 @@ const globalFilter = {
   },
 
   dateTimeFormatter(t) {
+    console.log('t::', t)
     if (!t) return ''
     t = new Date(t).getTime() // eslint-disable-line
     t = new Date(t) // eslint-disable-line
@@ -91,6 +92,7 @@ const globalFilter = {
 
     let se = t.getSeconds()
     se = checkAddZone(se)
+    console.log('date::', date)
 
     return `${year}-${month}-${date} ${hour}:${min}:${se}`
   },

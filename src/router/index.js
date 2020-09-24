@@ -74,6 +74,9 @@ router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title
   }
+  if (from.params.class_id && from.params.class_id !== to.params.class_id) {
+    to.params.class_id = from.params.class_id
+  }
 
   next()
 })

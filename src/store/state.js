@@ -18,4 +18,5 @@ export default {
     config: null,
     treePath: [],
   },
+  currentClassId: null,
 }

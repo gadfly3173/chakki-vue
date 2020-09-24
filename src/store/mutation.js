@@ -47,4 +47,8 @@ export default {
   [types.SET_REFERSH_OPTION](state, option) {
     state.refreshOptions = option
   },
+
+  [types.SET_CURRENT_CLASS_ID](state, id) {
+    state.currentClassId = id
+  },
 }
