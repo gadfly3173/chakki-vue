@@ -3,9 +3,25 @@
     <!-- 列表页面 -->
     <div class="container" v-loading="loading">
       <div class="header">
-        <div class="title">{{ className }} - 签到项目列表</div>
+        <div class="title">{{ className }} - 作业列表</div>
       </div>
-      <el-button class="create-button" type="primary" @click.stop="handleCreateSign">发起签到</el-button>
+      <el-card class="box-card">
+        <div slot="header" class="box-header">
+          <span>签到</span>
+          <el-button
+            class="operation"
+            type="primary"
+            size="medium"
+            round
+            v-if="signDetailAval"
+            @click.native.stop="handleConfirmSign"
+            >进行签到</el-button
+          >
+        </div>
+        <div class="text item">
+          {{ signDetail.name }}
+        </div>
+      </el-card>
       <el-dialog title="编辑签到项目" :visible.sync="signEditModal.show" width="600">
         <div>
           <el-form label-position="right" label-width="80px">
@@ -72,6 +88,9 @@ import Class from '@/model/class'
 export default {
   data() {
     return {
+      signDetail: {
+        name: '暂无可用签到',
+      },
       signList: [],
       totalNum: 0,
       currentPage: 1,
@@ -88,12 +107,19 @@ export default {
     }
   },
   async mounted() {
-    this.getClassDetail()
+    this.getStudentClassDetail()
+    this.getLatestSignDetail()
     await this.getSignList()
   },
   computed: {
     currentClassId() {
       return this.$store.state.currentClassId
+    },
+    signDetailAval() {
+      if (!this.signDetail.id || new Date(this.signDetail.end_time).getTime() < new Date().getTime()) {
+        return false
+      }
+      return true
     },
   },
   methods: {
@@ -102,6 +128,7 @@ export default {
         this.loading = true
         const res = await Class.getSignList(this.currentClassId, this.pageSize, this.currentPage - 1)
         this.signList = res.items
+        console.log('getsignList::', res)
         this.loading = false
         this.totalNum = res.total
       } catch (e) {
@@ -109,8 +136,21 @@ export default {
         this.signList = []
       }
     },
-    handleClick(id) {
-      this.$router.push({ path: `/class/room/${id}` })
+    async getLatestSignDetail() {
+      try {
+        this.loading = true
+        const res = await Class.getLatestSignDetail(this.currentClassId)
+        this.signDetail = res
+        if (!this.signDetailAval) {
+          this.signDetail.id = null
+          this.signDetail.name = '暂无可用签到'
+        }
+        this.loading = false
+      } catch (e) {
+        this.loading = false
+        this.signDetail.id = null
+        this.signDetail.name = '暂无可用签到'
+      }
     },
     handleCurrentChange() {
       this.getSignList()
@@ -118,17 +158,26 @@ export default {
     handleSizeChange() {
       this.getSignList()
     },
-    handleCreateSign() {
-      this.signEditModal.show = true
+    async handleConfirmSign() {
+      try {
+        this.loading = true
+        const res = await Class.postConfirmSign(this.signDetail.id)
+        if (res.code < window.MAX_SUCCESS_CODE) {
+          this.$message.success(res.message)
+        }
+        this.loading = false
+      } catch (e) {
+        this.loading = false
+      }
     },
-    async getClassDetail() {
-      const res = await Class.getClassDetail(this.currentClassId)
+    async getStudentClassDetail() {
+      const res = await Class.getStudentClassDetail(this.currentClassId)
       this.className = res.name
     },
     async handleEditConfirm() {
       this.loading = true
       const res = await Class.createSign(this.signEditForm, this.currentClassId)
-      if (res.code < window.MAX_SUCCESS_CODE) {
+      if (res) {
         this.$message.success('签到项目新建成功')
         this.signEditModal.show = false
         this.getSignList()
@@ -193,9 +242,17 @@ export default {
     margin: 20px;
     width: 300px;
     user-select: none;
-    cursor: pointer;
     .box-header {
-      font-weight: 700;
+      span {
+        font-weight: 700;
+      }
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .operation {
+      float: right;
+      margin: 3px 0;
     }
   }
 

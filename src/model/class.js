@@ -25,6 +25,20 @@ class Class {
     return res
   }
 
+  // 学生获取单个班级信息
+  async getStudentClassDetail(id) {
+    const res = await get(`v1/class/${id}`)
+    return res
+  }
+
+  // 学生获取班级最新签到项目
+  async getLatestSignDetail(class_id) {
+    const res = await get('v1/class/sign/latest', {
+      class_id,
+    })
+    return res
+  }
+
   // 获取班级内签到项目
   async getSignList(class_id, count, page) {
     const res = await get('v1/lesson/sign/list', {
@@ -42,6 +56,12 @@ class Class {
       title: form.title,
       end_minutes: form.endMinutes,
     })
+    return res
+  }
+
+  // 学生进行签到
+  async postConfirmSign(sign_id) {
+    const res = await post(`v1/class/sign/confirm/${sign_id}`)
     return res
   }
 }

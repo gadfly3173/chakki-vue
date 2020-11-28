@@ -12,7 +12,7 @@
           shadow="hover"
           v-for="item in classList"
           :key="item.id"
-          @click.native="handleClick(item.id)"
+          @click.native.stop="handleClick(item.id)"
         >
           <div slot="header" class="clearfix">
             <span class="box-header">{{ item.name }}</span>
@@ -20,7 +20,7 @@
           <div class="text item">{{ item.info }}</div>
         </el-card>
         <!-- 无内容显示 -->
-        <el-card class="box-card" shadow="hover" v-show="classList.length == 0">
+        <el-card class="box-card box-card-empty" shadow="hover" v-show="classList.length == 0">
           <div slot="header" class="clearfix">
             <span class="box-header">暂未加入任何班级</span>
           </div>
@@ -59,7 +59,7 @@ export default {
     },
     handleClick(id) {
       this.setCrrentClassId = id
-      this.$router.push({ path: '/class/room/sign' })
+      this.$router.push({ path: '/class/room/work' })
     },
     ...mapMutations({
       setCrrentClassId: 'SET_CURRENT_CLASS_ID',
@@ -124,6 +124,10 @@ export default {
     content: '';
     width: 300px;
     height: 0;
+  }
+
+  .box-card-empty {
+    color: #9c9c9c;
   }
 
   .wrapper {

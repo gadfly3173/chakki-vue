@@ -8,7 +8,7 @@ const classRouter = [
     inNav: true,
     icon: 'iconfont icon-erji1',
     order: null,
-    permission: ['查询自己信息'],
+    permission: ['学生进行签到'],
   },
   {
     title: '进入班级（教师）',
@@ -30,15 +30,6 @@ const classRouter = [
     inNav: false,
     icon: null,
     children: [
-      {
-        route: '/class/room/sign',
-        type: 'view',
-        name: 'signList',
-        inNav: true,
-        filePath: 'view/class/room/sign-list.vue',
-        title: '签到列表',
-        icon: 'iconfont icon-jiemianicon-',
-      },
       {
         route: '/class/room/work',
         type: 'view',

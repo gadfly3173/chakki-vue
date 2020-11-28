@@ -20,7 +20,7 @@
           <div class="text item">{{ item.info }}</div>
         </el-card>
         <!-- 无内容显示 -->
-        <el-card class="box-card" shadow="hover" v-show="classList.length == 0">
+        <el-card class="box-card box-card-empty" shadow="hover" v-show="classList.length == 0">
           <div slot="header" class="clearfix">
             <span class="box-header">暂无任何班级</span>
           </div>
@@ -124,6 +124,10 @@ export default {
     content: '';
     width: 300px;
     height: 0;
+  }
+
+  .box-card-empty {
+    color: #9c9c9c;
   }
 
   .wrapper {
