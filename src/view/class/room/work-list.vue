@@ -109,14 +109,19 @@ export default {
   async mounted() {
     this.getStudentClassDetail()
     this.getLatestSignDetail()
-    await this.getSignList()
+    // await this.getSignList()
   },
   computed: {
     currentClassId() {
       return this.$store.state.currentClassId
     },
     signDetailAval() {
-      if (!this.signDetail.id || new Date(this.signDetail.end_time).getTime() < new Date().getTime()) {
+      if (
+        !this.signDetail
+        || !this.signDetail.id
+        || this.signDetail.signed > 0
+        || new Date(this.signDetail.end_time).getTime() < new Date().getTime()
+      ) {
         return false
       }
       return true
@@ -142,14 +147,18 @@ export default {
         const res = await Class.getLatestSignDetail(this.currentClassId)
         this.signDetail = res
         if (!this.signDetailAval) {
-          this.signDetail.id = null
-          this.signDetail.name = '暂无可用签到'
+          this.signDetail = {
+            id: null,
+            name: '暂无可用签到',
+          }
         }
         this.loading = false
       } catch (e) {
         this.loading = false
-        this.signDetail.id = null
-        this.signDetail.name = '暂无可用签到'
+        this.signDetail = {
+          id: null,
+          name: '暂无可用签到',
+        }
       }
     },
     handleCurrentChange() {
@@ -164,6 +173,9 @@ export default {
         const res = await Class.postConfirmSign(this.signDetail.id)
         if (res.code < window.MAX_SUCCESS_CODE) {
           this.$message.success(res.message)
+          this.getLatestSignDetail()
+        } else {
+          this.$message.error(res.message)
         }
         this.loading = false
       } catch (e) {

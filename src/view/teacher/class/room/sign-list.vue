@@ -15,10 +15,12 @@
             <el-form-item label="结束时间">
               <el-input-number
                 v-model="signEditForm.endMinutes"
+                size="small"
                 :min="1"
                 :max="100"
                 controls-position="right"
               ></el-input-number>
+              分钟
             </el-form-item>
           </el-form>
         </div>

@@ -58,7 +58,7 @@ export default {
       }
     },
     handleClick(id) {
-      this.setCrrentClassId = id
+      this.setCrrentClassId(id)
       this.$router.push({ path: '/class/room/work' })
     },
     ...mapMutations({
