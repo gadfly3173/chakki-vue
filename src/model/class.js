@@ -49,6 +49,16 @@ class Class {
     return res
   }
 
+  // 获取签到项目的签到人员
+  async getSignUserList(sign_id, sign_status, count, page) {
+    const res = await get(`v1/lesson/sign/students/query/${sign_id}`, {
+      sign_status,
+      count,
+      page,
+    })
+    return res
+  }
+
   // 新建签到项目
   async createSign(form, class_id) {
     const res = await post('v1/lesson/sign/create', {
@@ -59,9 +69,24 @@ class Class {
     return res
   }
 
+  // 修改学生签到记录
+  async updateSignRecord(signId, user_id, sign_status) {
+    const res = await post(`v1/lesson/sign/record/update/${signId}`, {
+      user_id,
+      sign_status,
+    })
+    return res
+  }
+
   // 学生进行签到
   async postConfirmSign(sign_id) {
     const res = await post(`v1/class/sign/confirm/${sign_id}`)
+    return res
+  }
+
+  // 教师获取单个签到项目信息
+  async getSignDetail(id) {
+    const res = await get(`v1/lesson/sign/${id}`)
     return res
   }
 }

@@ -100,6 +100,15 @@ const globalFilter = {
   filterTitle(value, len = 9) {
     return Utils.cutString(value, len)
   },
+
+  signStatusFilter(val) {
+    return {
+      1: '已签到',
+      2: '迟到',
+      3: '已作废',
+      null: '未签到',
+    }[val]
+  },
 }
 
 // 全局过滤器

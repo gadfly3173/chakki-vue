@@ -91,6 +91,17 @@ const classRouter = [
       },
     ],
   },
+  {
+    title: '签到人员统计',
+    type: 'view',
+    name: null,
+    route: '/teacher/class/list/:id',
+    filePath: 'view/teacher/class/room/sign-student-list.vue',
+    inNav: false,
+    icon: 'iconfont icon-huiyuanguanli',
+    order: null,
+    permission: ['查询所有签到项目下的学生'],
+  },
 ]
 
 export default classRouter

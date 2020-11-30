@@ -3,54 +3,54 @@
     <!-- 列表页面 -->
     <div class="container" v-loading="loading">
       <div class="header">
-        <div class="title">{{ className }} - 签到项目列表</div>
+        <div class="title">{{ signName }} - 签到人员列表</div>
       </div>
-      <el-button class="create-button" type="primary" @click.stop="handleCreateSign">发起签到</el-button>
-      <el-dialog title="编辑签到项目" :visible.sync="signEditModal.show" width="600">
-        <div>
-          <el-form label-position="right" label-width="80px">
-            <el-form-item label="项目名称">
-              <el-input v-model="signEditForm.title" maxlength="60" show-word-limit></el-input>
-            </el-form-item>
-            <el-form-item label="结束时间">
-              <el-input-number
-                v-model="signEditForm.endMinutes"
-                size="small"
-                :min="1"
-                :max="100"
-                controls-position="right"
-              ></el-input-number>
-              分钟
-            </el-form-item>
-          </el-form>
-        </div>
-        <div slot="footer">
-          <el-button @click.stop="signEditModal.show = false">取 消</el-button>
-          <el-button type="primary" @click.stop="handleEditConfirm">确 定</el-button>
-        </div>
-      </el-dialog>
       <div class="wrapper">
         <!-- 表格渲染 -->
-        <el-table :data="signList" style="width: 100%">
-          <el-table-column prop="name" label="签到项目名称" width="180"></el-table-column>
-          <el-table-column prop="signed" label="已签到人数" width="120"></el-table-column>
-          <el-table-column label="创建时间" width="180">
+        <el-table :data="signList" style="width: 100%" class="table">
+          <el-table-column prop="username" label="用户名"></el-table-column>
+          <el-table-column prop="nickname" label="昵称/姓名"></el-table-column>
+          <el-table-column prop="ip" label="IP地址"></el-table-column>
+          <el-table-column label="签到时间">
             <template slot-scope="scope">
               {{ scope.row.create_time | dateTimeFormatter }}
             </template>
           </el-table-column>
-          <el-table-column label="结束时间" width="180">
+          <el-table-column label="签到状态">
             <template slot-scope="scope">
-              {{ scope.row.end_time | dateTimeFormatter }}
+              <div
+                :class="{
+                  danger: isSignStatusDanger(scope.row.status),
+                  warning: isSignStatusWarning(scope.row.status),
+                }"
+              >
+                {{ scope.row.status | signStatusFilter }}
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button @click.stop="handleClick(scope.row)" type="primary" plain size="mini">编辑</el-button>
-              <el-button @click.stop="handleViewStudentClick(scope.row.id)" type="success" plain size="mini"
-                >人员</el-button
+              <el-button
+                @click.stop="handleUpdateClick(scope.row.user_id, 1)"
+                type="primary"
+                size="mini"
+                v-if="scope.row.status !== 1"
+                >签到</el-button
               >
-              <el-button type="danger" size="mini" plain>删除</el-button>
+              <el-button
+                @click.stop="handleUpdateClick(scope.row.user_id, 2)"
+                type="warning"
+                size="mini"
+                v-if="scope.row.status !== 2"
+                >迟到</el-button
+              >
+              <el-button
+                @click.stop="handleUpdateClick(scope.row.user_id, 3)"
+                type="danger"
+                size="mini"
+                v-if="scope.row.status || scope.row.status === 3"
+                >作废</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
@@ -82,7 +82,7 @@ export default {
       currentPage: 1,
       pageSize: 10,
       loading: false,
-      className: '正在获取班级名称',
+      signName: '正在获取签到项目名称',
       signEditModal: {
         show: false,
       },
@@ -93,8 +93,8 @@ export default {
     }
   },
   async mounted() {
-    this.getClassDetail()
-    await this.getSignList()
+    this.getSignDetail()
+    await this.getSignUserList()
   },
   computed: {
     currentClassId() {
@@ -102,10 +102,15 @@ export default {
     },
   },
   methods: {
-    async getSignList() {
+    async getSignUserList() {
       try {
         this.loading = true
-        const res = await Class.getSignList(this.currentClassId, this.pageSize, this.currentPage - 1)
+        const res = await Class.getSignUserList(
+          this.$route.params.id,
+          this.signStatus,
+          this.pageSize,
+          this.currentPage - 1,
+        )
         this.signList = res.items
         this.loading = false
         this.totalNum = res.total
@@ -114,24 +119,36 @@ export default {
         this.signList = []
       }
     },
-    handleClick(id) {
-      this.$router.push({ path: `/class/room/${id}` })
+    isSignStatusDanger(status) {
+      if (!status || status === 3) {
+        return true
+      }
     },
-    handleViewStudentClick(id) {
-      this.$router.push({ path: `/teacher/class/list/${id}` })
+    isSignStatusWarning(status) {
+      if (status === 2) {
+        return true
+      }
+    },
+    async handleUpdateClick(userId, status) {
+      const res = await Class.updateSignRecord(this.$route.params.id, userId, status)
+      if (res.code < window.MAX_SUCCESS_CODE) {
+        this.$message.success(res.message)
+        return this.getSignUserList()
+      }
+      return this.$message.error(res.message)
     },
     handleCurrentChange() {
-      this.getSignList()
+      this.getSignUserList()
     },
     handleSizeChange() {
-      this.getSignList()
+      this.getSignUserList()
     },
     handleCreateSign() {
       this.signEditModal.show = true
     },
-    async getClassDetail() {
-      const res = await Class.getClassDetail(this.currentClassId)
-      this.className = res.name
+    async getSignDetail() {
+      const res = await Class.getSignDetail(this.$route.params.id)
+      this.signName = res.name
     },
     async handleEditConfirm() {
       this.loading = true
@@ -216,6 +233,14 @@ export default {
 
   .wrapper {
     margin-top: 20px;
+    .table {
+      .danger {
+        color: #f56c6c;
+      }
+      .warning {
+        color: #e6a23c;
+      }
+    }
     .pagination {
       margin: 10px 30px;
     }
