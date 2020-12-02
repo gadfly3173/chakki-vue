@@ -118,7 +118,7 @@ export default {
       this.$router.push({ path: `/class/room/${id}` })
     },
     handleViewStudentClick(id) {
-      this.$router.push({ path: `/teacher/class/list/${id}` })
+      this.$router.push({ path: `/teacher/class/room/sign/list/${id}` })
     },
     handleCurrentChange() {
       this.getSignList()

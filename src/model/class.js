@@ -50,9 +50,10 @@ class Class {
   }
 
   // 获取签到项目的签到人员
-  async getSignUserList(sign_id, sign_status, count, page) {
+  async getSignUserList(sign_id, sign_status, username, count, page) {
     const res = await get(`v1/lesson/sign/students/query/${sign_id}`, {
       sign_status,
+      username,
       count,
       page,
     })

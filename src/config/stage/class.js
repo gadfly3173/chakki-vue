@@ -95,7 +95,7 @@ const classRouter = [
     title: '签到人员统计',
     type: 'view',
     name: null,
-    route: '/teacher/class/list/:id',
+    route: '/teacher/class/room/sign/list/:id',
     filePath: 'view/teacher/class/room/sign-student-list.vue',
     inNav: false,
     icon: 'iconfont icon-huiyuanguanli',
