@@ -8,14 +8,20 @@
       <div class="wrapper">
         <el-form :inline="true" :model="searchModal" class="search-bar">
           <el-form-item label="姓名/学号：">
-            <el-input v-model="searchModal.username" placeholder="姓名/学号"></el-input>
+            <el-input v-model="searchModal.username" placeholder="姓名/学号" size="medium"></el-input>
           </el-form-item>
           <el-form-item label="签到状态：">
-            <el-select v-model="searchModal.status" placeholder="签到状态">
+            <el-select v-model="searchModal.status" placeholder="签到状态" size="medium">
               <el-option label="全部" :value="0"></el-option>
               <el-option label="已签到" :value="1"></el-option>
               <el-option label="迟到" :value="2"></el-option>
-              <el-option label="作废" :value="3"></el-option>
+              <el-option label="未签到" :value="3"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="按IP排序：">
+            <el-select v-model="searchModal.orderByIP" placeholder="按IP排序" size="medium">
+              <el-option label="正序" :value="false"></el-option>
+              <el-option label="倒序" :value="true"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -109,6 +115,7 @@ export default {
       searchModal: {
         username: '',
         status: 0,
+        orderByIP: false,
       },
     }
   },
@@ -128,6 +135,7 @@ export default {
         const res = await Class.getSignUserList(
           this.$route.params.id,
           this.searchModal.status,
+          this.searchModal.orderByIP,
           this.searchModal.username.trim().length > 0 ? this.searchModal.username.trim() : null,
           this.pageSize,
           this.currentPage - 1,
@@ -157,6 +165,7 @@ export default {
       const res = await Class.updateSignRecord(this.$route.params.id, userId, status)
       if (res.code < window.MAX_SUCCESS_CODE) {
         this.$message.success(res.message)
+        this.getSignDetail()
         return this.getSignUserList()
       }
       return this.$message.error(res.message)
@@ -167,27 +176,10 @@ export default {
     handleSizeChange() {
       this.getSignUserList()
     },
-    handleCreateSign() {
-      this.signEditModal.show = true
-    },
     async getSignDetail() {
       const res = await Class.getSignDetail(this.$route.params.id)
       this.signName = res.name
       this.signDetail = res
-    },
-    async handleEditConfirm() {
-      this.loading = true
-      const res = await Class.createSign(this.signEditForm, this.currentClassId)
-      if (res.code < window.MAX_SUCCESS_CODE) {
-        this.$message.success('签到项目新建成功')
-        this.signEditModal.show = false
-        this.getSignList()
-      }
-      this.loading = false
-      this.signEditForm = {
-        title: '',
-        endMinutes: 1,
-      }
     },
   },
 }
