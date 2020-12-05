@@ -47,7 +47,7 @@ let homeRouter = [
   },
   ...classConfig,
   bookConfig,
-  adminConfig,
+  ...adminConfig,
 ]
 
 const plugins = [...pluginsConfig]

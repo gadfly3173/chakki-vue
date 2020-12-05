@@ -170,6 +170,13 @@ export default class Admin {
     return students
   }
 
+  static async getAllTeachers({ class_id }) {
+    const teachers = await get('cms/admin/teacher/list', {
+      class_id,
+    })
+    return teachers
+  }
+
   static async deleteOneUser(id) {
     const res = await _delete(`cms/admin/user/${id}`)
     return res
@@ -226,6 +233,33 @@ export default class Admin {
 
   static async getFreshStudentByName(class_id, name, count, page) {
     const res = await get('cms/admin/students/fresh_by_name', {
+      class_id,
+      name,
+      count,
+      page,
+    })
+    return res
+  }
+
+  static async dispatchTeacherClass(user_id, class_ids) {
+    const res = await post('cms/admin/teacher/del', {
+      user_id,
+      class_ids,
+    })
+    return res
+  }
+
+  static async addTeacherClass(class_id, user_ids, level) {
+    const res = await post('cms/admin/teacher/add', {
+      class_id,
+      user_ids,
+      level,
+    })
+    return res
+  }
+
+  static async getFreshTeacherByName(class_id, name, count, page) {
+    const res = await get('cms/admin/teacher/fresh_by_name', {
       class_id,
       name,
       count,

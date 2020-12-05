@@ -109,6 +109,13 @@ const globalFilter = {
       null: '未签到',
     }[val]
   },
+
+  teacherFilter(val) {
+    return {
+      1: '教师',
+      2: '助教',
+    }[val]
+  },
 }
 
 // 全局过滤器

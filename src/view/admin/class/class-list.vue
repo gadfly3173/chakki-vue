@@ -139,7 +139,7 @@ export default {
         selectedData = val
       }
       this.id = selectedData.id
-      this.$router.push({ path: '/admin/class/edit', query: { id: selectedData.id, name: selectedData.name } })
+      this.$router.push({ path: `/admin/class/edit/${selectedData.id}/${selectedData.name}` })
     },
     handleDelete(val) {
       let res
