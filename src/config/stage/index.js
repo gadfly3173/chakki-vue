@@ -36,6 +36,9 @@ let homeRouter = [
     inNav: false,
     icon: 'iconfont icon-rizhiguanli',
   },
+  ...classConfig,
+  bookConfig,
+  ...adminConfig,
   {
     title: '404',
     type: 'view',
@@ -45,9 +48,6 @@ let homeRouter = [
     inNav: false,
     icon: 'iconfont icon-rizhiguanli',
   },
-  ...classConfig,
-  bookConfig,
-  ...adminConfig,
 ]
 
 const plugins = [...pluginsConfig]

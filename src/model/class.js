@@ -19,6 +19,22 @@ class Class {
     return res
   }
 
+  // 教师获取本学期所属班级
+  async getTeacherClassList(semester_id) {
+    const res = await get('v1/lesson/class/list', {
+      semester_id,
+    })
+    return res
+  }
+
+  // 学生获取本学期所属班级
+  async getStudentClassList(semester_id) {
+    const res = await get('v1/class/class/list', {
+      semester_id,
+    })
+    return res
+  }
+
   // 教师获取单个班级信息
   async getClassDetail(id) {
     const res = await get(`v1/lesson/class/${id}`)
@@ -90,6 +106,16 @@ class Class {
   async getSignDetail(id) {
     const res = await get(`v1/lesson/sign/${id}`)
     return res
+  }
+
+  async getStudentAllSemesters() {
+    const semester = await get('v1/class/semester/all')
+    return semester
+  }
+
+  async getTeacherAllSemesters() {
+    const semester = await get('v1/lesson/semester/all')
+    return semester
   }
 }
 

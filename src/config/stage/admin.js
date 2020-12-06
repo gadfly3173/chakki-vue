@@ -2,7 +2,7 @@ const adminRouter = [
   {
     route: null,
     name: null,
-    title: '权限管理',
+    title: '系统及教务管理',
     type: 'folder',
     icon: 'iconfont icon-huiyuanguanli',
     filePath: 'view/admin/',
@@ -97,7 +97,7 @@ const adminRouter = [
         name: null,
         title: '班级管理',
         type: 'tab', // 取 route 为默认加载页
-        icon: null,
+        icon: 'iconfont icon-kecheng',
         filePath: 'view/admin/class',
         inNav: true,
         children: [
@@ -122,6 +122,16 @@ const adminRouter = [
             permission: ['超级管理员独有权限'],
           },
         ],
+      },
+      {
+        route: '/admin/semester/list',
+        name: null,
+        title: '学期管理',
+        type: 'view',
+        icon: 'iconfont icon-kecheng',
+        filePath: 'view/admin/semester/semester-list.vue',
+        inNav: true,
+        permission: ['超级管理员独有权限'],
       },
     ],
   },

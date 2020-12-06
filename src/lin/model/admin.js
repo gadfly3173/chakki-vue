@@ -135,29 +135,57 @@ export default class Admin {
     return groups
   }
 
+  static async getAllSemesters() {
+    const groups = await get('cms/admin/semester/all')
+    return groups
+  }
+
   static async getOneClass(id) {
     const group = await get(`cms/admin/class/${id}`)
     return group
   }
 
-  static async createOneClass(name, info) {
+  static async createOneClass(name, info, semester_id) {
     const res = await post('cms/admin/class', {
       name,
       info,
+      semester_id,
     })
     return res
   }
 
-  static async updateOneClass(name, info, id) {
+  static async updateOneClass(name, info, id, semester_id) {
     const res = await put(`cms/admin/class/${id}`, {
       name,
       info,
+      semester_id,
     })
     return res
   }
 
   static async deleteOneClass(id) {
     const res = await _delete(`cms/admin/class/${id}`)
+    return res
+  }
+
+  static async createOneSemester(name, info) {
+    const res = await post('cms/admin/semester', {
+      name,
+      info,
+    })
+    return res
+  }
+
+  static async updateOneSemester(name, info, id) {
+    const res = await put(`cms/admin/semester/${id}`, {
+      name,
+      info,
+    })
+    return res
+  }
+
+  static async deleteOneSemester(id) {
+    const res = await _delete(`cms/admin/semester/${id}`)
     return res
   }
 

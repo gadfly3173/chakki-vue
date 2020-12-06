@@ -5,6 +5,11 @@
       <div class="header">
         <div class="title">已加入班级列表</div>
       </div>
+      <div class="semester-selector">
+        <el-select size="medium" v-model="semesterId" placeholder="请选择学期" @change="handleSemesterSelect">
+          <el-option v-for="item in semesters" :key="item.id" :label="item.name" :value="item.id"> </el-option>
+        </el-select>
+      </div>
       <div class="wrapper">
         <!-- 循环渲染 -->
         <el-card
@@ -40,16 +45,30 @@ export default {
     return {
       classList: [],
       loading: false,
+      semesters: [],
+      semesterId: 1,
     }
   },
   async mounted() {
-    await this.getClassList()
+    await this.getAllSemesters()
+    await this.handleSemesterSelect()
   },
   methods: {
-    async getClassList() {
+    async getAllSemesters() {
       try {
         this.loading = true
-        const res = await Class.getClassList()
+        this.semesters = await Class.getStudentAllSemesters()
+        this.semesterId = this.semesters[0].id
+        this.loading = false
+      } catch (e) {
+        this.loading = false
+        console.log(e)
+      }
+    },
+    async handleSemesterSelect() {
+      try {
+        this.loading = true
+        const res = await Class.getStudentClassList(this.semesterId)
         this.classList = res
         this.loading = false
       } catch (e) {
@@ -83,6 +102,13 @@ export default {
       text-indent: 40px;
       border-bottom: 1px solid #dae1ec;
     }
+  }
+
+  .semester-selector {
+    margin: 20px -60px;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
   }
 
   .text {

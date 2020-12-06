@@ -20,6 +20,11 @@
             <el-form-item label="班级描述" prop="info">
               <el-input size="medium" clearable v-model="form.info"></el-input>
             </el-form-item>
+            <el-form-item label="学期" prop="semester_id">
+              <el-select size="medium" v-model="form.semester_id" placeholder="请选择学期">
+                <el-option v-for="item in semesters" :key="item.id" :label="item.name" :value="item.id"> </el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item class="submit">
               <el-button type="primary" @click="submitForm('form')">保 存</el-button>
               <el-button @click="resetForm('form')">重 置</el-button>
@@ -44,19 +49,39 @@ export default {
       }
       callback()
     }
+    const checkSemester = (rule, value, callback) => {
+      // eslint-disable-line
+      if (!value) {
+        return callback(new Error('学期不能为空'))
+      }
+      callback()
+    }
     return {
       form: {
         name: '',
         info: '',
+        semester_id: null,
       },
       rules: {
         name: [{ validator: checkName, trigger: ['blur', 'change'], required: true }],
         info: [],
+        semester_id: [{ validator: checkSemester, trigger: ['blur', 'change'], required: true }],
       },
       loading: false,
+      semesters: [],
     }
   },
   methods: {
+    async getAllSemesters() {
+      try {
+        this.loading = true
+        this.semesters = await Admin.getAllSemesters()
+        this.loading = false
+      } catch (e) {
+        this.loading = false
+        console.log(e)
+      }
+    },
     async submitForm(formName) {
       this.$refs[formName].validate(async valid => {
         // eslint-disable-line
@@ -64,7 +89,7 @@ export default {
           let res
           try {
             this.loading = true
-            res = await Admin.createOneClass(this.form.name, this.form.info) // eslint-disable-line
+            res = await Admin.createOneClass(this.form.name, this.form.info, this.form.semester_id) // eslint-disable-line
           } catch (e) {
             this.loading = false
             console.log(e)
@@ -88,6 +113,9 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
+  },
+  created() {
+    this.getAllSemesters()
   },
 }
 </script>
