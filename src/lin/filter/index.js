@@ -103,6 +103,7 @@ const globalFilter = {
 
   signStatusFilter(val) {
     return {
+      0: '未签到',
       1: '已签到',
       2: '迟到',
       3: '已作废',

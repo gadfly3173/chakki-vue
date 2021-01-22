@@ -100,7 +100,7 @@ const classRouter = [
     inNav: false,
     icon: 'iconfont icon-huiyuanguanli',
     order: null,
-    permission: ['查询所有签到项目下的学生'],
+    permission: ['查询单个签到项目下的所有学生'],
   },
 ]
 
