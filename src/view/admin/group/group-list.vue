@@ -151,22 +151,16 @@ export default {
         try {
           this.loading = true
           res = await Admin.deleteOneGroup(val.row.id)
+          if (res.code < window.MAX_SUCCESS_CODE) {
+            await this.getAllGroups()
+            this.$message({
+              type: 'success',
+              message: `${res.message}`,
+            })
+          }
+          this.loading = false
         } catch (e) {
           this.loading = false
-          console.log(e)
-        }
-        if (res.code < window.MAX_SUCCESS_CODE) {
-          await this.getAllGroups()
-          this.$message({
-            type: 'success',
-            message: `${res.message}`,
-          })
-        } else {
-          this.loading = false
-          this.$message({
-            type: 'error',
-            message: `${res.message}`,
-          })
         }
       })
     },
@@ -191,7 +185,10 @@ export default {
   },
   async created() {
     await this.getAllGroups()
-    this.tableColumn = [{ prop: 'name', label: '名称' }, { prop: 'info', label: '信息' }] // 设置表头信息
+    this.tableColumn = [
+      { prop: 'name', label: '名称' },
+      { prop: 'info', label: '信息' },
+    ] // 设置表头信息
     this.operate = [
       { name: '信息', func: 'handleEdit', type: 'primary' },
       { name: '权限', func: 'goToGroupEditPage', type: 'info' },

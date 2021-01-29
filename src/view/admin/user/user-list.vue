@@ -166,24 +166,20 @@ export default {
         try {
           this.loading = true
           res = await Admin.deleteOneUser(val.row.id)
+          this.loading = false
+          if (res.code < window.MAX_SUCCESS_CODE) {
+            if (this.total_nums % this.pageCount === 1 && this.currentPage !== 1) {
+              // 判断删除的是不是每一页的最后一条数据
+              this.currentPage--
+            }
+            await this.getAdminUsers()
+            this.$message({
+              type: 'success',
+              message: `${res.message}`,
+            })
+          }
         } catch (e) {
           this.loading = false
-          console.log(e)
-        }
-        if (res.code < window.MAX_SUCCESS_CODE) {
-          this.loading = false
-          if (this.total_nums % this.pageCount === 1 && this.currentPage !== 1) {
-            // 判断删除的是不是每一页的最后一条数据
-            this.currentPage--
-          }
-          await this.getAdminUsers()
-          this.$message({
-            type: 'success',
-            message: `${res.message}`,
-          })
-        } else {
-          this.loading = false
-          this.$message.error(`${res.message}`)
         }
       })
     },
