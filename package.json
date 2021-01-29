@@ -3,6 +3,7 @@
   "version": "0.3.5",
   "private": true,
   "scripts": {
+    "dev": "yarn run serve",
     "serve": "node script/plugin-get-config.js && vue-cli-service serve",
     "build": "node script/plugin-get-config.js && vue-cli-service build",
     "lint": "vue-cli-service lint",
