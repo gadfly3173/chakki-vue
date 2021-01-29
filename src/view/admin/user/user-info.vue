@@ -185,6 +185,10 @@ export default {
               return
             }
             try {
+              if (!this.form.group_ids.length) {
+                this.$message.error('至少选择一个分组')
+                return
+              }
               this.loading = true
               res = await Admin.updateOneUser(this.form.username, this.form.nickname, this.form.group_ids, this.id)
             } catch (e) {

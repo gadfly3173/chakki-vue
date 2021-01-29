@@ -214,7 +214,6 @@ export default {
     },
     // 切换tab栏
     handleClick(tab) {
-      console.log(tab)
       this.activeTab = tab.name
     },
     // 监听子组件更新用户信息是否成功
