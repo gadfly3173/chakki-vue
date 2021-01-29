@@ -46,7 +46,7 @@ export default {
       classList: [],
       loading: false,
       semesters: [],
-      semesterId: 1,
+      semesterId: null,
     }
   },
   async mounted() {

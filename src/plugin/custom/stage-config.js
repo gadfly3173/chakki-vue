@@ -12,7 +12,7 @@ const CustomRouter = {
       title: 'upload 图像上传',
       type: 'view',
       name: 'ImgsUploadDemo',
-      route: '/custom/upload-image',
+      route: '/upload-image/stage1',
       filePath: 'plugin/custom/view/upload-image.vue',
       inNav: true,
       icon: 'iconfont icon-zidingyi',

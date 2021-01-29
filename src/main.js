@@ -12,7 +12,7 @@ import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
 import LinNotify from '@/component/notify'
 import router from '@/router'
 import store from '@/store'
-import App from '@/App.vue'
+import App from '@/app.vue'
 
 import StickyTop from '@/component/base/sticky-top/sticky-top'
 import LIcon from '@/component/base/icon/lin-icon'
