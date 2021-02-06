@@ -48,6 +48,7 @@ module.exports = {
     'no-param-reassign': ['error', { props: false }],
     'max-len': 0,
     'linebreak-style': 'off',
+    'no-mixed-operators': 0,
   },
   parserOptions: {
     parser: 'babel-eslint',

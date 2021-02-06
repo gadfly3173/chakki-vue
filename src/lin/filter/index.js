@@ -73,7 +73,6 @@ const globalFilter = {
   },
 
   dateTimeFormatter(t) {
-    console.log('t::', t)
     if (!t) return ''
     t = new Date(t).getTime() // eslint-disable-line
     t = new Date(t) // eslint-disable-line
@@ -92,13 +91,25 @@ const globalFilter = {
 
     let se = t.getSeconds()
     se = checkAddZone(se)
-    console.log('date::', date)
 
     return `${year}-${month}-${date} ${hour}:${min}:${se}`
   },
 
   filterTitle(value, len = 9) {
     return Utils.cutString(value, len)
+  },
+
+  byteFilter(value) {
+    if (value === null || value === '') {
+      return '0 B'
+    }
+    const unitArr = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+    let index = 0
+    const srcsize = parseFloat(value)
+    index = Math.floor(Math.log(srcsize) / Math.log(1024))
+    let size = srcsize / 1024 ** index
+    size = size.toFixed(2)
+    return `${size} ${unitArr[index - 1]}`
   },
 
   signStatusFilter(val) {
