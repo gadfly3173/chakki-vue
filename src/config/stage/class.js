@@ -25,10 +25,10 @@ const classRouter = [
     title: '班级页面',
     type: 'tab',
     name: Symbol('room'),
-    route: '/class/room/work',
-    filePath: 'view/class/room/work-list.vue',
+    // route: '/class/room/work',
+    // filePath: 'view/class/room/work-list.vue',
     inNav: false,
-    icon: null,
+    icon: 'anticon icon-home',
     children: [
       {
         route: '/class/room/work',
@@ -54,10 +54,10 @@ const classRouter = [
     title: '班级页面',
     type: 'tab',
     name: Symbol('teacher-room'),
-    route: '/teacher/class/room/work',
-    filePath: 'view/teacher/class/room/work-list.vue',
+    // route: '/teacher/class/room/work',
+    // filePath: 'view/teacher/class/room/work-list.vue',
     inNav: false,
-    icon: null,
+    icon: 'anticon icon-home',
     children: [
       {
         route: '/teacher/class/room/sign',
