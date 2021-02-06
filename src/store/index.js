@@ -10,9 +10,9 @@ import actions from './action'
 Vue.use(Vuex)
 
 const vuexLocal = new VuexPersistence({
+  key: 'chakki-persist',
   storage: window.localStorage,
   reducer: stateData => ({
-    // eslint-disable-line
     logined: stateData.logined,
     user: stateData.user,
     permissions: stateData.permissions,
