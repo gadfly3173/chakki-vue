@@ -157,7 +157,7 @@ export default {
         info: '',
         fileNum: 1,
         fileSize: 10,
-        fileSizeUnit: 'MB',
+        fileSizeUnit: '2',
         fileExtend: [],
         endTime: null,
       },
