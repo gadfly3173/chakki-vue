@@ -117,6 +117,21 @@ class Class {
     const semester = await get('v1/lesson/semester/all')
     return semester
   }
+
+  // 新建作业项目
+  async createWork(form, class_id) {
+    const res = await post('v1/lesson/work/create', {
+      class_id,
+      name: form.name,
+      info: form.info,
+      file_num: form.fileNum,
+      file_size: form.fileSize,
+      file_extend: form.fileExtend,
+      end_time: form.endTime,
+      type: form.type,
+    })
+    return res
+  }
 }
 
 export default new Class()

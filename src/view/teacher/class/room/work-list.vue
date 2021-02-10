@@ -66,6 +66,7 @@
               <el-date-picker
                 v-model="workEditForm.endTime"
                 type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期时间"
                 align="right"
                 :editable="false"
@@ -157,21 +158,22 @@ export default {
         info: '',
         fileNum: 1,
         fileSize: 10,
-        fileSizeUnit: '2',
+        fileSizeUnit: 2,
         fileExtend: [],
         endTime: null,
+        type: false,
       },
       fileSizeUnit: [
         {
-          value: '0',
+          value: 0,
           label: 'B',
         },
         {
-          value: '1',
+          value: 1,
           label: 'KB',
         },
         {
-          value: '2',
+          value: 2,
           label: 'MB',
         },
       ],
@@ -259,7 +261,10 @@ export default {
     },
     async handleEditConfirm() {
       this.loading = true
-      const res = await Class.createWork(this.workEditForm, this.currentClassId)
+      const form = JSON.parse(JSON.stringify(this.workEditForm))
+      form.fileSize *= 1024 ** form.fileSizeUnit
+      form.type = form.type ? 2 : 1
+      const res = await Class.createWork(form, this.currentClassId)
       if (res.code < window.MAX_SUCCESS_CODE) {
         this.$message.success('作业项目新建成功')
         this.workEditModal.show = false
@@ -267,8 +272,14 @@ export default {
       }
       this.loading = false
       this.workEditForm = {
-        title: '',
-        endMinutes: 1,
+        name: '',
+        info: '',
+        fileNum: 1,
+        fileSize: 10,
+        fileSizeUnit: 2,
+        fileExtend: [],
+        endTime: null,
+        type: false,
       }
     },
   },
