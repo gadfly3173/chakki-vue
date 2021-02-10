@@ -7,7 +7,7 @@ import pluginsConfig from './plugin'
 // eslint-disable-next-line import/no-mutable-exports
 let homeRouter = [
   {
-    title: '林间有风',
+    title: '关于Chakki',
     type: 'view',
     name: Symbol('about'),
     route: '/about',

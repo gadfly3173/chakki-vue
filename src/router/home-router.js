@@ -24,7 +24,7 @@ deepTravel(stageConfig, viewConfig => {
   viewRouter.name = viewConfig.name
   viewRouter.component = () => import(`@/${viewConfig.filePath}`)
   viewRouter.meta = {
-    title: viewConfig.title,
+    title: `${viewConfig.title} - Chakki 作业平台`,
     icon: viewConfig.icon,
     permission: viewConfig.permission,
     type: viewConfig.type,
