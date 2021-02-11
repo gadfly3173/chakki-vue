@@ -55,7 +55,13 @@
               </el-select>
             </el-form-item>
             <el-form-item label="允许上传的文件扩展名">
-              <el-select v-model="workEditForm.fileExtend" multiple filterable allow-create placeholder="请输入扩展名">
+              <el-select
+                v-model="workEditForm.fileExtension"
+                multiple
+                filterable
+                allow-create
+                placeholder="请输入扩展名"
+              >
               </el-select>
               <el-tooltip effect="dark" placement="right">
                 <div slot="content">在左侧直接输入想要添加的扩展名，大小写随意，不用输入句点符号'.'</div>
@@ -109,7 +115,7 @@
           </el-table-column>
           <el-table-column label="文件扩展名" width="180">
             <template slot-scope="scope">
-              {{ scope.row.file_extend | arrayToString }}
+              {{ scope.row.file_extension | arrayToString }}
             </template>
           </el-table-column>
           <el-table-column label="创建时间" width="180">
@@ -170,7 +176,7 @@ export default {
         fileNum: 1,
         fileSize: 10,
         fileSizeUnit: 2,
-        fileExtend: [],
+        fileExtension: [],
         endTime: null,
         type: false,
       },
@@ -288,7 +294,7 @@ export default {
         fileNum: 1,
         fileSize: 10,
         fileSizeUnit: 2,
-        fileExtend: [],
+        fileExtension: [],
         endTime: null,
         type: false,
       }

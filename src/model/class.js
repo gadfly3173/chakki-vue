@@ -126,7 +126,7 @@ class Class {
       info: form.info,
       file_num: form.fileNum,
       file_size: form.fileSize,
-      file_extend: form.fileExtend,
+      file_extension: form.fileExtension,
       end_time: form.endTime,
       type: form.type,
     })
