@@ -132,6 +132,16 @@ class Class {
     })
     return res
   }
+
+  // 获取班级内作业项目
+  async getWorkList(class_id, count, page) {
+    const res = await get('v1/lesson/work/list', {
+      class_id,
+      count,
+      page,
+    })
+    return res
+  }
 }
 
 export default new Class()

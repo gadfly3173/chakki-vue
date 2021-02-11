@@ -93,12 +93,23 @@
       <div class="wrapper">
         <!-- 表格渲染 -->
         <el-table :data="workList" style="width: 100%">
+          <el-table-column prop="type" label="类型">
+            <template slot-scope="scope">
+              <el-tag type="success" v-if="scope.row.type === 1">课堂作业</el-tag>
+              <el-tag v-else>课后作业</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column prop="name" label="作业项目名称" width="180"></el-table-column>
-          <el-table-column prop="worked" label="已交作业人数" width="120"></el-table-column>
-          <el-table-column prop="file_num" label="文件数量" width="120"></el-table-column>
-          <el-table-column label="文件大小" width="120">
+          <el-table-column prop="handed" label="已交作业人数" width="120"></el-table-column>
+          <el-table-column prop="file_num" label="文件数量"></el-table-column>
+          <el-table-column label="文件大小">
             <template slot-scope="scope">
               {{ scope.row.file_size | byteFilter }}
+            </template>
+          </el-table-column>
+          <el-table-column label="文件扩展名" width="180">
+            <template slot-scope="scope">
+              {{ scope.row.file_extend | arrayToString }}
             </template>
           </el-table-column>
           <el-table-column label="创建时间" width="180">
@@ -111,7 +122,7 @@
               {{ scope.row.end_time | dateTimeFormatter }}
             </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" fixed="right" width="200">
             <template slot-scope="scope">
               <el-button @click.stop="handleClick(scope.row)" type="primary" plain size="mini">编辑</el-button>
               <el-button @click.stop="handleViewStudentClick(scope.row.id)" type="success" plain size="mini"

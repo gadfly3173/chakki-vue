@@ -109,7 +109,11 @@ const globalFilter = {
     index = Math.floor(Math.log(srcsize) / Math.log(1024))
     let size = srcsize / 1024 ** index
     size = size.toFixed(2)
-    return `${size} ${unitArr[index - 1]}`
+    return `${size} ${unitArr[index]}`
+  },
+
+  arrayToString(value) {
+    return value.toString()
   },
 
   signStatusFilter(val) {
