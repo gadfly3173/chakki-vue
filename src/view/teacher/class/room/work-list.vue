@@ -41,7 +41,7 @@
                 v-model="workEditForm.fileSize"
                 size="small"
                 :min="1"
-                :max="100"
+                :max="1024"
                 controls-position="right"
               ></el-input-number>
               <el-select
@@ -61,6 +61,7 @@
                 filterable
                 allow-create
                 placeholder="请输入扩展名"
+                @change="formatExtension"
               >
               </el-select>
               <el-tooltip effect="dark" placement="right">
@@ -275,6 +276,12 @@ export default {
     async getClassDetail() {
       const res = await Class.getClassDetail(this.currentClassId)
       this.className = res.name
+    },
+    formatExtension() {
+      const index = this.workEditForm.fileExtension.length - 1
+      this.workEditForm.fileExtension[index] = this.workEditForm.fileExtension[index]
+        .replace(/[^a-zA-Z0-9]/g, '')
+        .toUpperCase()
     },
     async handleEditConfirm() {
       this.loading = true

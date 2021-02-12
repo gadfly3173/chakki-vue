@@ -46,7 +46,6 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button @click.stop="handleClick(scope.row)" type="primary" plain size="mini">编辑</el-button>
               <el-button @click.stop="handleViewStudentClick(scope.row.id)" type="success" plain size="mini"
                 >人员</el-button
               >
@@ -113,9 +112,6 @@ export default {
         this.loading = false
         this.signList = []
       }
-    },
-    handleClick(id) {
-      this.$router.push({ path: `/class/room/${id}` })
     },
     handleViewStudentClick(id) {
       this.$router.push({ path: `/teacher/class/room/sign/list/${id}` })
