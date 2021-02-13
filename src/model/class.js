@@ -124,12 +124,17 @@ class Class {
       class_id,
       name: form.name,
       info: form.info,
-      file_num: form.fileNum,
       file_size: form.fileSize,
       file_extension: form.fileExtension,
       end_time: form.endTime,
       type: form.type,
     })
+    return res
+  }
+
+  // 删除作业项目
+  async deleteWork(id) {
+    const res = await post(`v1/lesson/work/delete/${id}`)
     return res
   }
 

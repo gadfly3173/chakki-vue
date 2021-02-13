@@ -1,12 +1,12 @@
 <template>
   <div>
     <!-- 列表页面 -->
-    <div class="container" v-loading="loading">
+    <div class="container">
       <div class="header">
         <div class="title">{{ className }} - 作业项目列表</div>
       </div>
       <el-button class="create-button" type="primary" @click.stop="handleCreateWork">发起作业</el-button>
-      <el-dialog title="编辑作业项目" :visible.sync="workEditModal.show" width="600">
+      <el-dialog title="编辑作业项目" :visible.sync="workEditModal.show" width="600" v-loading="dialogLoading">
         <div>
           <el-form label-position="right" label-width="auto">
             <el-form-item label="项目名称">
@@ -27,16 +27,7 @@
                 @blur="workEditForm.info = workEditForm.info.trim()"
               ></el-input>
             </el-form-item>
-            <el-form-item label="可上传文件数量">
-              <el-input-number
-                v-model="workEditForm.fileNum"
-                size="small"
-                :min="1"
-                :max="10"
-                controls-position="right"
-              ></el-input-number>
-            </el-form-item>
-            <el-form-item label="单个可上传文件大小">
+            <el-form-item label="可上传文件大小">
               <el-input-number
                 v-model="workEditForm.fileSize"
                 size="small"
@@ -50,7 +41,7 @@
                 size="small"
                 style="width:80px;margin-left:10px"
               >
-                <el-option v-for="item in fileSizeUnit" :key="item.value" :label="item.label" :value="item.value">
+                <el-option v-for="item in fileSizeUnitList" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -60,9 +51,11 @@
                 multiple
                 filterable
                 allow-create
+                default-first-option
                 placeholder="请输入扩展名"
                 @change="formatExtension"
               >
+                <el-option v-for="item in fileExtensionList" :key="item" :label="item" :value="item"> </el-option>
               </el-select>
               <el-tooltip effect="dark" placement="right">
                 <div slot="content">在左侧直接输入想要添加的扩展名，大小写随意，不用输入句点符号'.'</div>
@@ -99,7 +92,7 @@
       </el-dialog>
       <div class="wrapper">
         <!-- 表格渲染 -->
-        <el-table :data="workList" style="width: 100%">
+        <el-table :data="workList" style="width: 100%" v-loading="loading">
           <el-table-column prop="type" label="类型">
             <template slot-scope="scope">
               <el-tag type="success" v-if="scope.row.type === 1">课堂作业</el-tag>
@@ -108,7 +101,6 @@
           </el-table-column>
           <el-table-column prop="name" label="作业项目名称" width="180"></el-table-column>
           <el-table-column prop="handed" label="已交作业人数" width="120"></el-table-column>
-          <el-table-column prop="file_num" label="文件数量"></el-table-column>
           <el-table-column label="文件大小">
             <template slot-scope="scope">
               {{ scope.row.file_size | byteFilter }}
@@ -132,10 +124,10 @@
           <el-table-column label="操作" fixed="right" width="200">
             <template slot-scope="scope">
               <el-button @click.stop="handleClick(scope.row)" type="primary" plain size="mini">编辑</el-button>
-              <el-button @click.stop="handleViewStudentClick(scope.row.id)" type="success" plain size="mini"
-                >人员</el-button
-              >
-              <el-button type="danger" size="mini" plain>删除</el-button>
+              <el-button @click.stop="handleViewStudentClick(scope.row.id)" type="success" plain size="mini">
+                人员
+              </el-button>
+              <el-button @click.stop="handleDeleteClick(scope.row.id)" type="danger" size="mini" plain>删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -167,6 +159,7 @@ export default {
       currentPage: 1,
       pageSize: 10,
       loading: false,
+      dialogLoading: false,
       className: '正在获取班级名称',
       workEditModal: {
         show: false,
@@ -174,14 +167,13 @@ export default {
       workEditForm: {
         name: '',
         info: '',
-        fileNum: 1,
         fileSize: 10,
         fileSizeUnit: 2,
         fileExtension: [],
         endTime: null,
         type: false,
       },
-      fileSizeUnit: [
+      fileSizeUnitList: [
         {
           value: 0,
           label: 'B',
@@ -195,6 +187,25 @@ export default {
           label: 'MB',
         },
       ],
+      fileExtensionList: [
+        'JPG',
+        'PNG',
+        'JPEG',
+        'BMP',
+        'JAVA',
+        'C',
+        'CPP',
+        'HTML',
+        'HTM',
+        'JS',
+        'TXT',
+        'MD',
+        'EXE',
+        'ZIP',
+        '7Z',
+        'RAR',
+      ],
+      fileExtensionOpt: [],
       pickerOptions: {
         shortcuts: [
           {
@@ -264,6 +275,13 @@ export default {
     handleViewStudentClick(id) {
       this.$router.push({ path: `/teacher/class/room/work/list/${id}` })
     },
+    async handleDeleteClick(id) {
+      const res = await Class.deleteWork(id)
+      if (res.code < window.MAX_SUCCESS_CODE) {
+        this.$message.success('作业项目删除成功')
+        this.getWorkList()
+      }
+    },
     handleCurrentChange() {
       this.getWorkList()
     },
@@ -278,13 +296,20 @@ export default {
       this.className = res.name
     },
     formatExtension() {
+      if (!this.workEditForm.fileExtension.length) {
+        return
+      }
       const index = this.workEditForm.fileExtension.length - 1
-      this.workEditForm.fileExtension[index] = this.workEditForm.fileExtension[index]
-        .replace(/[^a-zA-Z0-9]/g, '')
-        .toUpperCase()
+      const tmpStr = this.workEditForm.fileExtension[index].replace(/[^a-zA-Z0-9]/g, '').toUpperCase()
+      const tmpStrIndex = this.workEditForm.fileExtension.indexOf(tmpStr)
+      if (tmpStrIndex === index) {
+        this.workEditForm.fileExtension[index] = tmpStr
+      } else {
+        this.workEditForm.fileExtension.splice(index, 1)
+      }
     },
     async handleEditConfirm() {
-      this.loading = true
+      this.dialogLoading = true
       const form = JSON.parse(JSON.stringify(this.workEditForm))
       form.fileSize *= 1024 ** form.fileSizeUnit
       form.type = form.type ? 2 : 1
@@ -294,11 +319,10 @@ export default {
         this.workEditModal.show = false
         this.getWorkList()
       }
-      this.loading = false
+      this.dialogLoading = false
       this.workEditForm = {
         name: '',
         info: '',
-        fileNum: 1,
         fileSize: 10,
         fileSizeUnit: 2,
         fileExtension: [],
