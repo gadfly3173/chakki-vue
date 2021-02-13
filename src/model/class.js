@@ -147,6 +147,20 @@ class Class {
     })
     return res
   }
+
+  // 新建作业项目
+  async updateWork(form) {
+    const res = await post('v1/lesson/work/update', {
+      id: form.id,
+      name: form.name,
+      info: form.info,
+      file_size: form.fileSize,
+      file_extension: form.fileExtension,
+      end_time: form.endTime,
+      type: form.type,
+    })
+    return res
+  }
 }
 
 export default new Class()

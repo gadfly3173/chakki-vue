@@ -104,9 +104,8 @@ const globalFilter = {
       return '0 B'
     }
     const unitArr = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-    let index = 0
     const srcsize = parseFloat(value)
-    index = Math.floor(Math.log(srcsize) / Math.log(1024))
+    const index = Math.floor(Math.log(srcsize) / Math.log(1024))
     let size = srcsize / 1024 ** index
     size = size.toFixed(2)
     return `${size} ${unitArr[index]}`

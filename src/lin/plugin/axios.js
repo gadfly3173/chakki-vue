@@ -34,6 +34,32 @@ function refreshTokenException(code) {
 // const retryTime = 2 // 请求失败重试次数
 // const retryDelay = 1500 // 请求失败重试间隔
 
+/* 当页面有两个接口时，第一个接口loading的close事件会直接将第二个接口的loading实例也close */
+let loadingInstance = null
+function startLoading() {
+  loadingInstance = Vue.prototype.$loading({
+    text: '拼命加载中...',
+    background: 'rgba(255, 255, 255, 0.3)',
+  })
+}
+function endLoading() {
+  loadingInstance.close()
+}
+let needLoadingRequestCount = 0
+function showFullScreenLoading() {
+  if (needLoadingRequestCount === 0) {
+    startLoading()
+  }
+  needLoadingRequestCount++
+}
+function tryHideFullScreenLoading() {
+  if (needLoadingRequestCount <= 0) return
+  needLoadingRequestCount--
+  if (needLoadingRequestCount === 0) {
+    endLoading()
+  }
+}
+
 // 创建请求实例
 const _axios = axios.create(config)
 
@@ -112,9 +138,12 @@ _axios.interceptors.request.use(
         reqConfig.headers.Authorization = accessToken
       }
     }
+
+    showFullScreenLoading()
     return reqConfig
   },
   error => {
+    tryHideFullScreenLoading()
     Promise.reject(error)
   },
 )
@@ -122,6 +151,7 @@ _axios.interceptors.request.use(
 // Add a response interceptor
 _axios.interceptors.response.use(
   async res => {
+    tryHideFullScreenLoading()
     let { code, message } = res.data // eslint-disable-line
     if (res.status.toString().charAt(0) === '2') {
       return res.data
@@ -174,6 +204,7 @@ _axios.interceptors.response.use(
     })
   },
   error => {
+    tryHideFullScreenLoading()
     if (!error.response) {
       Vue.prototype.$notify({
         title: 'Network Error',

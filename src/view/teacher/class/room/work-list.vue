@@ -6,7 +6,7 @@
         <div class="title">{{ className }} - 作业项目列表</div>
       </div>
       <el-button class="create-button" type="primary" @click.stop="handleCreateWork">发起作业</el-button>
-      <el-dialog title="编辑作业项目" :visible.sync="workEditModal.show" width="600" v-loading="dialogLoading">
+      <el-dialog title="编辑作业项目" :visible.sync="workEditModal.show" width="600" @close="resetForm">
         <div>
           <el-form label-position="right" label-width="auto">
             <el-form-item label="项目名称">
@@ -66,7 +66,6 @@
               <el-date-picker
                 v-model="workEditForm.endTime"
                 type="datetime"
-                value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期时间"
                 align="right"
                 :editable="false"
@@ -92,7 +91,7 @@
       </el-dialog>
       <div class="wrapper">
         <!-- 表格渲染 -->
-        <el-table :data="workList" style="width: 100%" v-loading="loading">
+        <el-table :data="workList" style="width: 100%">
           <el-table-column prop="type" label="类型">
             <template slot-scope="scope">
               <el-tag type="success" v-if="scope.row.type === 1">课堂作业</el-tag>
@@ -123,7 +122,7 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="200">
             <template slot-scope="scope">
-              <el-button @click.stop="handleClick(scope.row)" type="primary" plain size="mini">编辑</el-button>
+              <el-button @click.stop="handleEditClick(scope.row)" type="primary" plain size="mini">编辑</el-button>
               <el-button @click.stop="handleViewStudentClick(scope.row.id)" type="success" plain size="mini">
                 人员
               </el-button>
@@ -158,13 +157,12 @@ export default {
       totalNum: 0,
       currentPage: 1,
       pageSize: 10,
-      loading: false,
-      dialogLoading: false,
       className: '正在获取班级名称',
       workEditModal: {
         show: false,
       },
       workEditForm: {
+        id: null,
         name: '',
         info: '',
         fileSize: 10,
@@ -269,8 +267,35 @@ export default {
         this.workList = []
       }
     },
-    handleClick(id) {
-      this.$router.push({ path: `/class/room/${id}` })
+    handleEditClick(detail) {
+      this.workEditForm = {
+        id: detail.id,
+        name: detail.name,
+        info: detail.info,
+        fileSize: this.fileSizeCompute(detail.file_size),
+        fileSizeUnit: this.fileSizeUnitCompute(detail.file_size),
+        fileExtension: detail.file_extension,
+        endTime: detail.end_time ? new Date(detail.end_time) : null,
+        type: detail.type === 2,
+      }
+      this.handleCreateWork()
+    },
+    fileSizeCompute(value) {
+      if (value === null || value === '') {
+        return 0
+      }
+      const srcsize = parseFloat(value)
+      const index = Math.floor(Math.log(srcsize) / Math.log(1024))
+      const size = srcsize / 1024 ** index
+      return Math.round(size)
+    },
+    fileSizeUnitCompute(value) {
+      if (value === null || value === '') {
+        return 0
+      }
+      const srcsize = parseFloat(value)
+      const index = Math.floor(Math.log(srcsize) / Math.log(1024))
+      return index
     },
     handleViewStudentClick(id) {
       this.$router.push({ path: `/teacher/class/room/work/list/${id}` })
@@ -309,18 +334,25 @@ export default {
       }
     },
     async handleEditConfirm() {
-      this.dialogLoading = true
       const form = JSON.parse(JSON.stringify(this.workEditForm))
       form.fileSize *= 1024 ** form.fileSizeUnit
       form.type = form.type ? 2 : 1
-      const res = await Class.createWork(form, this.currentClassId)
+      let res
+      if (!form.id) {
+        res = await Class.createWork(form, this.currentClassId)
+      } else {
+        res = await Class.updateWork(form)
+      }
       if (res.code < window.MAX_SUCCESS_CODE) {
         this.$message.success('作业项目新建成功')
         this.workEditModal.show = false
         this.getWorkList()
       }
-      this.dialogLoading = false
+      this.resetForm()
+    },
+    resetForm() {
       this.workEditForm = {
+        id: null,
         name: '',
         info: '',
         fileSize: 10,
