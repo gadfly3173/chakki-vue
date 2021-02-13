@@ -22,6 +22,13 @@ import '@/assets/style/index.scss' // eslint-disable-line
 import '@/assets/style/realize/element-variable.scss'
 import 'element-ui/lib/theme-chalk/display.css'
 
+import xss from 'xss'
+
+const options = {} // 自定义规则
+const myxss = new xss.FilterXSS(options)
+// 以后直接调用 $xss.process() 来处理即可
+Vue.prototype.$xss = myxss
+
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
