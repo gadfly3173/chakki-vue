@@ -100,12 +100,12 @@
           </el-table-column>
           <el-table-column prop="name" label="作业项目名称" width="180"></el-table-column>
           <el-table-column prop="handed" label="已交作业人数" width="120"></el-table-column>
-          <el-table-column label="文件大小">
+          <el-table-column label="可上传文件大小">
             <template slot-scope="scope">
               {{ scope.row.file_size | byteFilter }}
             </template>
           </el-table-column>
-          <el-table-column label="文件扩展名" width="180">
+          <el-table-column label="允许的扩展名" width="180">
             <template slot-scope="scope">
               {{ scope.row.file_extension | arrayToString }}
             </template>
@@ -158,6 +158,8 @@ export default {
       currentPage: 1,
       pageSize: 10,
       className: '正在获取班级名称',
+      loading: false,
+      dialogLoading: false,
       workEditModal: {
         show: false,
       },
@@ -301,10 +303,16 @@ export default {
       this.$router.push({ path: `/teacher/class/room/work/list/${id}` })
     },
     async handleDeleteClick(id) {
-      const res = await Class.deleteWork(id)
-      if (res.code < window.MAX_SUCCESS_CODE) {
-        this.$message.success('作业项目删除成功')
-        this.getWorkList()
+      try {
+        this.loading = true
+        const res = await Class.deleteWork(id)
+        if (res.code < window.MAX_SUCCESS_CODE) {
+          this.$message.success('作业项目删除成功')
+          this.getWorkList()
+          this.loading = false
+        }
+      } catch (e) {
+        this.loading = false
       }
     },
     handleCurrentChange() {
@@ -334,21 +342,27 @@ export default {
       }
     },
     async handleEditConfirm() {
+      this.dialogLoading = true
       const form = JSON.parse(JSON.stringify(this.workEditForm))
       form.fileSize *= 1024 ** form.fileSizeUnit
       form.type = form.type ? 2 : 1
-      let res
-      if (!form.id) {
-        res = await Class.createWork(form, this.currentClassId)
-      } else {
-        res = await Class.updateWork(form)
+      try {
+        let res
+        if (!form.id) {
+          res = await Class.createWork(form, this.currentClassId)
+        } else {
+          res = await Class.updateWork(form)
+        }
+        if (res.code < window.MAX_SUCCESS_CODE) {
+          this.dialogLoading = false
+          this.$message.success(res.message)
+          this.workEditModal.show = false
+          this.getWorkList()
+          this.resetForm()
+        }
+      } catch (e) {
+        this.dialogLoading = false
       }
-      if (res.code < window.MAX_SUCCESS_CODE) {
-        this.$message.success('作业项目新建成功')
-        this.workEditModal.show = false
-        this.getWorkList()
-      }
-      this.resetForm()
     },
     resetForm() {
       this.workEditForm = {

@@ -22,32 +22,74 @@
           {{ signDetail.name }}
         </div>
       </el-card>
-      <el-dialog title="编辑签到项目" :visible.sync="signEditModal.show" width="600">
-        <div>
-          <el-form label-position="right" label-width="80px">
-            <el-form-item label="项目名称">
-              <el-input v-model="signEditForm.title" maxlength="60" show-word-limit></el-input>
-            </el-form-item>
-            <el-form-item label="结束时间">
-              <el-input-number
-                v-model="signEditForm.endMinutes"
-                :min="1"
-                :max="100"
-                controls-position="right"
-              ></el-input-number>
-            </el-form-item>
-          </el-form>
-        </div>
-        <div slot="footer">
-          <el-button @click.stop="signEditModal.show = false">取 消</el-button>
-          <el-button type="primary" @click.stop="handleEditConfirm">确 定</el-button>
-        </div>
+      <el-dialog
+        title="作业详情"
+        :visible.sync="workHandModalShow"
+        width="600"
+        v-loading="dialogLoading"
+        :destroy-on-close="true"
+      >
+        <el-form label-position="right" label-width="auto" class="work">
+          <el-form-item label="名称">
+            <div class="title">{{ workHandModal.name }}</div>
+          </el-form-item>
+          <el-form-item label="详情">
+            <div class="info">{{ workHandModal.info }}</div>
+          </el-form-item>
+          <el-form-item label="可上传文件大小">
+            <div class="info">{{ workHandModal.file_size | byteFilter }}</div>
+          </el-form-item>
+          <el-form-item label="允许的扩展名">
+            <div class="info">{{ workHandModal.file_extension | arrayToString }}</div>
+          </el-form-item>
+          <el-form-item label="发布时间">
+            <div class="info">{{ workHandModal.create_time | dateTimeFormatter }}</div>
+          </el-form-item>
+          <el-form-item label="结束时间">
+            <div class="info">{{ workHandModal.end_time | dateTimeFormatter }}</div>
+          </el-form-item>
+          <el-form-item label="文件">
+            <el-upload
+              ref="uploader"
+              class="upload-demo"
+              drag
+              action=""
+              :limit="1"
+              :auto-upload="false"
+              :accept="formatExtensionList(workHandModal.file_extension)"
+              :on-change="handleUploaderChange"
+              :on-exceed="handleUploaderExceed"
+            >
+              <i class="el-icon-upload"></i>
+              <div class="el-upload__text">将文件拖到此处，或<em>点击选择</em></div>
+            </el-upload>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click.stop="handleHandWork">立即提交</el-button>
+            <el-button>取消</el-button>
+          </el-form-item>
+        </el-form>
       </el-dialog>
       <div class="wrapper">
         <!-- 表格渲染 -->
-        <el-table :data="signList" style="width: 100%">
-          <el-table-column prop="name" label="签到项目名称" width="180"></el-table-column>
-          <el-table-column prop="signed" label="已签到人数" width="120"></el-table-column>
+        <el-table :data="workList" style="width: 100%">
+          <el-table-column prop="type" label="类型">
+            <template slot-scope="scope">
+              <el-tag type="success" v-if="scope.row.type === 1">课堂作业</el-tag>
+              <el-tag v-else>课后作业</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="name" label="作业项目名称" width="180"></el-table-column>
+          <el-table-column label="可上传文件大小">
+            <template slot-scope="scope">
+              {{ scope.row.file_size | byteFilter }}
+            </template>
+          </el-table-column>
+          <el-table-column label="允许的扩展名" width="180">
+            <template slot-scope="scope">
+              {{ scope.row.file_extension | arrayToString }}
+            </template>
+          </el-table-column>
           <el-table-column label="创建时间" width="180">
             <template slot-scope="scope">
               {{ scope.row.create_time | dateTimeFormatter }}
@@ -60,14 +102,15 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button @click.stop="handleClick(scope.row)" type="primary" plain size="mini">编辑</el-button>
-              <el-button type="danger" size="mini" plain>删除</el-button>
+              <el-button @click.stop="handleViewClick(scope.row.id)" type="primary" plain size="mini">{{
+                workAval(scope.row) ? '交作业' : '查看'
+              }}</el-button>
             </template>
           </el-table-column>
         </el-table>
         <el-pagination
           class="pagination"
-          v-if="signList.length > 0"
+          v-if="workList.length > 0"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
@@ -91,25 +134,30 @@ export default {
       signDetail: {
         name: '暂无可用签到',
       },
-      signList: [],
+      workList: [],
       totalNum: 0,
       currentPage: 1,
       pageSize: 10,
       loading: false,
+      dialogLoading: true,
       className: '正在获取班级名称',
-      signEditModal: {
+      workHandModal: {
         show: false,
+        name: '',
+        info: '',
+        file_size: 0,
+        file_extension: [],
+        create_time: '',
+        end_time: '',
       },
-      signEditForm: {
-        title: '',
-        endMinutes: 1,
-      },
+      workHandModalShow: false,
+      fileList: [],
     }
   },
   async mounted() {
     this.getStudentClassDetail()
     this.getLatestSignDetail()
-    // await this.getSignList()
+    await this.getWorkList()
   },
   computed: {
     currentClassId() {
@@ -128,17 +176,21 @@ export default {
     },
   },
   methods: {
-    async getSignList() {
+    workAval(detail) {
+      if (detail.handed) return false
+      if (detail.end_time && new Date(detail.end_time).getTime() <= Date.now()) return false
+      return true
+    },
+    async getWorkList() {
       try {
         this.loading = true
-        const res = await Class.getSignList(this.currentClassId, this.pageSize, this.currentPage - 1)
-        this.signList = res.items
-        console.log('getsignList::', res)
+        const res = await Class.getWorkListForStudentList(this.currentClassId, this.pageSize, this.currentPage - 1)
+        this.workList = res.items
         this.loading = false
         this.totalNum = res.total
       } catch (e) {
         this.loading = false
-        this.signList = []
+        this.workList = []
       }
     },
     async getLatestSignDetail() {
@@ -161,11 +213,22 @@ export default {
         }
       }
     },
+    async handleViewClick(id) {
+      try {
+        this.loading = true
+        const res = await Class.getWorkDetailForStudent(id)
+        this.workHandModal = res
+        this.workHandModalShow = true
+        this.loading = false
+      } catch (e) {
+        this.loading = false
+      }
+    },
     handleCurrentChange() {
-      this.getSignList()
+      this.getWorkList()
     },
     handleSizeChange() {
-      this.getSignList()
+      this.getWorkList()
     },
     async handleConfirmSign() {
       try {
@@ -182,23 +245,39 @@ export default {
         this.loading = false
       }
     },
+    async handleHandWork() {
+      try {
+        this.dialogLoading = true
+        const res = await Class.handWork(this.$refs.uploader.uploadFiles[0].raw, this.workHandModal.id)
+        if (res.code < window.MAX_SUCCESS_CODE) {
+          this.$message.success(res.message)
+          this.workHandModalShow = false
+          this.getWorkList()
+        } else {
+          this.$message.error(res.message)
+        }
+        this.dialogLoading = false
+      } catch (e) {
+        console.log(e)
+        this.dialogLoading = false
+      }
+    },
+    handleUploaderExceed(files) {
+      this.$refs.uploader.clearFiles()
+      this.$refs.uploader.handleStart(files[0])
+    },
+    handleUploaderChange(file) {
+      if (file.size >= this.workHandModal.file_size) {
+        this.$message.warning('文件体积过大')
+        this.$refs.uploader.clearFiles()
+      }
+    },
     async getStudentClassDetail() {
       const res = await Class.getStudentClassDetail(this.currentClassId)
       this.className = res.name
     },
-    async handleEditConfirm() {
-      this.loading = true
-      const res = await Class.createSign(this.signEditForm, this.currentClassId)
-      if (res) {
-        this.$message.success('签到项目新建成功')
-        this.signEditModal.show = false
-        this.getSignList()
-      }
-      this.loading = false
-      this.signEditForm = {
-        title: '',
-        endMinutes: 1,
-      }
+    formatExtensionList(list) {
+      return list.map(item => `.${item}`).toString()
     },
   },
 }
@@ -273,6 +352,27 @@ export default {
     content: '';
     width: 300px;
     height: 0;
+  }
+
+  .work {
+    /deep/ .el-form-item {
+      margin-bottom: 0 !important;
+      .el-form-item__content {
+        margin-bottom: 8px !important;
+        .el-upload-list {
+          margin-top: -10px;
+          .el-upload-list__item {
+            margin-top: 0 !important;
+          }
+        }
+      }
+    }
+    .title {
+      color: #333333;
+    }
+    .info {
+      color: #4b4b4b;
+    }
   }
 
   .wrapper {

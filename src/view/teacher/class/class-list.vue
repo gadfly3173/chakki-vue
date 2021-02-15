@@ -17,7 +17,7 @@
           shadow="hover"
           v-for="item in classList"
           :key="item.id"
-          @click.native="handleClick(item.id)"
+          @click.native.stop="handleClick(item.id)"
         >
           <div slot="header" class="clearfix">
             <span class="box-header">{{ item.name }}</span>

@@ -148,6 +148,22 @@ class Class {
     return res
   }
 
+  // 学生获取班级内作业项目
+  async getWorkListForStudentList(class_id, count, page) {
+    const res = await get('v1/class/work/list', {
+      class_id,
+      count,
+      page,
+    })
+    return res
+  }
+
+  // 学生获取作业详情
+  async getWorkDetailForStudent(id) {
+    const res = await get(`v1/class/work/${id}`)
+    return res
+  }
+
   // 新建作业项目
   async updateWork(form) {
     const res = await post('v1/lesson/work/update', {
@@ -158,6 +174,14 @@ class Class {
       file_extension: form.fileExtension,
       end_time: form.endTime,
       type: form.type,
+    })
+    return res
+  }
+
+  // 交作业上传文件
+  async handWork(file, workId) {
+    const res = await post(`v1/class/work/hand/${workId}`, {
+      file,
     })
     return res
   }
