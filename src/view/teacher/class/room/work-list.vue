@@ -209,6 +209,38 @@ export default {
       pickerOptions: {
         shortcuts: [
           {
+            text: '五分钟后',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() + 5 * 60 * 1000)
+              picker.$emit('pick', date)
+            },
+          },
+          {
+            text: '十分钟后',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() + 10 * 60 * 1000)
+              picker.$emit('pick', date)
+            },
+          },
+          {
+            text: '十五分钟后',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() + 15 * 60 * 1000)
+              picker.$emit('pick', date)
+            },
+          },
+          {
+            text: '三十分钟后',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() + 30 * 60 * 1000)
+              picker.$emit('pick', date)
+            },
+          },
+          {
             text: '一小时后',
             onClick(picker) {
               const date = new Date()

@@ -65,7 +65,7 @@
             </el-upload>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click.stop="handleHandWork">立即提交</el-button>
+            <el-button type="primary" v-if="workAval(workHandModal)" @click.stop="handleHandWork">立即提交</el-button>
             <el-button>取消</el-button>
           </el-form-item>
         </el-form>
@@ -102,9 +102,9 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button @click.stop="handleViewClick(scope.row.id)" type="primary" plain size="mini">{{
-                workAval(scope.row) ? '交作业' : '查看'
-              }}</el-button>
+              <el-button @click.stop="handleViewClick(scope.row.id)" type="primary" plain size="mini">
+                {{ workAval(scope.row) ? '交作业' : '查看' }}
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
