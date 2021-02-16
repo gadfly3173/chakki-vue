@@ -52,6 +52,7 @@
             <el-upload
               ref="uploader"
               class="upload-demo"
+              v-if="workAval(workHandModal)"
               drag
               action=""
               :limit="1"
