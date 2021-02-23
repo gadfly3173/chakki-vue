@@ -10,6 +10,7 @@ const config = {
   baseURL: Config.baseURL || process.env.apiUrl || '',
   timeout: 5 * 1000, // 请求超时时间设置
   crossDomain: true,
+  responseType: 'arraybuffer',
   // withCredentials: true, // Check cross-site Access-Control
   // 定义可获得的http响应状态码
   // return true、设置为null或者undefined，promise将resolved,否则将rejected
@@ -123,10 +124,19 @@ _axios.interceptors.request.use(
 // Add a response interceptor
 _axios.interceptors.response.use(
   async res => {
-    let { code, message } = res.data // eslint-disable-line
+    if (res.headers['content-type'].toLowerCase().includes('application/octet-stream')) {
+      return res
+    }
+    if (res.request.responseType === 'arraybuffer' && res.data.toString() === '[object ArrayBuffer]') {
+      // 返回的数据是 arraybuffer，内容是 json
+      // 备注：可能内容不是 json，这里暂未处理
+      const text = Buffer.from(res.data).toString('utf8')
+      res.data = JSON.parse(text)
+    }
     if (res.status.toString().charAt(0) === '2') {
       return res.data
     }
+    let { code, message } = res.data // eslint-disable-line
     return new Promise(async (resolve, reject) => {
       const { url } = res.config
 
@@ -243,6 +253,19 @@ export function get(url, params = {}) {
     method: 'get',
     url,
     params,
+  })
+}
+
+/**
+ * @param {string} url
+ * @param {object} params
+ */
+export function download(url, params = {}) {
+  return _axios({
+    method: 'get',
+    url,
+    params,
+    timeout: 0,
   })
 }
 

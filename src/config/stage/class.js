@@ -102,6 +102,17 @@ const classRouter = [
     order: null,
     permission: ['查询单个签到项目下的所有学生'],
   },
+  {
+    title: '作业人员统计',
+    type: 'view',
+    name: null,
+    route: '/teacher/class/room/work/list/:id',
+    filePath: 'view/teacher/class/room/work-student-list.vue',
+    inNav: false,
+    icon: 'iconfont icon-huiyuanguanli',
+    order: null,
+    permission: ['查询单个作业项目下的所有学生'],
+  },
 ]
 
 export default classRouter
