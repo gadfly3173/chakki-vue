@@ -102,9 +102,14 @@
                 style="margin-left: 10px"
                 >下载</el-button
               >
-              <el-button @click.stop="handleDeleteClick(scope.row.id)" type="danger" size="mini" v-if="scope.row.id"
-                >删除</el-button
+              <el-popconfirm
+                v-if="scope.row.id"
+                title="确定删除该作业吗？"
+                @confirm="handleDeleteClick(scope.row.id)"
+                style="margin-left: 10px"
               >
+                <el-button slot="reference" type="danger" size="mini">删除</el-button>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -319,15 +324,19 @@ export default {
   }
 
   .download-all-button {
-    margin-left: 40px;
+    margin-left: 20px;
   }
 
   .wrapper {
     margin-top: 20px;
     .search-bar {
-      margin: 20px;
+      margin-top: 20px;
+      margin-left: 20px;
       /deep/ .el-form-item__label {
         padding-right: 0;
+      }
+      /deep/ .el-form-item {
+        margin-bottom: 0 !important;
       }
     }
     .count-info {

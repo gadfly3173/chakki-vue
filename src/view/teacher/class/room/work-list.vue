@@ -126,7 +126,14 @@
               <el-button @click.stop="handleViewStudentClick(scope.row.id)" type="success" plain size="mini">
                 人员
               </el-button>
-              <el-button @click.stop="handleDeleteClick(scope.row.id)" type="danger" size="mini" plain>删除</el-button>
+              <el-popconfirm
+                v-if="scope.row.id"
+                title="确定删除该作业吗？"
+                @confirm="handleDeleteClick(scope.row.id)"
+                style="margin-left: 10px"
+              >
+                <el-button slot="reference" type="danger" size="mini">删除</el-button>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
