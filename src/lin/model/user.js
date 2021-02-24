@@ -1,6 +1,6 @@
 import _axios, { post, get, put } from '@/lin/plugin/axios'
-import { saveTokens } from '../util/token'
 import store from '@/store'
+import { saveTokens } from '../util/token'
 
 export default class User {
   /**
@@ -24,7 +24,7 @@ export default class User {
     return _axios({
       method: 'post',
       url: 'cms/user/register/batch',
-      data
+      data,
     })
   }
 

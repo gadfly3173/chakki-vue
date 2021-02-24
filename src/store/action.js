@@ -1,5 +1,5 @@
-import * as types from './mutation-type'
 import { removeToken } from '@/lin/util/token'
+import * as types from './mutation-type'
 
 export default {
   setUserAndState({ commit }, user) {
