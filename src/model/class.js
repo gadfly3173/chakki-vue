@@ -198,6 +198,12 @@ class Class {
     return res
   }
 
+  // 下载指定作业项目的全部文件
+  async getWorkFileZip(id) {
+    const res = await download(`cms/file/lesson/work/download/${id}`)
+    return res
+  }
+
   // 获取作业项目的签到人员
   async getWorkUserList(work_id, work_status, order_by_IP, username, count, page) {
     const res = await get(`v1/lesson/work/students/query/${work_id}`, {
@@ -206,6 +212,14 @@ class Class {
       username,
       count,
       page,
+    })
+    return res
+  }
+
+  // 给学生作业打分
+  async rateStudentWork(id, rate) {
+    const res = await post(`v1/lesson/work/student/rate/${id}`, {
+      rate,
     })
     return res
   }

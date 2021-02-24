@@ -27,6 +27,9 @@
             <el-button type="primary" @click.stop="handleSearch">查询</el-button>
           </el-form-item>
         </el-form>
+        <el-button class="download-all-button" type="primary" @click.stop="handleDownloadAllClick"
+          >下载该作业项目所有已提交的作业</el-button
+        >
         <div class="count-info">
           <span class="info-item danger">未交：{{ workDetail.unhanded }}人</span>
           <span class="info-item info">已交：{{ workDetail.handed }}人</span>
@@ -36,7 +39,18 @@
           <el-table-column prop="username" label="用户名"></el-table-column>
           <el-table-column prop="nickname" label="昵称/姓名"></el-table-column>
           <el-table-column prop="ip" label="IP地址"></el-table-column>
-          <el-table-column prop="rate" label="分数"></el-table-column>
+          <el-table-column label="分数">
+            <template slot-scope="scope">
+              <div
+                :class="{
+                  danger: scope.row.rate < 6,
+                  warning: scope.row.rate >= 6 && scope.row.rate < 9,
+                }"
+              >
+                {{ scope.row.rate }}
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column label="作业时间">
             <template slot-scope="scope">
               {{ scope.row.create_time | dateTimeFormatter }}
@@ -60,25 +74,35 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="220">
             <template slot-scope="scope">
-              <el-button
-                @click.stop="handleRateClick(scope.row.id)"
-                type="primary"
-                size="mini"
-                v-if="scope.row.create_time"
-                >打分</el-button
+              <el-popover
+                placement="top"
+                width="285"
+                trigger="click"
+                :ref="`popover-${scope.$index}`"
+                v-if="scope.row.id"
               >
+                <div style="text-align:center;margin-bottom:10px;font-size:16px">打分</div>
+                <el-rate
+                  v-model="rateEditValue"
+                  :colors="rateEditColors"
+                  :max="10"
+                  show-score
+                  style="text-align:center;margin-bottom:5px"
+                ></el-rate>
+                <div style="text-align: right; margin: 0">
+                  <el-button type="primary" size="mini" @click.stop="handleRateClick(scope)">确定</el-button>
+                </div>
+                <el-button type="primary" size="mini" slot="reference">打分</el-button>
+              </el-popover>
               <el-button
                 @click.stop="handleDownloadClick(scope.row.id)"
                 type="success"
                 size="mini"
-                v-if="scope.row.create_time"
+                v-if="scope.row.id"
+                style="margin-left: 10px"
                 >下载</el-button
               >
-              <el-button
-                @click.stop="handleDeleteClick(scope.row.id)"
-                type="danger"
-                size="mini"
-                v-if="scope.row.create_time"
+              <el-button @click.stop="handleDeleteClick(scope.row.id)" type="danger" size="mini" v-if="scope.row.id"
                 >删除</el-button
               >
             </template>
@@ -119,6 +143,12 @@ export default {
         username: '',
         status: 0,
         orderByIP: false,
+      },
+      rateEditValue: 0,
+      rateEditColors: {
+        3: '#99A9BF',
+        6: '#F7BA2A',
+        10: '#FF9900',
       },
     }
   },
@@ -165,12 +195,42 @@ export default {
       }
     },
     async handleDownloadClick(id) {
+      const notify = this.$notify({
+        title: '提示',
+        message: '文件正在后台下载中，请勿离开或刷新本页面',
+        duration: 0,
+      })
       const res = await Class.getStudentWorkFile(id)
       // 提取文件名
       const filename = res.headers['content-disposition'].match(
         /(?:.*filename\*|filename)=(?:([^'"]*)''|("))([^;]+)\2(?:[;`\n]|$)/,
       )[3]
-      fileDownload(res.data, filename)
+      fileDownload(res.data, decodeURI(filename))
+      notify.close()
+    },
+    async handleDownloadAllClick() {
+      const notify = this.$notify({
+        title: '提示',
+        message: '文件正在后台下载中，请勿离开或刷新本页面',
+        duration: 0,
+      })
+      const res = await Class.getWorkFileZip(this.$route.params.id)
+      // 提取文件名
+      const filename = res.headers['content-disposition'].match(
+        /(?:.*filename\*|filename)=(?:([^'"]*)''|("))([^;]+)\2(?:[;`\n]|$)/,
+      )[3]
+      fileDownload(res.data, decodeURI(filename))
+      notify.close()
+    },
+    async handleRateClick(scope) {
+      const res = await Class.rateStudentWork(scope.row.id, this.rateEditValue)
+      if (res.code < window.MAX_SUCCESS_CODE) {
+        this.$message.success(res.message)
+        this.$refs[`popover-${scope.$index}`].doClose()
+        this.rateEditValue = 0
+        return this.getWorkUserList()
+      }
+      return this.$message.error(res.message)
     },
     async handleUpdateClick(userId, status) {
       const res = await Class.updateWorkRecord(this.$route.params.id, userId, status)
@@ -257,6 +317,10 @@ export default {
     content: '';
     width: 300px;
     height: 0;
+  }
+
+  .download-all-button {
+    margin-left: 40px;
   }
 
   .wrapper {
