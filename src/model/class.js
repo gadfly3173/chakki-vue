@@ -223,6 +223,12 @@ class Class {
     })
     return res
   }
+
+  // 删除学生作业
+  async deleteStudentWork(id) {
+    const res = await post(`v1/lesson/work/student/delete/${id}`)
+    return res
+  }
 }
 
 export default new Class()

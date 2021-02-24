@@ -232,11 +232,10 @@ export default {
       }
       return this.$message.error(res.message)
     },
-    async handleUpdateClick(userId, status) {
-      const res = await Class.updateWorkRecord(this.$route.params.id, userId, status)
+    async handleDeleteClick(id) {
+      const res = await Class.deleteStudentWork(id)
       if (res.code < window.MAX_SUCCESS_CODE) {
         this.$message.success(res.message)
-        this.getWorkDetail()
         return this.getWorkUserList()
       }
       return this.$message.error(res.message)
