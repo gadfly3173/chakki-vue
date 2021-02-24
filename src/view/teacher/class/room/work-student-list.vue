@@ -103,6 +103,7 @@
 
 <script>
 import Class from '@/model/class'
+import fileDownload from 'js-file-download'
 
 export default {
   data() {
@@ -169,28 +170,7 @@ export default {
       const filename = res.headers['content-disposition'].match(
         /(?:.*filename\*|filename)=(?:([^'"]*)''|("))([^;]+)\2(?:[;`\n]|$)/,
       )[3]
-      // 将二进制流转为blob
-      const blob = new Blob([res.data], { type: 'application/octet-stream' })
-      // 创建新的URL并指向File对象或者Blob对象的地址
-      const blobURL = window.URL.createObjectURL(blob)
-      // 创建a标签，用于跳转至下载链接
-      const tempLink = document.createElement('a')
-      tempLink.style.display = 'none'
-      tempLink.href = blobURL
-      tempLink.setAttribute('download', decodeURI(filename))
-      // 兼容：某些浏览器不支持HTML5的download属性
-      if (typeof tempLink.download === 'undefined') {
-        tempLink.setAttribute('target', '_blank')
-      }
-      // 挂载a标签
-      document.body.appendChild(tempLink)
-      tempLink.click()
-      // Fixes "webkit blob resource error 1"
-      setTimeout(() => {
-        document.body.removeChild(tempLink)
-        // 释放blob URL地址
-        window.URL.revokeObjectURL(blobURL)
-      }, 200)
+      fileDownload(res.data, filename)
     },
     async handleUpdateClick(userId, status) {
       const res = await Class.updateWorkRecord(this.$route.params.id, userId, status)
