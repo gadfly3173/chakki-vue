@@ -185,9 +185,12 @@ export default {
       // 挂载a标签
       document.body.appendChild(tempLink)
       tempLink.click()
-      document.body.removeChild(tempLink)
-      // 释放blob URL地址
-      window.URL.revokeObjectURL(blobURL)
+      // Fixes "webkit blob resource error 1"
+      setTimeout(() => {
+        document.body.removeChild(tempLink)
+        // 释放blob URL地址
+        window.URL.revokeObjectURL(blobURL)
+      }, 200)
     },
     async handleUpdateClick(userId, status) {
       const res = await Class.updateWorkRecord(this.$route.params.id, userId, status)

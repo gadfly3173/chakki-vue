@@ -10,7 +10,6 @@ const config = {
   baseURL: Config.baseURL || process.env.apiUrl || '',
   timeout: 5 * 1000, // 请求超时时间设置
   crossDomain: true,
-  responseType: 'arraybuffer',
   // withCredentials: true, // Check cross-site Access-Control
   // 定义可获得的http响应状态码
   // return true、设置为null或者undefined，promise将resolved,否则将rejected
@@ -124,12 +123,12 @@ _axios.interceptors.request.use(
 // Add a response interceptor
 _axios.interceptors.response.use(
   async res => {
+    // 返回的内容是文件
     if (res.headers['content-type'].toLowerCase().includes('application/octet-stream')) {
       return res
     }
+    // 返回的数据是 arraybuffer，内容是 json
     if (res.request.responseType === 'arraybuffer' && res.data.toString() === '[object ArrayBuffer]') {
-      // 返回的数据是 arraybuffer，内容是 json
-      // 备注：可能内容不是 json，这里暂未处理
       const text = Buffer.from(res.data).toString('utf8')
       res.data = JSON.parse(text)
     }
@@ -149,7 +148,7 @@ _axios.interceptors.response.use(
         }, 1500)
         return resolve(null)
       }
-      // assessToken相关，刷新令牌
+      // accessToken相关，刷新令牌
       if (code === 10041 || code === 10051) {
         const cache = {}
         if (cache.url !== url) {
@@ -266,6 +265,7 @@ export function download(url, params = {}) {
     url,
     params,
     timeout: 0,
+    responseType: 'arraybuffer',
   })
 }
 
