@@ -16,7 +16,6 @@
                     v-model="nickname"
                     suffix-icon="el-icon-edit"
                     ref="input"
-                    @blur="blur"
                     disabled
                   ></el-input>
                 </div>
@@ -56,8 +55,55 @@
               </el-form-item>
             </el-form>
           </div>
+          <div class="mfa">
+            <div class="title">MFA / 两步验证设置</div>
+            <p class="info">
+              本功能需要支持两步验证的APP配合，如谷歌验证器、微软验证器、Authy等，请确保您了解两步验证的工作流程之后再使用。开启本功能后，登录网站时需要输入两步验证器中提供的验证码，并且取消本功能也需要两步验证器中提供的验证码。
+            </p>
+            <el-popconfirm
+              title="启用后需要验证MFA码才能关闭，是否启用？"
+              v-if="!mfaEnabled"
+              @confirm="handleEnableMFA"
+            >
+              <el-button slot="reference" type="primary">启用</el-button>
+            </el-popconfirm>
+            <!-- <el-button v-else type="danger">关闭</el-button> -->
+            <el-popover placement="top" width="285" trigger="click" ref="popover-disable" v-else>
+              <div style="text-align:center;margin-bottom:10px;font-size:16px">请输入MFA码</div>
+              <el-input
+                v-model="MFACode"
+                @change="MFACode = MFACode.replace(/[^0-9]/g, '')"
+                :maxlength="6"
+                size="small"
+              ></el-input>
+              <div style="text-align: right; margin-top: 10px">
+                <el-button type="primary" size="mini" @click.stop="handleDisableMFAClick()">确定</el-button>
+              </div>
+              <el-button slot="reference" type="danger">关闭</el-button>
+            </el-popover>
+          </div>
         </el-col>
       </el-row>
+      <el-dialog title="两步验证绑定" :visible.sync="MFAQRCodeShow" @close="getMFAStatus">
+        <div>使用支持两步验证APP扫描以下二维码</div>
+        <vue-qr
+          :correctLevel="3"
+          :text="MFAQRCodeUrl"
+          :size="200"
+          :margin="10"
+          style="width:200px;height:200px"
+        ></vue-qr>
+        <div style="margin:10px">
+          在下方输入APP中显示的code，并点击“试一试”按钮来确认是否有效，五分钟内输入错误的code则会取消本次绑定
+        </div>
+        <el-input v-model="MFACode" @change="MFACode = MFACode.replace(/[^0-9]/g, '')" :maxlength="6"></el-input>
+        <div style="margin-top:10px">
+          <el-button type="primary" @click="handleConfirmCode" style="margin-right:10px">试一试</el-button>
+          <el-popconfirm title="关闭后无法再次打开，确认MFA已经绑定成功了吗？" @confirm="MFAQRCodeShow = false">
+            <el-button slot="reference" type="danger">关闭</el-button>
+          </el-popconfirm>
+        </div>
+      </el-dialog>
     </div>
     <!-- 修改头像 -->
     <el-dialog
@@ -104,6 +150,7 @@ import Croppa from 'vue-croppa'
 import User from '@/lin/model/user'
 import 'vue-croppa/dist/vue-croppa.css'
 import defaultAvatar from '@/assets/image/user/user.png'
+import VueQr from 'vue-qr'
 
 Vue.use(Croppa)
 
@@ -112,7 +159,9 @@ const height = 150
 
 export default {
   name: 'center',
-  components: {},
+  components: {
+    VueQr,
+  },
   data() {
     const oldPassword = (rule, value, callback) => {
       // eslint-disable-line
@@ -172,6 +221,10 @@ export default {
       imgInfo: null,
       quality: 1,
       defaultAvatar,
+      mfaEnabled: false,
+      MFAQRCodeShow: false,
+      MFAQRCodeUrl: '',
+      MFACode: null,
     }
   },
   computed: {
@@ -289,40 +342,10 @@ export default {
           })
       })
     },
-    async blur() {
-      if (this.nickname) {
-        const { user } = this.$store.state
-        if (this.nickname !== user.nickname && this.nickname !== '佚名') {
-          this.$axios({
-            method: 'put',
-            url: '/cms/user',
-            data: {
-              nickname: this.nickname,
-            },
-            showBackend: true,
-          })
-            .then(res => {
-              if (res.code < window.MAX_SUCCESS_CODE) {
-                this.$message({
-                  type: 'success',
-                  message: '更新昵称成功',
-                })
-                // 触发重新获取用户信息
-                return User.getInformation()
-              }
-            })
-            .then(res => {
-              // eslint-disable-line
-              this.setUserAndState(res)
-              this.nickname = res.nickname
-            })
-        }
-      }
-      this.nicknameChanged = false
-    },
     init() {
       const { user } = this.$store.state
       this.nickname = user && user.nickname ? user.nickname : '佚名'
+      this.getMFAStatus()
     },
     goToCenter() {
       this.$router.push('/center')
@@ -364,6 +387,28 @@ export default {
     clearFileInput(ele) {
       // eslint-disable-next-line
       ele.value = ''
+    },
+    async getMFAStatus() {
+      this.mfaEnabled = await User.getMFAStatus()
+    },
+    async handleEnableMFA() {
+      this.MFAQRCodeShow = true
+      this.MFAQRCodeUrl = await User.getMFAQRCodeUrl()
+    },
+    async handleConfirmCode() {
+      const res = await User.confirmUserMFASecret(this.MFACode)
+      if (res.code === 34) {
+        this.MFAQRCodeShow = false
+      }
+      this.MFACode = null
+      this.$message.success(res.message)
+    },
+    async handleDisableMFAClick() {
+      const res = await User.deleteUserMFASecret(this.MFACode)
+      this.MFACode = null
+      this.$refs['popover-disable'].doClose()
+      this.$message.success(res.message)
+      this.getMFAStatus()
     },
   },
 }
@@ -484,7 +529,8 @@ export default {
       }
     }
     .password {
-      padding: 25px 20px 25px 30px;
+      padding: 20px 20px 0 30px;
+      border-bottom: 1px solid #dae1ec;
       .title {
         color: #3a3a3a;
         font-weight: bold;
@@ -492,6 +538,26 @@ export default {
         text-indent: 0px;
         margin-bottom: 20px;
         border: none;
+      }
+      /deep/ .el-form-item {
+        margin-bottom: 0 !important;
+      }
+    }
+    .mfa {
+      padding: 0px 20px 25px 30px;
+      .title {
+        color: #3a3a3a;
+        font-weight: bold;
+        font-size: 16px;
+        text-indent: 0px;
+        border: none;
+      }
+      .info {
+        color: #3a3a3a;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        margin-bottom: 10px;
       }
     }
   }

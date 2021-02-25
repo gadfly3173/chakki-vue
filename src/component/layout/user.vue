@@ -8,21 +8,9 @@
         <div class="user-info">
           <div class="avatar" title="点击修改头像">
             <img :src="user.avatar || defaultAvatar" alt="头像" />
-            <label class="mask">
-              <i class="iconfont icon-icon-test" style="font-size: 20px;"></i>
-              <input ref="avatarInput" type="file" accept="image/*" @change="fileChange" />
-            </label>
           </div>
           <div class="text">
-            <div class="username" @click="changeNickname" v-if="!nicknameChanged">{{ nickname }}</div>
-            <el-input
-              placeholder="请输入内容"
-              size="small"
-              v-else
-              v-model="nickname"
-              ref="input"
-              @blur="blur"
-            ></el-input>
+            <div class="username" v-if="!nicknameChanged">{{ nickname }}</div>
           </div>
           <img src="../../assets/image/user/corner.png" class="corner" />
         </div>
@@ -301,37 +289,6 @@ export default {
       setTimeout(() => {
         this.$refs.input.focus()
       }, 200)
-    },
-    async blur() {
-      if (this.nickname) {
-        const { user } = this.$store.state
-        if (this.nickname !== user.nickname && this.nickname !== '佚名') {
-          this.$axios({
-            method: 'put',
-            url: '/cms/user',
-            data: {
-              nickname: this.nickname,
-            },
-            showBackend: true,
-          })
-            .then(res => {
-              if (res.code < window.MAX_SUCCESS_CODE) {
-                this.$message({
-                  type: 'success',
-                  message: '更新昵称成功',
-                })
-                // 触发重新获取用户信息
-                return User.getInformation()
-              }
-            })
-            .then(res => {
-              // eslint-disable-line
-              this.setUserAndState(res)
-              this.nickname = res.nickname
-            })
-        }
-      }
-      this.nicknameChanged = false
     },
     init() {
       const { user } = this.$store.state

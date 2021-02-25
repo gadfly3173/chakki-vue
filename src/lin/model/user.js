@@ -48,6 +48,26 @@ export default class User {
     return url
   }
 
+  static async getMFAStatus() {
+    const url = await get('cms/user/mfa')
+    return url
+  }
+
+  static async getMFAQRCodeUrl() {
+    const url = await post('cms/user/get_mfa_secret')
+    return url
+  }
+
+  static async confirmUserMFASecret(code) {
+    const res = await post(`cms/user/confirm_mfa_secret/${code}`)
+    return res
+  }
+
+  static async deleteUserMFASecret(code) {
+    const res = await post(`cms/user/delete_mfa_secret/${code}`)
+    return res
+  }
+
   /**
    * 获取当前用户信息，并返回User实例
    */
