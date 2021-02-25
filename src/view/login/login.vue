@@ -48,7 +48,10 @@ export default {
       const { username, password, captcha } = this.form
       try {
         this.loading = true
-        await User.getToken(username, password, captcha)
+        const tokens = await User.getToken(username, password, captcha)
+        if (tokens.mfarequire) {
+          return this.handleLoginWithMFA()
+        }
         await this.getInformation()
         this.loading = false
         this.$router.push(AppConfig.defaultRoute)
@@ -72,6 +75,33 @@ export default {
     async getCaptcha() {
       this.captchaUrl = await User.getCaptcha()
       this.form.captcha = ''
+    },
+    async handleLoginWithMFA() {
+      this.$prompt('由于您设置了MFA，本次登录需要验证您的MFA码。请在一分钟内输入MFA码', '登录', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /^[0-9]{6}$/,
+        inputErrorMessage: 'MFA码为六位数字',
+      })
+        .then(async ({ value }) => {
+          await User.loginWithMFA(value)
+          await this.getInformation()
+          this.loading = false
+          this.$router.push(AppConfig.defaultRoute)
+          this.$message.success('登录成功')
+        })
+        .catch(() => {
+          this.resetForm()
+        })
+    },
+    resetForm() {
+      this.form = {
+        username: '',
+        password: '',
+        captcha: '',
+      }
+      this.getCaptcha()
+      this.loading = false
     },
     ...mapActions(['setUserAndState']),
     ...mapMutations({

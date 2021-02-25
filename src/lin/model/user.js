@@ -43,6 +43,12 @@ export default class User {
     return tokens
   }
 
+  static async loginWithMFA(code) {
+    const tokens = await post(`cms/user/login_with_mfa/${code}`)
+    saveTokens(tokens.access_token, tokens.refresh_token)
+    return tokens
+  }
+
   static async getCaptcha() {
     const url = await get('cms/user/get_captcha_img')
     return url
