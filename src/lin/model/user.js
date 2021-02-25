@@ -33,13 +33,19 @@ export default class User {
    * @param {string} username 用户名
    * @param {string} password 密码
    */
-  static async getToken(username, password) {
+  static async getToken(username, password, captcha) {
     const tokens = await post('cms/user/login', {
       username,
       password,
+      captcha,
     })
     saveTokens(tokens.access_token, tokens.refresh_token)
     return tokens
+  }
+
+  static async getCaptcha() {
+    const url = await get('cms/user/get_captcha_img')
+    return url
   }
 
   /**

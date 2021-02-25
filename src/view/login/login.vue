@@ -12,6 +12,10 @@
           <span class="icon secret-icon"></span>
           <input type="password" v-model="form.password" autocomplete="off" placeholder="请填写用户登录密码" />
         </div>
+        <div class="form-item captcha">
+          <input type="text" v-model="form.captcha" autocomplete="off" placeholder="请填写验证码" class="input" />
+          <img :src="captchaUrl" class="captcha-img" />
+        </div>
         <button class="submit-btn" type="submit">登录</button>
       </form>
     </div>
@@ -34,21 +38,24 @@ export default {
       form: {
         username: '',
         password: '',
+        captcha: '',
       },
+      captchaUrl: '',
     }
   },
   methods: {
     async login() {
-      const { username, password } = this.form
+      const { username, password, captcha } = this.form
       try {
         this.loading = true
-        await User.getToken(username, password)
+        await User.getToken(username, password, captcha)
         await this.getInformation()
         this.loading = false
         this.$router.push(AppConfig.defaultRoute)
         this.$message.success('登录成功')
       } catch (e) {
         this.loading = false
+        this.getCaptcha()
         console.log(e)
       }
     },
@@ -62,6 +69,10 @@ export default {
         console.log(e)
       }
     },
+    async getCaptcha() {
+      this.captchaUrl = await User.getCaptcha()
+      this.form.captcha = ''
+    },
     ...mapActions(['setUserAndState']),
     ...mapMutations({
       setUserPermissions: 'SET_USER_PERMISSIONS',
@@ -70,6 +81,7 @@ export default {
   created() {
     // 节流登录
     this.throttleLogin = Utils.throttle(this.login, this.wait)
+    this.getCaptcha()
   },
   components: {},
 }
@@ -142,6 +154,18 @@ export default {
         background: url('../../assets/image/login/password.png') no-repeat;
         background-size: 100% auto;
         background-position: left bottom;
+      }
+
+      .form-item.captcha {
+        display: flex;
+        .input {
+          width: auto;
+        }
+        .captcha-img {
+          height: 30px;
+          width: auto;
+          margin: 0;
+        }
       }
 
       .submit-btn {
