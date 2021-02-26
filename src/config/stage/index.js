@@ -1,6 +1,5 @@
 import Utils from '@/lin/util/util'
 import adminConfig from './admin'
-import bookConfig from './book' // 引入图书管理路由文件
 import classConfig from './class' // 引入班级路由文件
 import pluginsConfig from './plugin'
 
@@ -37,7 +36,6 @@ let homeRouter = [
     icon: 'iconfont icon-rizhiguanli',
   },
   ...classConfig,
-  bookConfig,
   ...adminConfig,
   {
     title: '404',
