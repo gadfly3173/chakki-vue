@@ -256,6 +256,7 @@ export function get(url, params = {}) {
 }
 
 /**
+ * 下载用的实例配置
  * @param {string} url
  * @param {object} params
  */

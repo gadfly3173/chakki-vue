@@ -39,7 +39,9 @@ export default class User {
       password,
       captcha,
     })
-    saveTokens(tokens.access_token, tokens.refresh_token)
+    if (!tokens.mfarequire) {
+      saveTokens(tokens.access_token, tokens.refresh_token)
+    }
     return tokens
   }
 
