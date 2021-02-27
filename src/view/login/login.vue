@@ -58,6 +58,7 @@ export default {
       } catch (e) {
         this.loading = false
         this.getCaptcha()
+        // eslint-disable-next-line
         console.log(e)
       }
     },
@@ -68,6 +69,7 @@ export default {
         this.setUserAndState(user)
         this.setUserPermissions(user.permissions)
       } catch (e) {
+        // eslint-disable-next-line
         console.log(e)
       }
     },

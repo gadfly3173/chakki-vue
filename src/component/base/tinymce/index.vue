@@ -1,8 +1,10 @@
 <template>
   <div>
-    <editor id="tinymceEditor" :init="tinymceInit" v-model="content" :key="tinymceFlag"></editor>
+    <editor id="tinymceEditor" ref="tinymceEditor" :init="tinymceInit" v-model="content" :key="tinymceFlag"></editor>
+    <el-divider class="word-count">字数：{{ wordCount }} 字</el-divider>
   </div>
 </template>
+
 <script>
 // eslint-disable-next-line
 import tinymce from 'tinymce/tinymce'
@@ -35,12 +37,12 @@ export default {
     },
     toolbar: {
       type: String,
-      default: ` undo redo 
-      | formatselect 
-      | bold italic strikethrough forecolor backcolor formatpainter 
-      | link image | alignleft aligncenter alignright alignjustify 
-      | numlist bullist outdent indent 
-      | removeformat 
+      default: ` undo redo
+      | formatselect
+      | bold italic strikethrough forecolor backcolor formatpainter
+      | link image | alignleft aligncenter alignright alignjustify
+      | numlist bullist outdent indent
+      | removeformat
       | preview fullscreen code`,
     },
     baseUrl: {
@@ -56,14 +58,21 @@ export default {
       tinymceFlag: 1,
       tinymceInit: {},
       content: '',
+      wordCount: 0,
     }
+  },
+  methods: {
+    wordCountUpdate() {
+      const { wordcount } = tinymce.activeEditor.plugins
+      this.wordCount = wordcount.body.getWordCount()
+    },
   },
   created() {
     const _this = this
     this.tinymceInit = {
       language_url: `${this.baseUrl}/tinymce/langs/zh_CN.js`,
       skin_url: `${this.baseUrl}/tinymce/skins/ui/oxide`,
-      content_css: `${this.baseUrl}/tinymce/skins/content/default/content.css`,
+      content_css: `${this.baseUrl}/tinymce/skins/content/default/content.min.css`,
       language: 'zh_CN',
       height: this.height,
       width: undefined,
@@ -73,8 +82,8 @@ export default {
       statusbar: false, // 隐藏编辑器底部的状态栏
       paste_data_images: true, // 允许粘贴图像
       menubar: this.showMenubar, // 隐藏最上方menu
-      plugins: `print fullpage searchreplace autolink directionality visualblocks 
-        visualchars template codesample charmap hr pagebreak nonbreaking anchor toc insertdatetime 
+      plugins: `print searchreplace autolink directionality visualblocks
+        visualchars template codesample charmap hr pagebreak nonbreaking anchor toc insertdatetime
         wordcount textpattern help advlist table lists paste preview fullscreen image imagetools code link`,
       toolbar: this.toolbar,
       async images_upload_handler(blobInfo, success, failure) {
@@ -106,6 +115,7 @@ export default {
   watch: {
     content: {
       handler() {
+        this.wordCountUpdate()
         this.$emit('change', this.content)
       },
     },
@@ -121,3 +131,13 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.word-count {
+  /deep/ .el-divider__text.is-center {
+    background: #f9fafb;
+  }
+  font-size: 14px;
+  margin-top: 20px;
+}
+</style>
