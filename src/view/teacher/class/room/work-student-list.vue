@@ -131,8 +131,8 @@
 </template>
 
 <script>
-import Class from '@/model/class'
 import fileDownload from 'js-file-download'
+import Class from '@/model/class'
 
 export default {
   data() {

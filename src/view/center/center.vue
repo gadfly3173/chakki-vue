@@ -147,10 +147,10 @@
 import { mapActions, mapGetters } from 'vuex'
 import Vue from 'vue'
 import Croppa from 'vue-croppa'
+import VueQr from 'vue-qr'
 import User from '@/lin/model/user'
 import 'vue-croppa/dist/vue-croppa.css'
 import defaultAvatar from '@/assets/image/user/user.png'
-import VueQr from 'vue-qr'
 
 Vue.use(Croppa)
 
