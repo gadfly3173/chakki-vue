@@ -121,6 +121,7 @@ export default {
     },
     defaultContent: {
       handler() {
+        this.$_lin_jump()
         this.content = this.defaultContent
       },
       immediate: true,

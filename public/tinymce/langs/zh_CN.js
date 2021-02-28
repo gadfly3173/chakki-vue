@@ -46,7 +46,7 @@ tinymce.addI18n('zh_CN', {
   Div: 'Div',
   Pre: 'Pre',
   Code: '代码',
-  Paragraph: '段落',
+  Paragraph: '正文',
   Blockquote: '引文区块',
   Inline: '文本',
   Blocks: '基块',
