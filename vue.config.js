@@ -33,6 +33,7 @@ module.exports = {
             test: /\.js$|\.html$|\.css$|\.jpg$|\.jpeg$|\.png/, // 需要压缩的文件类型
             threshold: 100, // 归档需要进行压缩的文件大小最小值
             deleteOriginalAssets: false, // 是否删除原文件
+            minRatio: 0.8, //压缩率达到20%才会压缩
           }),
         ],
       }

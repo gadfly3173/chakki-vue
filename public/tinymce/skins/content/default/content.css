@@ -4,35 +4,35 @@
  * For LGPL see License.txt in the project root for license information.
  * For commercial licenses see https://www.tiny.cloud/
  */
-table {
+.mce-content-body table {
   border-collapse: collapse;
 }
-table th,
-table td {
+.mce-content-body table th,
+.mce-content-body table td {
   border: 1px solid #ccc;
   padding: .4rem;
 }
-blockquote {
+.mce-content-body blockquote {
   border-left: 2px solid #ccc;
   margin-left: 1.5rem;
   padding-left: 1rem;
 }
-figure {
+.mce-content-body figure {
   display: table;
   margin: 1rem auto;
 }
-figure figcaption {
+.mce-content-body figure figcaption {
   color: #999;
   display: block;
   margin-top: .25rem;
   text-align: center;
 }
-hr {
+.mce-content-body hr {
   border-color: #ccc;
   border-style: solid;
   border-width: 1px 0 0 0;
 }
-code {
+.mce-content-body code {
   background-color: #e8e8e8;
   border-radius: 3px;
   padding: .1rem .2rem;

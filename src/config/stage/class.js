@@ -84,7 +84,7 @@ const classRouter = [
         type: 'view',
         name: 'announceList',
         filePath: 'view/teacher/class/room/announce-list.vue',
-        inNav: false,
+        inNav: true,
         title: '公告列表',
         icon: 'iconfont icon-fold',
         permission: ['发起签到'],

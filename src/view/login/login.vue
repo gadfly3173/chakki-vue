@@ -4,11 +4,11 @@
       <div class="title"><h1 title="Lin">Chakki - 作业平台</h1></div>
       <form class="login-form" autocomplete="off" @submit.prevent="throttleLogin()">
         <div class="form-item nickname">
-          <span class="icon account-icon"></span>
+          <i class="el-icon-user"></i>
           <input type="text" v-model="form.username" autocomplete="off" placeholder="请填写用户名" />
         </div>
         <div class="form-item password">
-          <span class="icon secret-icon"></span>
+          <i class="el-icon-lock"></i>
           <input type="password" v-model="form.password" autocomplete="off" placeholder="请填写用户登录密码" />
         </div>
         <div class="form-item captcha">
@@ -123,7 +123,7 @@ export default {
   width: 100%;
   height: 100%;
   background-size: auto;
-  background: #1b2c5f url('../../assets/image/login/login-ba.png') no-repeat center center;
+  background: #1b2c5f url('../../assets/image/login/login-ba.jpg') no-repeat center center;
 
   .team-name {
     position: fixed;
@@ -165,13 +165,18 @@ export default {
         margin-bottom: 34px;
 
         input {
-          width: 100%;
+          width: 350px;
           height: 100%;
           background: transparent;
           color: #c4c9d2;
           font-size: 14px;
-          padding-left: 74px;
+          padding-left: 20px;
           box-sizing: border-box;
+        }
+
+        i {
+          color: #c4c9d2;
+          vertical-align: middle;
         }
       }
 
@@ -189,8 +194,9 @@ export default {
 
       .form-item.captcha {
         display: flex;
+        justify-content: center;
         .input {
-          width: auto;
+          width: 220px;
         }
         .captcha-img {
           height: 30px;

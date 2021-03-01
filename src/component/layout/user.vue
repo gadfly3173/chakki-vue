@@ -385,7 +385,7 @@ export default {
   border: none;
 
   .user-info {
-    background-image: url('../../assets/image/user/user-bg.png');
+    background-image: url('../../assets/image/user/user-bg.jpg');
     background-size: 100% 100%;
     transform: translateY(-10px);
     border-top-left-radius: 4px;
