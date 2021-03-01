@@ -229,6 +229,22 @@ class Class {
     const res = await post(`v1/lesson/work/student/delete/${id}`)
     return res
   }
+
+  // 删除学生作业
+  async deleteAnnounce(id) {
+    const res = await post(`v1/lesson/announcement/delete/${id}`)
+    return res
+  }
+
+  // 获取班级内通知公告
+  async getAnnounceList(class_id, count, page) {
+    const res = await get('v1/lesson/announcement/list', {
+      class_id,
+      count,
+      page,
+    })
+    return res
+  }
 }
 
 export default new Class()

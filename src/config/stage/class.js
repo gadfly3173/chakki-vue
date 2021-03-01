@@ -113,6 +113,17 @@ const classRouter = [
     order: null,
     permission: ['查询单个作业项目下的所有学生'],
   },
+  {
+    title: '编辑通知公告',
+    type: 'view',
+    name: null,
+    route: '/teacher/class/room/announce/edit/:id',
+    filePath: 'view/teacher/class/room/announce-edit.vue',
+    inNav: false,
+    icon: 'el-icon-edit-outline',
+    order: null,
+    permission: ['发布通知公告'],
+  },
 ]
 
 export default classRouter

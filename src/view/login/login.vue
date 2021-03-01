@@ -12,7 +12,15 @@
           <input type="password" v-model="form.password" autocomplete="off" placeholder="请填写用户登录密码" />
         </div>
         <div class="form-item captcha">
-          <input type="text" v-model="form.captcha" autocomplete="off" placeholder="请填写验证码" class="input" />
+          <i class="el-icon-key"></i>
+          <input
+            type="text"
+            v-model="form.captcha"
+            autocomplete="off"
+            placeholder="请填写验证码"
+            class="input"
+            maxlength="4"
+          />
           <img :src="captchaUrl" class="captcha-img" />
         </div>
         <button class="submit-btn" type="submit">登录</button>
@@ -195,8 +203,11 @@ export default {
       .form-item.captcha {
         display: flex;
         justify-content: center;
+        i {
+          line-height: 30px;
+        }
         .input {
-          width: 220px;
+          width: 240px;
         }
         .captcha-img {
           height: 30px;

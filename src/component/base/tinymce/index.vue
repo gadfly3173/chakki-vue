@@ -93,7 +93,7 @@ export default {
         _this
           .$axios({
             method: 'post',
-            url: '/cms/file',
+            url: '/cms/file/img/upload',
             data: {
               file,
             },
@@ -115,13 +115,13 @@ export default {
   watch: {
     content: {
       handler() {
+        this.$_lin_jump()
         this.wordCountUpdate()
         this.$emit('change', this.content)
       },
     },
     defaultContent: {
       handler() {
-        this.$_lin_jump()
         this.content = this.defaultContent
       },
       immediate: true,
@@ -139,6 +139,7 @@ export default {
     background: #f9fafb;
   }
   font-size: 14px;
-  margin-top: 20px;
+  margin: 20px auto 0;
+  max-width: 500px;
 }
 </style>

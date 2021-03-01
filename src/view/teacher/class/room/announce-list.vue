@@ -1,0 +1,271 @@
+<template>
+  <div>
+    <!-- 列表页面 -->
+    <div class="container">
+      <div class="header">
+        <div class="title">{{ className }} - 公告项目列表</div>
+      </div>
+      <el-button class="create-button" type="primary" @click.stop="handleCreateAnnounce">发起公告</el-button>
+      <div class="wrapper">
+        <!-- 表格渲染 -->
+        <el-table :data="announceList" style="width: 100%">
+          <el-table-column prop="title" label="标题"></el-table-column>
+          <el-table-column label="创建时间" width="180">
+            <template slot-scope="scope">
+              {{ scope.row.create_time | dateTimeFormatter }}
+            </template>
+          </el-table-column>
+          <el-table-column label="更新时间" width="180">
+            <template slot-scope="scope">
+              {{ scope.row.update_time | dateTimeFormatter }}
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" fixed="right" width="200">
+            <template slot-scope="scope">
+              <el-button @click.stop="handleEditClick(scope.row)" type="primary" plain size="mini">编辑</el-button>
+              <el-popconfirm
+                v-if="scope.row.id"
+                title="确定删除该公告吗？"
+                @confirm="handleDeleteClick(scope.row.id)"
+                style="margin-left: 10px"
+              >
+                <el-button slot="reference" type="danger" size="mini">删除</el-button>
+              </el-popconfirm>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          class="pagination"
+          v-if="announceList.length > 0"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="currentPage"
+          :page-sizes="[10, 20, 50, 100]"
+          :page-size.sync="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalNum"
+        >
+        </el-pagination>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Class from '@/model/class'
+
+export default {
+  data() {
+    return {
+      announceList: [],
+      totalNum: 0,
+      currentPage: 1,
+      pageSize: 10,
+      className: '正在获取班级名称',
+      loading: false,
+    }
+  },
+  async mounted() {
+    this.getClassDetail()
+    await this.getAnnounceList()
+  },
+  computed: {
+    currentClassId() {
+      return this.$store.state.currentClassId
+    },
+  },
+  methods: {
+    async getAnnounceList() {
+      try {
+        this.loading = true
+        const res = await Class.getAnnounceList(this.currentClassId, this.pageSize, this.currentPage - 1)
+        this.announceList = res.items
+        this.loading = false
+        this.totalNum = res.total
+      } catch (e) {
+        this.loading = false
+        this.announceList = []
+      }
+    },
+    handleEditClick(detail) {
+      this.announceEditForm = {
+        id: detail.id,
+        name: detail.name,
+        info: detail.info,
+        fileSize: this.fileSizeCompute(detail.file_size),
+        fileSizeUnit: this.fileSizeUnitCompute(detail.file_size),
+        fileExtension: detail.file_extension,
+        endTime: detail.end_time ? new Date(detail.end_time) : null,
+        type: detail.type === 2,
+      }
+      this.handleCreateAnnounce()
+    },
+    fileSizeCompute(value) {
+      if (value === null || value === '') {
+        return 0
+      }
+      const srcsize = parseFloat(value)
+      const index = Math.floor(Math.log(srcsize) / Math.log(1024))
+      const size = srcsize / 1024 ** index
+      return Math.round(size)
+    },
+    fileSizeUnitCompute(value) {
+      if (value === null || value === '') {
+        return 0
+      }
+      const srcsize = parseFloat(value)
+      const index = Math.floor(Math.log(srcsize) / Math.log(1024))
+      return index
+    },
+    handleViewStudentClick(id) {
+      this.$router.push({ path: `/teacher/class/room/announce/list/${id}` })
+    },
+    async handleDeleteClick(id) {
+      try {
+        this.loading = true
+        const res = await Class.deleteAnnounce(id)
+        if (res.code < window.MAX_SUCCESS_CODE) {
+          this.$message.success('公告项目删除成功')
+          this.getAnnounceList()
+          this.loading = false
+        }
+      } catch (e) {
+        this.loading = false
+      }
+    },
+    handleCurrentChange() {
+      this.getAnnounceList()
+    },
+    handleSizeChange() {
+      this.getAnnounceList()
+    },
+    handleCreateAnnounce() {
+      this.$router.push({ path: '/teacher/class/room/announce/edit/0' })
+    },
+    async getClassDetail() {
+      const res = await Class.getClassDetail(this.currentClassId)
+      this.className = res.name
+    },
+    formatExtension() {
+      if (!this.announceEditForm.fileExtension.length) {
+        return
+      }
+      const index = this.announceEditForm.fileExtension.length - 1
+      const tmpStr = this.announceEditForm.fileExtension[index].replace(/[^a-zA-Z0-9]/g, '').toUpperCase()
+      const tmpStrIndex = this.announceEditForm.fileExtension.indexOf(tmpStr)
+      if (tmpStrIndex === index) {
+        this.announceEditForm.fileExtension[index] = tmpStr
+      } else {
+        this.announceEditForm.fileExtension.splice(index, 1)
+      }
+    },
+    async handleEditConfirm() {
+      this.dialogLoading = true
+      const form = JSON.parse(JSON.stringify(this.announceEditForm))
+      form.fileSize *= 1024 ** form.fileSizeUnit
+      form.type = form.type ? 2 : 1
+      try {
+        let res
+        if (!form.id) {
+          res = await Class.createAnnounce(form, this.currentClassId)
+        } else {
+          res = await Class.updateAnnounce(form)
+        }
+        if (res.code < window.MAX_SUCCESS_CODE) {
+          this.dialogLoading = false
+          this.$message.success(res.message)
+          this.announceEditModal.show = false
+          this.getAnnounceList()
+          this.resetForm()
+        }
+      } catch (e) {
+        this.dialogLoading = false
+      }
+    },
+    resetForm() {
+      this.announceEditForm = {
+        id: null,
+        name: '',
+        info: '',
+        fileSize: 10,
+        fileSizeUnit: 2,
+        fileExtension: [],
+        endTime: null,
+        type: false,
+      }
+    },
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+.container {
+  padding: 0 30px;
+  color: #596c8e;
+
+  .header {
+    .title {
+      height: 59px;
+      line-height: 59px;
+      color: $parent-title-color;
+      font-size: 16px;
+      font-weight: 500;
+      text-indent: 40px;
+      border-bottom: 1px solid #dae1ec;
+    }
+  }
+
+  .create-button {
+    margin-top: 20px;
+    margin-left: 40px;
+  }
+
+  .text {
+    font-size: 14px;
+    word-break: break-all;
+  }
+
+  .item {
+    margin-bottom: 18px;
+    line-height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: '';
+  }
+  .clearfix:after {
+    clear: both;
+  }
+
+  .box-card {
+    margin: 20px;
+    width: 300px;
+    user-select: none;
+    cursor: pointer;
+    .box-header {
+      font-weight: 700;
+    }
+  }
+
+  .box-card:after {
+    display: block;
+    content: '';
+    width: 300px;
+    height: 0;
+  }
+
+  .wrapper {
+    margin-top: 20px;
+    .pagination {
+      margin: 10px 30px;
+    }
+  }
+}
+</style>
