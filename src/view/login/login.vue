@@ -211,7 +211,7 @@ export default {
         }
         .captcha-img {
           height: 30px;
-          width: auto;
+          width: 110px;
           margin: 0;
         }
       }
