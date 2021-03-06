@@ -245,6 +245,39 @@ class Class {
     })
     return res
   }
+
+  // 获取指定通知公告
+  async getAnnouncementVO(id) {
+    const res = await get(`v1/lesson/announcement/${id}`)
+    return res
+  }
+
+  // 发布通知公告
+  async createAnnouncement(title, content, class_id) {
+    const res = await post('v1/lesson/announcement/create', {
+      title,
+      content,
+      class_id,
+    })
+    return res
+  }
+
+  // 修改指定通知公告
+  async updateAnnouncement(id, title, content) {
+    const res = await post(`v1/lesson/announcement/update/${id}`, {
+      title,
+      content,
+    })
+    return res
+  }
+
+  // 修改公告文件
+  async updateAnnouncementAttachment(id, file) {
+    const res = await post(`v1/lesson/announcement/attachment/${id}`, {
+      file,
+    })
+    return res
+  }
 }
 
 export default new Class()

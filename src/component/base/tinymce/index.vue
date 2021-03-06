@@ -63,8 +63,12 @@ export default {
   },
   methods: {
     wordCountUpdate() {
-      const { wordcount } = tinymce.activeEditor.plugins
-      this.wordCount = wordcount.body.getWordCount()
+      if (!tinymce.activeEditor.plugins.wordcount) {
+        return setTimeout(() => {
+          this.wordCount = tinymce.activeEditor.plugins.wordcount.body.getWordCount()
+        }, 2000)
+      }
+      this.wordCount = tinymce.activeEditor.plugins.wordcount.body.getWordCount()
     },
   },
   created() {
@@ -116,8 +120,8 @@ export default {
     content: {
       handler() {
         this.$_lin_jump()
-        this.wordCountUpdate()
         this.$emit('change', this.content)
+        this.wordCountUpdate()
       },
     },
     defaultContent: {

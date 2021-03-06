@@ -10,8 +10,9 @@
         >
           <i v-if="!filterIcon(stageList[item.stageId].icon)" :class="stageList[item.stageId].icon"></i>
           <img v-else :src="stageList[item.stageId].icon" style="width:16px;" />
-          <span style="padding: 0 5px;">{{ stageList[item.stageId].title }}</span>
+          <span style="margin: 0 5px;">{{ stageList[item.stageId].title }}</span>
           <span class="el-icon-close" @click.prevent.stop="close(index)" />
+          <span v-if="item.path === $route.path" class="el-icon-refresh" @click.prevent.stop="refresh" />
         </router-link>
       </swiper-slide>
     </swiper>
@@ -215,6 +216,10 @@ export default {
       this.histories.splice(index, 1)
       this.histories = [...this.histories]
     },
+    refresh() {
+      // 刷新当前路由
+      this.$router.go(0)
+    },
   },
 }
 </script>
@@ -265,6 +270,11 @@ export default {
       position: absolute;
     }
 
+    .el-icon-refresh {
+      opacity: 0;
+      width: 0;
+    }
+
     &:hover {
       background: $theme;
       border: none;
@@ -291,6 +301,17 @@ export default {
           right: -1px;
           transform: scale(0.7);
         }
+      }
+
+      .el-icon-refresh {
+        font-size: 8px;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
+        opacity: 1;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
       }
     }
   }

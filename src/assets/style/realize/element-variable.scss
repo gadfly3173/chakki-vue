@@ -655,6 +655,10 @@ thead tr {
   color: $--link-disabled-font-color;
 }
 
+.el-upload-dragger {
+  border-radius: 2px;
+}
+
 $typeMap: (primary:#3963BC,
   success:#00C292,
   danger: #E46A76,

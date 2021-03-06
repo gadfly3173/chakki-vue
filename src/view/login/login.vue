@@ -21,7 +21,7 @@
             class="input"
             maxlength="4"
           />
-          <img :src="captchaUrl" class="captcha-img" />
+          <img :src="captchaUrl" class="captcha-img" alt="验证码" />
         </div>
         <button class="submit-btn" type="submit">登录</button>
       </form>

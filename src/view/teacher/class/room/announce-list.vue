@@ -22,7 +22,7 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="200">
             <template slot-scope="scope">
-              <el-button @click.stop="handleEditClick(scope.row)" type="primary" plain size="mini">编辑</el-button>
+              <el-button @click.stop="handleEditClick(scope.row.id)" type="primary" plain size="mini">编辑</el-button>
               <el-popconfirm
                 v-if="scope.row.id"
                 title="确定删除该公告吗？"
@@ -87,18 +87,8 @@ export default {
         this.announceList = []
       }
     },
-    handleEditClick(detail) {
-      this.announceEditForm = {
-        id: detail.id,
-        name: detail.name,
-        info: detail.info,
-        fileSize: this.fileSizeCompute(detail.file_size),
-        fileSizeUnit: this.fileSizeUnitCompute(detail.file_size),
-        fileExtension: detail.file_extension,
-        endTime: detail.end_time ? new Date(detail.end_time) : null,
-        type: detail.type === 2,
-      }
-      this.handleCreateAnnounce()
+    handleEditClick(id) {
+      this.handleEditAnnounce(id)
     },
     fileSizeCompute(value) {
       if (value === null || value === '') {
@@ -141,6 +131,9 @@ export default {
     },
     handleCreateAnnounce() {
       this.$router.push({ path: '/teacher/class/room/announce/edit/0' })
+    },
+    handleEditAnnounce(id) {
+      this.$router.push({ path: `/teacher/class/room/announce/edit/${id}` })
     },
     async getClassDetail() {
       const res = await Class.getClassDetail(this.currentClassId)
