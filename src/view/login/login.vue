@@ -21,7 +21,7 @@
             class="input"
             maxlength="4"
           />
-          <img :src="captchaUrl" class="captcha-img" alt="验证码" />
+          <img :src="captchaUrl" class="captcha-img" alt="点击刷新验证码" @click.stop="getCaptcha" />
         </div>
         <button class="submit-btn" type="submit">登录</button>
       </form>
@@ -213,6 +213,7 @@ export default {
           height: 30px;
           width: 110px;
           margin: 0;
+          cursor: pointer;
         }
       }
 
