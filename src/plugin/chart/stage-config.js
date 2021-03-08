@@ -7,6 +7,7 @@ const ChartsRouter = {
   filePath: 'plugin/chart/view/chart.vue',
   order: 0,
   inNav: true,
+  permission: ['超级管理员独有权限'],
 }
 
 export default ChartsRouter

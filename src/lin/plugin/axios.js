@@ -8,7 +8,7 @@ import { getToken, saveAccessToken } from '@/lin/util/token'
 
 const config = {
   baseURL: Config.baseURL || process.env.apiUrl || '',
-  timeout: 30 * 1000, // 请求超时时间设置
+  timeout: 10 * 1000, // 请求超时时间设置
   crossDomain: true,
   withCredentials: true, // Check cross-site Access-Control
   // 定义可获得的http响应状态码
@@ -252,6 +252,19 @@ export function get(url, params = {}) {
     method: 'get',
     url,
     params,
+  })
+}
+
+/**
+ * @param {string} url
+ * @param {object} params
+ */
+export function postfile(url, params = {}) {
+  return _axios({
+    method: 'post',
+    url,
+    params,
+    timeout: 0,
   })
 }
 

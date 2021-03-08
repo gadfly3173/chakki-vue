@@ -3,10 +3,10 @@
     <div class="lin-info">
       <div class="lin-info-left">
         <div class="welcome">
-          <img src="../../assets/image/about/welcome.png" class="welcome-title" alt="" />
+          <div class="welcome-title">欢迎来到Chakki课堂管理系统</div>
           <div class="subtitle">
-            <div class="guide">您还可以点击林间有风官方网站，查看更多作品</div>
-            <div class="link"><a href="https://www.talelin.com" target="_blank">https://talelin.com</a></div>
+            <div class="guide">本系统为猪蹄的本科毕设，欢迎访问我的主页</div>
+            <div class="link"><a href="https://www.gadfly.vip" target="_blank">https://www.gadfly.vip</a></div>
           </div>
         </div>
         <img class="welcome-bg" src="../../assets/image/about/header-bg.png" alt="" />
@@ -18,34 +18,42 @@
             <ul class="team-ul">
               <li>
                 <span class="shadow-box"> <i class="team-shadow"></i> </span> <span class="team-role">策划</span>
-                <span class="team-name">七月</span>
+                <span class="team-name">猪蹄</span>
               </li>
               <li>
                 <span class="shadow-box"> <i class="team-shadow"></i> </span> <span class="team-role">研发</span>
                 <span class="team-name">
-                  <ul v-if="!showTeam">
-                    <li>Pedro</li>
-                    <li>一飞</li>
-                    <li>凉面</li>
-                    <li>圈圈</li>
-                    <li>家乐</li>
-                    <li>Jocky</li>
-                    <li>流乔</li>
-                    <li>西麦</li>
-                  </ul>
-                  <ul v-else>
-                    <li>林间有风 CMS 组</li>
+                  <ul>
+                    <li>猪蹄</li>
                   </ul>
                 </span>
               </li>
               <li>
-                <span class="shadow-box"> <i class="team-shadow"></i> </span> <span class="team-role">设计</span>
-                <span class="team-name">瓜瓜</span>
+                <span class="shadow-box"> <i class="team-shadow"></i> </span> <span class="team-role">指导教师</span>
+                <span class="team-name">江峰</span>
               </li>
             </ul>
           </div>
-          <div class="team-icon"><img src="../../assets/image/about/qrcode.jpg" alt="" /></div>
-          <p class="team-label">林间有风公众号</p>
+          <div class="team-icon">
+            <a href="https://github.com/gadfly3173/chakki-vue" target="_blank">前端代码仓库</a>
+            <a href="https://github.com/gadfly3173/chakki-spring" target="_blank">后端代码仓库</a>
+          </div>
+          <div class="team-label">
+            <svg
+              class="octicon octicon-law mr-1"
+              viewBox="0 0 16 16"
+              version="1.1"
+              width="16"
+              height="16"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8.75.75a.75.75 0 00-1.5 0V2h-.984c-.305 0-.604.08-.869.23l-1.288.737A.25.25 0 013.984 3H1.75a.75.75 0 000 1.5h.428L.066 9.192a.75.75 0 00.154.838l.53-.53-.53.53v.001l.002.002.002.002.006.006.016.015.045.04a3.514 3.514 0 00.686.45A4.492 4.492 0 003 11c.88 0 1.556-.22 2.023-.454a3.515 3.515 0 00.686-.45l.045-.04.016-.015.006-.006.002-.002.001-.002L5.25 9.5l.53.53a.75.75 0 00.154-.838L3.822 4.5h.162c.305 0 .604-.08.869-.23l1.289-.737a.25.25 0 01.124-.033h.984V13h-2.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-2.5V3.5h.984a.25.25 0 01.124.033l1.29.736c.264.152.563.231.868.231h.162l-2.112 4.692a.75.75 0 00.154.838l.53-.53-.53.53v.001l.002.002.002.002.006.006.016.015.045.04a3.517 3.517 0 00.686.45A4.492 4.492 0 0013 11c.88 0 1.556-.22 2.023-.454a3.512 3.512 0 00.686-.45l.045-.04.01-.01.006-.005.006-.006.002-.002.001-.002-.529-.531.53.53a.75.75 0 00.154-.838L13.823 4.5h.427a.75.75 0 000-1.5h-2.234a.25.25 0 01-.124-.033l-1.29-.736A1.75 1.75 0 009.735 2H8.75V.75zM1.695 9.227c.285.135.718.273 1.305.273s1.02-.138 1.305-.273L3 6.327l-1.305 2.9zm10 0c.285.135.718.273 1.305.273s1.02-.138 1.305-.273L13 6.327l-1.305 2.9z"
+              ></path>
+            </svg>
+            MIT License
+          </div>
         </div>
       </div>
     </div>
@@ -53,9 +61,9 @@
       <div class="quantity-item">
         <div class="quantity-detail">
           <div class="quantity-detail-box">
-            <div class="quantity-title">总访问量</div>
+            <div class="quantity-title">Followers</div>
             <div class="quantity-border-line"></div>
-            <div class="quantity">11,590</div>
+            <div class="quantity">7</div>
           </div>
         </div>
         <div class="quantity-icon"><img src="../../assets/image/about/icon.png" alt="" /></div>
@@ -63,9 +71,9 @@
       <div class="quantity-item">
         <div class="quantity-detail">
           <div class="quantity-detail-box">
-            <div class="quantity-title">总用户数</div>
+            <div class="quantity-title">Following</div>
             <div class="quantity-border-line"></div>
-            <div class="quantity">51,862</div>
+            <div class="quantity">11</div>
           </div>
         </div>
         <div class="quantity-icon"><img src="../../assets/image/about/icon.png" alt="" /></div>
@@ -73,9 +81,11 @@
       <div class="quantity-item">
         <div class="quantity-detail">
           <div class="quantity-detail-box">
-            <div class="quantity-title">新增访问量 (月)</div>
+            <div class="quantity-title">Highlights</div>
             <div class="quantity-border-line"></div>
-            <div class="quantity">1,862</div>
+            <div class="quantity" style="font-size: 14px; line-height: 18px; letter-spacing: 0">
+              Arctic Code Vault Contributor
+            </div>
           </div>
         </div>
         <div class="quantity-icon"><img src="../../assets/image/about/icon.png" alt="" /></div>
@@ -83,9 +93,9 @@
       <div class="quantity-item">
         <div class="quantity-detail">
           <div class="quantity-detail-box">
-            <div class="quantity-title">新增用户数</div>
+            <div class="quantity-title">Repositories</div>
             <div class="quantity-border-line"></div>
-            <div class="quantity">1,323</div>
+            <div class="quantity">14</div>
           </div>
         </div>
         <div class="quantity-icon"><img src="../../assets/image/about/icon.png" alt="" /></div>
@@ -94,45 +104,58 @@
     <div class="information">
       <div class="personal">
         <div class="personal-title">个人信息</div>
-        <img src="../../assets/image/about/avatar.png" class="personal-avatar" />
+        <a href="https://github.com/gadfly3173" target="_blank"
+          ><img src="https://avatars.githubusercontent.com/u/28685179" class="personal-avatar"
+        /></a>
+        <a href="https://github.com/gadfly3173" target="_blank"><div class="personal-username">gadfly3173</div></a>
         <div class="personal-influence">
-          <div class="personal-influence-item">
-            <div class="personal-influence-num color1">5411</div>
-            <div class="personal-influece-label">总访问量</div>
-          </div>
-          <div class="personal-influence-item">
-            <div class="personal-influence-num color2">913</div>
-            <div class="personal-influece-label">粉丝</div>
-          </div>
-          <div class="personal-influence-item">
-            <div class="personal-influence-num color3">72</div>
-            <div class="personal-influece-label">作品</div>
-          </div>
+          <a class="personal-influence-item" href="https://github.com/gadfly3173?tab=followers" target="_blank">
+            <div class="personal-influence-num color1">7</div>
+            <div class="personal-influece-label">关注者</div>
+          </a>
+          <a class="personal-influence-item" href="https://github.com/gadfly3173?tab=following" target="_blank">
+            <div class="personal-influence-num color2">11</div>
+            <div class="personal-influece-label">关注中</div>
+          </a>
+          <a class="personal-influence-item" href="https://github.com/gadfly3173?tab=stars" target="_blank">
+            <div class="personal-influence-num color3">89</div>
+            <div class="personal-influece-label">星标</div>
+          </a>
         </div>
         <el-tabs v-model="activeName" class="personal-tabs">
-          <el-tab-pane label="最新作品" name="first">
-            <div class="content">How to Contribute to Open Source?</div>
+          <el-tab-pane label="最新博客" name="first">
+            <div class="content">
+              <a href="https://blog.gadfly.vip/2021/02/axios-xhr-with-cookie/" target="_blank"
+                >Axios 发送请求时携带 Cookies</a
+              >
+            </div>
           </el-tab-pane>
-          <el-tab-pane label="最热作品" name="second">
-            <div class="content">为什么程序员们愿意在GitHub上开源...</div>
+          <el-tab-pane label="最热博客" name="second">
+            <div class="content">
+              <a href="https://blog.gadfly.vip/2019/09/about-ic-cards/" target="_blank">关于NFC和IC智能卡的一二三</a>
+            </div>
+            <div class="content">
+              <a href="https://blog.gadfly.vip/2019/05/campus-card-research/" target="_blank">关于校园一卡通的初探索</a>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </div>
       <div class="article">
-        <div class="article-title">文章</div>
+        <div class="article-title">私货博客</div>
         <div class="article-list">
-          <div class="article-item" @click="handleArticle('https://opensource.guide/how-to-contribute/')">
-            <img class="article-thumb" src="../../assets/image/about/open-source.jpg" alt="" />
+          <a class="article-item" href="https://blog.gadfly.vip/2019/09/about-ic-cards/" target="_blank">
+            <img class="article-thumb" src="https://blog.gadfly.vip/img/random/material-13.png" alt="" />
             <div class="article-detail">
-              <p class="article-detail-title">How to Contribute to Open Source?</p>
+              <p class="article-detail-title">关于NFC和IC智能卡的一二三</p>
               <div class="article-detail-content">
-                Whether you just made your first open source contribution, or you’re looking for new ways to contribute,
-                we hope you’re inspired to take action. Even if your contribution wasn’t accepted, don’t forget to say
-                thanks when a maintainer put effort into helping you. Open source is made by people like you: one issue,
-                pull request, comment, or high-five at a time.
+                近场通信技术（Near-field
+                communication，NFC）由非接触式射频识别（RFID）演变而来，由飞利浦半导体（现恩智浦半导体）、诺基亚和索尼共同于2004年研制开发，
+                其基础是RFID及互连技术。近场通信是一种短距高频的无线电技术，在13.56MHz频率运行于20厘米距离内。其传输速度有106
+                Kbit/秒、212 Kbit/秒或者424 Kbit/秒三种。 当前近场通信已通过成为ISO/IEC IS
+                18092国际标准、EMCA-340标准与ETSI TS 102 190标准。NFC采用主动和被动两种读取模式。
               </div>
               <div class="article-tool">
-                <div class="pubdate">一天前</div>
+                <div class="pubdate">2019年9月29日</div>
                 <div class="article-about">
                   <span><i class="iconfont icon-shoucang"></i>37</span>
                   <el-divider direction="vertical"></el-divider>
@@ -142,16 +165,18 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="article-item" @click="handleArticle('https://www.zhihu.com/question/269033309')">
-            <img class="article-thumb" src="../../assets/image/about/open-source.jpg" alt="" />
+          </a>
+          <a class="article-item" href="https://blog.gadfly.vip/2019/05/campus-card-research/" target="_blank">
+            <img class="article-thumb" src="https://blog.gadfly.vip/img/random/material-12.png" alt="" />
             <div class="article-detail article-last">
-              <p class="article-detail-title">为什么程序员们愿意在GitHub上开源自己的成果给别人免费使用和学习？</p>
+              <p class="article-detail-title">关于校园一卡通的初探索</p>
               <div class="article-detail-content">
-                “Git的精髓在于让所有人的贡献无缝合并。而GitHub的天才之处，在于理解了Git的精髓。”来一句我们程序员们接地气的话：分享是一种快乐~
+                校园一卡通涵盖了我们校园生活中的方方面面，吃饭喝水购物门禁都靠它，对于其工作方式我非常感兴趣，因此做了这次的探索。
+                In the world of locked rooms, the man with the key is king. – Moriarty
+                本文中提到的所有技术仅供学习研究作参考，请勿将其用于非法用途！！！
               </div>
               <div class="article-tool">
-                <div class="pubdate">2019年5月26日</div>
+                <div class="pubdate">2019年5月7日</div>
                 <div class="article-about">
                   <span><i class="iconfont icon-shoucang"></i>37</span>
                   <el-divider direction="vertical"></el-divider>
@@ -161,7 +186,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </a>
         </div>
       </div>
     </div>
@@ -207,8 +232,10 @@ export default {
       .welcome {
         margin: 28px 0 0 30px;
         .welcome-title {
-          width: 366px;
-          height: 31px;
+          font-size: 28px;
+          font-weight: 300;
+          letter-spacing: 2px;
+          color: #fff;
         }
         .subtitle {
           display: flex;
@@ -230,6 +257,7 @@ export default {
             text-align: center;
             line-height: 20px;
             color: rgba(255, 255, 255, 1);
+            padding: 0 5px;
           }
         }
       }
@@ -290,7 +318,7 @@ export default {
 
               .team-role {
                 display: inline-block;
-                width: 30px;
+                width: 60px;
                 margin-right: 15px;
                 font-weight: 400;
                 color: #45526b;
@@ -317,27 +345,30 @@ export default {
           position: absolute;
           top: 25%;
           right: 33px;
-          width: 70px;
-          height: 70px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background-color: #fff;
-          box-shadow: 0 0 10px 0 #cfd5e3;
-
-          img {
-            width: 62px;
-            height: 62px;
+          a {
+            display: block;
+            line-height: 30px;
           }
         }
         .team-label {
           position: absolute;
           top: 73%;
-          right: 20px;
+          right: 33px;
           font-size: 13px;
           font-weight: 400;
           color: rgba(69, 82, 107, 1);
           line-height: 20px;
+          .mr-1 {
+            margin-right: 4px !important;
+          }
+          .octicon {
+            vertical-align: text-bottom;
+          }
+          .octicon {
+            display: inline-block;
+            vertical-align: text-top;
+            fill: currentColor;
+          }
         }
       }
     }
@@ -364,7 +395,7 @@ export default {
             line-height: 20px;
             color: #495468;
             font-size: 14px;
-            font-weight: 400;
+            font-weight: 700;
           }
           .quantity-border-line {
             width: 46px;
@@ -415,17 +446,23 @@ export default {
         color: #596c8e;
         font-size: 16px;
       }
+      .personal-username {
+        font-size: 32px;
+        font-weight: 600;
+        text-align: center;
+        margin: 0 auto 30px;
+      }
       .personal-avatar {
         width: 140px;
         height: 140px;
-        margin: 0 auto 40px;
+        margin: 0 auto 20px;
         border-radius: 75px;
         box-shadow: 0 0 30px 0 #cfd5e3;
       }
       .personal-influence {
         display: flex;
         justify-content: space-between;
-        padding: 0 30px 40px;
+        padding: 0 30px 20px;
         .personal-influence-item {
           display: flex;
           flex-direction: column;
@@ -453,11 +490,22 @@ export default {
       }
       .personal-tabs {
         margin-bottom: 20px;
+        .content {
+          height: 36px;
+          font-size: 16px;
+          font-weight: 400;
+          color: #45526b;
+          line-height: 36px;
+          border-bottom: 1px #ecedef solid;
+        }
       }
       .personal-tabs /deep/ .is-top {
         width: 320px;
         display: flex;
         justify-content: space-around;
+      }
+      .personal-tabs /deep/ .el-tabs__header {
+        margin: 0 0 10px;
       }
       .personal-tabs /deep/ .el-tabs__content {
         text-indent: 20px;

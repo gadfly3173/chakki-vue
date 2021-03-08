@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import { get, post, download } from '@/lin/plugin/axios'
+import { get, post, download, postfile } from '@/lin/plugin/axios'
 
 // 我们通过 class 这样的语法糖使模型这个概念更加具象化，其优点：耦合性低、可维护性。
 class Class {
@@ -180,7 +180,7 @@ class Class {
 
   // 交作业上传文件
   async handWork(file, workId) {
-    const res = await post(`v1/class/work/hand/${workId}`, {
+    const res = await postfile(`v1/class/work/hand/${workId}`, {
       file,
     })
     return res
@@ -273,7 +273,7 @@ class Class {
 
   // 修改公告文件
   async updateAnnouncementAttachment(id, file) {
-    const res = await post(`v1/lesson/announcement/attachment/${id}`, {
+    const res = await postfile(`v1/lesson/announcement/attachment/${id}`, {
       file,
     })
     return res
