@@ -176,6 +176,9 @@ export default {
     handleDelete(_this, index, row) {
       _this.$emit('handleDelete', { index, row })
     },
+    handleUserMFADelete(_this, index, row) {
+      _this.$emit('handleUserMFADelete', { index, row })
+    },
     // 行内跳转页面
     goToGroupEditPage(_this, index, row) {
       _this.$emit('goToGroupEditPage', { index, row })

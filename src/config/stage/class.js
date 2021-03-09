@@ -7,7 +7,7 @@ const classRouter = [
     filePath: 'view/class/class-list.vue',
     inNav: true,
     icon: 'iconfont icon-erji1',
-    order: null,
+    order: 3,
     permission: ['查询学生本学期所属班级'],
   },
   {
@@ -18,7 +18,7 @@ const classRouter = [
     filePath: 'view/teacher/class/class-list.vue',
     inNav: true,
     icon: 'iconfont icon-erji1',
-    order: null,
+    order: 4,
     permission: ['查询教师本学期所属班级'],
   },
   {

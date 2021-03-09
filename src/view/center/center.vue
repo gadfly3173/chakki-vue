@@ -20,12 +20,8 @@
                   ></el-input>
                 </div>
               </div>
-              <div class="avatar" title="点击修改头像">
+              <div class="avatar">
                 <img :src="user.avatar || defaultAvatar" alt="头像" />
-                <label class="mask">
-                  <i class="iconfont icon-icon-test" style="font-size: 20px;"></i>
-                  <input ref="avatarInput" type="file" accept="image/*" @change="fileChange" disabled />
-                </label>
               </div>
             </div>
           </div>

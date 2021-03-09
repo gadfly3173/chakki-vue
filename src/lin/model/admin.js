@@ -210,6 +210,11 @@ export default class Admin {
     return res
   }
 
+  static async deleteUserMFA(id) {
+    const res = await _delete(`cms/admin/user/mfa/${id}`)
+    return res
+  }
+
   static async updateOneUser(username, nickname, group_ids, id) {
     const res = await put(`cms/admin/user/${id}`, {
       username,

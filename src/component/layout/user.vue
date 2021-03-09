@@ -6,7 +6,7 @@
       </span>
       <el-dropdown-menu slot="dropdown" class="user-box">
         <div class="user-info">
-          <div class="avatar" title="点击修改头像">
+          <div class="avatar">
             <img :src="user.avatar || defaultAvatar" alt="头像" />
           </div>
           <div class="text">

@@ -14,6 +14,7 @@
       :operate="operate"
       @handleEdit="handleEdit"
       @handleDelete="handleDelete"
+      @handleUserMFADelete="handleUserMFADelete"
       @row-click="rowClick"
       v-loading="loading"
     ></lin-table>
@@ -183,6 +184,29 @@ export default {
         }
       })
     },
+    handleUserMFADelete(val) {
+      let res
+      this.$confirm('此操作将删除用户两步验证, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(async () => {
+        try {
+          this.loading = true
+          res = await Admin.deleteUserMFA(val.row.id)
+          this.loading = false
+          if (res.code < window.MAX_SUCCESS_CODE) {
+            await this.getAdminUsers()
+            this.$message({
+              type: 'success',
+              message: `${res.message}`,
+            })
+          }
+        } catch (e) {
+          this.loading = false
+        }
+      })
+    },
     // 提交表单信息
     async confirmEdit() {
       if (this.activeTab === '修改信息') {
@@ -263,6 +287,7 @@ export default {
     this.operate = [
       { name: '编辑', func: 'handleEdit', type: 'primary' },
       { name: '删除', func: 'handleDelete', type: 'danger' },
+      { name: '解除mfa', func: 'handleUserMFADelete', type: 'danger' },
     ]
     this.eventBus.$on('addUser', this.addUser)
   },
