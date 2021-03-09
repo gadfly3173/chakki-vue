@@ -8,7 +8,6 @@ import '@/lin/filter'
 import '@/lin/plugin'
 import '@/lin/directive'
 
-import xss from 'xss'
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
 import LinNotify from '@/component/notify'
 import router from '@/router'
@@ -22,11 +21,6 @@ import SourceCode from '@/component/base/source-code/source-code'
 import '@/assets/style/index.scss' // eslint-disable-line
 import '@/assets/style/realize/element-variable.scss'
 import 'element-ui/lib/theme-chalk/display.css'
-
-const options = {} // 自定义规则
-const myxss = new xss.FilterXSS(options)
-// 以后直接调用 $xss.process() 来处理即可
-Vue.prototype.$xss = myxss
 
 Vue.config.productionTip = false
 

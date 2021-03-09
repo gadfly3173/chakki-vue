@@ -246,6 +246,21 @@ class Class {
     return res
   }
 
+  async getStudentAnnounceList(class_id, count, page) {
+    const res = await get('v1/class/announcement/list', {
+      class_id,
+      count,
+      page,
+    })
+    return res
+  }
+
+  // 获取指定通知公告
+  async getStudentAnnouncementVO(id) {
+    const res = await get(`v1/class/announcement/${id}`)
+    return res
+  }
+
   // 获取指定通知公告
   async getAnnouncementVO(id) {
     const res = await get(`v1/lesson/announcement/${id}`)
