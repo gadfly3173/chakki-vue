@@ -293,6 +293,17 @@ class Class {
     })
     return res
   }
+
+  // 下载公告附件
+  async downloadAnnouncementFile(id) {
+    const res = await download(`cms/file/lesson/announcement/download/${id}`)
+    return res
+  }
+
+  async downloadStudentAnnouncementFile(id) {
+    const res = await download(`cms/file/class/announcement/download/${id}`)
+    return res
+  }
 }
 
 export default new Class()

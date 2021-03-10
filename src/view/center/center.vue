@@ -59,7 +59,7 @@
             <el-popconfirm
               title="启用后需要验证MFA码才能关闭，是否启用？"
               v-if="!mfaEnabled"
-              @confirm="handleEnableMFA"
+              @onConfirm="handleEnableMFA"
             >
               <el-button slot="reference" type="primary">启用</el-button>
             </el-popconfirm>
@@ -80,7 +80,14 @@
           </div>
         </el-col>
       </el-row>
-      <el-dialog title="两步验证绑定" :visible.sync="MFAQRCodeShow" @close="getMFAStatus">
+      <el-dialog
+        title="两步验证绑定"
+        :visible.sync="MFAQRCodeShow"
+        @close="getMFAStatus"
+        :show-close="false"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false"
+      >
         <div>使用支持两步验证APP扫描以下二维码</div>
         <vue-qr
           :correctLevel="3"
@@ -90,12 +97,12 @@
           style="width:200px;height:200px"
         ></vue-qr>
         <div style="margin:10px">
-          在下方输入APP中显示的code，并点击“试一试”按钮来确认是否有效，五分钟内输入错误的code则会取消本次绑定
+          在下方输入APP中显示的code，并点击“启用”按钮来确认是否有效，超过五分钟没有输入或验证失败则需要重新生成
         </div>
         <el-input v-model="MFACode" @change="MFACode = MFACode.replace(/[^0-9]/g, '')" :maxlength="6"></el-input>
         <div style="margin-top:10px">
-          <el-button type="primary" @click="handleConfirmCode" style="margin-right:10px">试一试</el-button>
-          <el-popconfirm title="关闭后无法再次打开，确认MFA已经绑定成功了吗？" @confirm="MFAQRCodeShow = false">
+          <el-button type="primary" @click="handleConfirmCode" style="margin-right:10px">启用</el-button>
+          <el-popconfirm title="关闭后将会取消本次绑定，是否继续？" @onConfirm="MFAQRCodeShow = false">
             <el-button slot="reference" type="danger">关闭</el-button>
           </el-popconfirm>
         </div>
@@ -389,15 +396,17 @@ export default {
     },
     async handleEnableMFA() {
       this.MFAQRCodeShow = true
+      console.log(1)
       this.MFAQRCodeUrl = await User.getMFAQRCodeUrl()
     },
     async handleConfirmCode() {
       const res = await User.confirmUserMFASecret(this.MFACode)
-      if (res.code === 34) {
+      if (res.code < window.MAX_SUCCESS_CODE) {
         this.MFAQRCodeShow = false
+        this.$message.success(res.message)
       }
       this.MFACode = null
-      this.$message.success(res.message)
+      this.getMFAStatus()
     },
     async handleDisableMFAClick() {
       const res = await User.deleteUserMFASecret(this.MFACode)

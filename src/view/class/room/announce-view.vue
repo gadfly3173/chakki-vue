@@ -10,7 +10,7 @@
         <div class="attachment">
           <div class="title">
             已发布的附件：
-            <span v-if="announce.filename" class="filename">
+            <span v-if="announce.filename" class="filename" title="点击下载文件" @click="handleDownloadClick($route.params.id)">
               <i class="el-icon-download"></i>
               {{ announce.filename }} - {{ announce.filesize | byteFilter }}
             </span>
@@ -23,8 +23,8 @@
 </template>
 
 <script>
+import fileDownload from 'js-file-download'
 import Class from '@/model/class'
-import Prism from '@/assets/style/prism'
 
 export default {
   data() {
@@ -57,6 +57,20 @@ export default {
     async getClassDetail() {
       const res = await Class.getStudentClassDetail(this.currentClassId)
       this.className = res.name
+    },
+    async handleDownloadClick(id) {
+      const notify = this.$notify({
+        title: '提示',
+        message: '文件正在后台下载中，请勿离开或刷新本页面',
+        duration: 0,
+      })
+      const res = await Class.downloadStudentAnnouncementFile(id)
+      // 提取文件名
+      const filename = res.headers['content-disposition'].match(
+        /(?:.*filename\*|filename)=(?:([^'"]*)''|("))([^;]+)\2(?:[;`\n]|$)/,
+      )[3]
+      fileDownload(res.data, decodeURI(filename))
+      notify.close()
     },
   },
   watch: {

@@ -86,7 +86,7 @@ export default {
       this.form.captcha = ''
     },
     async handleLoginWithMFA() {
-      this.$prompt('由于您设置了MFA，本次登录需要验证您的MFA码。请在一分钟内输入MFA码', '登录', {
+      this.$prompt('由于您设置了MFA，本次登录需要验证您的MFA码。请在五分钟内输入MFA码', '登录', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         inputPattern: /^[0-9]{6}$/,

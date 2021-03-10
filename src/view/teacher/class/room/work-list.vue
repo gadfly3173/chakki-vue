@@ -129,7 +129,7 @@
               <el-popconfirm
                 v-if="scope.row.id"
                 title="确定删除该作业吗？"
-                @confirm="handleDeleteClick(scope.row.id)"
+                @onConfirm="handleDeleteClick(scope.row.id)"
                 style="margin-left: 10px"
               >
                 <el-button slot="reference" type="danger" size="mini">删除</el-button>

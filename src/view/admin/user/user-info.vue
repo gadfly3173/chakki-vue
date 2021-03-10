@@ -37,9 +37,9 @@
       </el-form-item>
       <el-form-item v-if="pageType !== 'password'" label="选择分组">
         <el-checkbox-group v-model="form.group_ids" size="small" style="transform: translateY(5px);">
-          <el-checkbox v-for="item in groups" :key="item.id" :label="item.id" border style="margin-left: 0">{{
-            item.name
-          }}</el-checkbox>
+          <el-checkbox v-for="item in groups" :key="item.id" :label="item.id" border style="margin-left: 0">
+            {{ item.name }}
+          </el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item v-show="submit" class="submit">
