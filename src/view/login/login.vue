@@ -130,8 +130,8 @@ export default {
 .login {
   width: 100%;
   height: 100%;
-  background-size: auto;
-  background: #1b2c5f url('../../assets/image/login/login-ba.jpg') no-repeat center center;
+  background: #1b2c5f url(../img/login-ba.97589bd8.jpg) no-repeat center/cover;
+  background-size: cover;
 
   .team-name {
     position: fixed;
