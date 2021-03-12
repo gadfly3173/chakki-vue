@@ -332,7 +332,7 @@ export default {
             }, 1000)
           }
         } else {
-          console.log('error submit!!')
+          // console.log('error submit!!')
           this.$message.error('请填写正确的信息')
           return false
         }

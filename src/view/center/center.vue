@@ -377,7 +377,7 @@ export default {
             }, 1000)
           }
         } else {
-          console.log('error submit!!')
+          // console.log('error submit!!')
           this.$message.error('请填写正确的信息')
           return false
         }
@@ -396,7 +396,6 @@ export default {
     },
     async handleEnableMFA() {
       this.MFAQRCodeShow = true
-      console.log(1)
       this.MFAQRCodeUrl = await User.getMFAQRCodeUrl()
     },
     async handleConfirmCode() {

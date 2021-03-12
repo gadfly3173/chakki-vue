@@ -88,7 +88,7 @@ export default {
             res = await Admin.createOneGroup(this.form.name, this.form.info, finalPermissions, this.id) // eslint-disable-line
           } catch (e) {
             this.loading = false
-            console.log(e)
+            // console.log(e)
           }
           if (res.code < window.MAX_SUCCESS_CODE) {
             this.loading = false

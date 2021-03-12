@@ -173,7 +173,7 @@ export default {
               } else {
                 this.$message.error('新增用户失败')
               }
-              console.log(e)
+              // console.log(e)
             }
           } else {
             // 更新用户信息
@@ -193,7 +193,7 @@ export default {
               res = await Admin.updateOneUser(this.form.username, this.form.nickname, this.form.group_ids, this.id)
             } catch (e) {
               this.loading = false
-              console.log(e)
+              // console.log(e)
             }
             if (res.code < window.MAX_SUCCESS_CODE) {
               this.loading = false
@@ -205,7 +205,7 @@ export default {
             }
           }
         } else {
-          console.log('error submit!!')
+          // console.log('error submit!!')
           this.$message.error('请填写正确的信息')
         }
       })

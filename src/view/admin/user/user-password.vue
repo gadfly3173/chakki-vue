@@ -79,7 +79,7 @@ export default {
             res = await Admin.changePassword(this.form.new_password, this.form.confirm_password, this.id) // eslint-disable-line
           } catch (e) {
             this.loading = false
-            console.log(e)
+            // console.log(e)
           }
           if (res.code < window.MAX_SUCCESS_CODE) {
             this.loading = false
@@ -91,7 +91,7 @@ export default {
             this.$message.error(`${res.message}`)
           }
         } else {
-          console.log('error submit!!')
+          // console.log('error submit!!')
           this.$message.error('请填写正确的信息')
           this.$emit('handlePasswordResult', false)
           return false

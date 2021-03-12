@@ -1,4 +1,3 @@
-import { removeToken } from '@/lin/util/token'
 import * as types from './mutation-type'
 
 export default {
@@ -10,7 +9,7 @@ export default {
   },
 
   loginOut({ commit }) {
-    removeToken()
+    localStorage.clear()
     commit(types.REMOVE_LOGINED, false)
   },
 

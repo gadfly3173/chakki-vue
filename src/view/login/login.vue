@@ -66,8 +66,6 @@ export default {
       } catch (e) {
         this.loading = false
         this.getCaptcha()
-        // eslint-disable-next-line
-        console.log(e)
       }
     },
     async getInformation() {
@@ -130,7 +128,7 @@ export default {
 .login {
   width: 100%;
   height: 100%;
-  background: #1b2c5f url(../img/login-ba.97589bd8.jpg) no-repeat center/cover;
+  background: #1b2c5f url('../../assets/image/login/login-ba.png') no-repeat center/cover;
   background-size: cover;
 
   .team-name {

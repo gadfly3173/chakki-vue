@@ -69,7 +69,6 @@ export default {
   methods: {
     change(val) {
       this.content = val
-      console.log(this.content)
     },
     async getAnnouncementVO() {
       const res = await Class.getAnnouncementVO(this.$route.params.id)

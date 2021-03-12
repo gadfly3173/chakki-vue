@@ -111,7 +111,7 @@ export default {
         this.selectLoading = false
       } catch (e) {
         this.selectLoading = false
-        console.log(e)
+        // console.log(e)
       }
     },
     handleConfirm() {
@@ -148,7 +148,7 @@ export default {
           res = await User.createBatchUser(data)
         } catch (e) {
           this.fullscreenLoading = false
-          console.log(e)
+          // console.log(e)
         }
         if (res.code < window.MAX_SUCCESS_CODE) {
           this.$message({

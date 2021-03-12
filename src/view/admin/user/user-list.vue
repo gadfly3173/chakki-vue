@@ -112,7 +112,7 @@ export default {
         this.total_nums = res.total
       } catch (e) {
         this.loading = false
-        console.log(e)
+        // console.log(e)
       }
     },
     // 获取所有分组
@@ -123,7 +123,7 @@ export default {
         this.loading = false
       } catch (e) {
         this.loading = false
-        console.log(e)
+        // console.log(e)
       }
     },
     // 获取所拥有的权限并渲染  由子组件提供

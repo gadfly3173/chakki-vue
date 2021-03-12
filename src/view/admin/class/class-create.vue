@@ -79,7 +79,7 @@ export default {
         this.loading = false
       } catch (e) {
         this.loading = false
-        console.log(e)
+        // console.log(e)
       }
     },
     async submitForm(formName) {
@@ -92,7 +92,7 @@ export default {
             res = await Admin.createOneClass(this.form.name, this.form.info, this.form.semester_id) // eslint-disable-line
           } catch (e) {
             this.loading = false
-            console.log(e)
+            // console.log(e)
           }
           if (res.code < window.MAX_SUCCESS_CODE) {
             this.loading = false

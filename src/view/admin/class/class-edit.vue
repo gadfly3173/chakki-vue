@@ -170,7 +170,7 @@ export default {
         this.total_nums = res.total
       } catch (e) {
         this.loading = false
-        console.log(e)
+        // console.log(e)
       }
     },
     async getPageTeachers() {
@@ -181,7 +181,7 @@ export default {
         this.teacherData = res.items
       } catch (e) {
         this.loading = false
-        console.log(e)
+        // console.log(e)
       }
     },
     // 切换table页
@@ -203,7 +203,7 @@ export default {
           res = await Admin.dispatchStudentClass(val.id, [this.class_id])
         } catch (e) {
           this.loading = false
-          console.log(e)
+          // console.log(e)
         }
         if (res.code < window.MAX_SUCCESS_CODE) {
           this.loading = false
@@ -233,7 +233,7 @@ export default {
           res = await Admin.dispatchTeacherClass(val.id, [this.class_id])
         } catch (e) {
           this.loading = false
-          console.log(e)
+          // console.log(e)
         }
         if (res.code < window.MAX_SUCCESS_CODE) {
           this.loading = false

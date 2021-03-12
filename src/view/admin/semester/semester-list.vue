@@ -123,7 +123,7 @@ export default {
         this.loading = false
       } catch (e) {
         this.loading = false
-        console.log(e)
+        // console.log(e)
       }
     },
     async confirmEdit() {
@@ -153,7 +153,7 @@ export default {
             res = await Admin.createOneSemester(this.form.name, this.form.info)
           } catch (e) {
             this.loading = false
-            console.log(e)
+            // console.log(e)
           }
           if (res.code < window.MAX_SUCCESS_CODE) {
             this.loading = false
@@ -207,7 +207,7 @@ export default {
           res = await Admin.deleteOneSemester(val.row.id)
         } catch (e) {
           this.loading = false
-          console.log(e)
+          // console.log(e)
         }
         if (res.code < window.MAX_SUCCESS_CODE) {
           await this.getAllSemesters()

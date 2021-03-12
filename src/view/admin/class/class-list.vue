@@ -100,7 +100,7 @@ export default {
         this.loading = false
       } catch (e) {
         this.loading = false
-        console.log(e)
+        // console.log(e)
       }
     },
     async getAllSemesters() {
@@ -110,7 +110,7 @@ export default {
         this.loading = false
       } catch (e) {
         this.loading = false
-        console.log(e)
+        // console.log(e)
       }
     },
     async confirmEdit() {
@@ -170,7 +170,7 @@ export default {
           res = await Admin.deleteOneClass(val.row.id)
         } catch (e) {
           this.loading = false
-          console.log(e)
+          // console.log(e)
         }
         if (res.code < window.MAX_SUCCESS_CODE) {
           await this.getAllClasses()
