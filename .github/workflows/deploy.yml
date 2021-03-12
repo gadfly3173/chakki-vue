@@ -1,0 +1,44 @@
+name: Vue CI
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  TZ: Asia/Shanghai
+
+jobs:
+  build:
+    name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node-version: [10.x]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: |
+          yarn
+
+      - name: Build
+        run: yarn build
+
+      - name: deploy file to server
+        uses: wlixcc/SFTP-Deploy-Action@1.1
+        with:
+          username: 'gadflyFang'   #ssh user name
+          server: '${{ secrets.SERVER_IP }}' #引用之前创建好的secret
+          port: ${{ secrets.SERVER_PORT }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} #引用之前创建好的secret
+          local_path: './dist/*'  # 对应我们项目build的文件夹路径
+          remote_path: '/home/chakki'
