@@ -158,8 +158,8 @@ export default {
           if (res.code < window.MAX_SUCCESS_CODE) {
             this.loading = false
             this.$message.success(`${res.message}`)
-            this.resetForm(formName)
             this.getAllSemesters()
+            this.resetForm()
           } else {
             this.loading = false
             this.$message.error(`${res.message}`)
@@ -171,8 +171,11 @@ export default {
       })
       this.dialogSemesterFormVisible = false
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
+    resetForm() {
+      this.form = {
+        name: '',
+        info: '',
+      }
     },
     // 获取所拥有的权限并渲染  由子组件提供
     handleEdit(val) {
