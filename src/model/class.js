@@ -304,6 +304,20 @@ class Class {
     const res = await download(`cms/file/class/announcement/download/${id}`)
     return res
   }
+
+  async deleteQuestionnaire(id) {
+    const res = await post(`v1/lesson/questionnaire/delete/${id}`)
+    return res
+  }
+
+  async getQuestionnaireList(class_id, count, page) {
+    const res = await get('v1/lesson/questionnaire/list', {
+      class_id,
+      count,
+      page,
+    })
+    return res
+  }
 }
 
 export default new Class()

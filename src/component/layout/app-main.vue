@@ -21,6 +21,7 @@ export default {
 
 <style lang="scss" scoped>
 .container {
+  height: 100%;
   .wrapper {
     width: 100%;
     height: 100%;

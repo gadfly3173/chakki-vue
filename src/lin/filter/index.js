@@ -131,6 +131,13 @@ const globalFilter = {
       2: '助教',
     }[val]
   },
+
+  questionTypeFilter(val) {
+    return {
+      1: '简答',
+      2: '选择',
+    }[val]
+  },
 }
 
 // 全局过滤器

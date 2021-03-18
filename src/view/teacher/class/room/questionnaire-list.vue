@@ -1,0 +1,270 @@
+<template>
+  <div>
+    <!-- 列表页面 -->
+    <div class="container">
+      <div class="header">
+        <div class="title">{{ className }} - 问卷项目列表</div>
+      </div>
+      <el-button class="create-button" type="primary" @click.stop="handleCreateQuestionnaire">发起问卷</el-button>
+      <div class="wrapper">
+        <!-- 表格渲染 -->
+        <el-table :data="questionnaireList" style="width: 100%">
+          <el-table-column prop="title" label="标题"></el-table-column>
+          <el-table-column prop="count" label="问题数量"></el-table-column>
+          <el-table-column label="结束时间" width="180">
+            <template slot-scope="scope">
+              {{ scope.row.end_time | dateTimeFormatter }}
+            </template>
+          </el-table-column>
+          <el-table-column label="创建时间" width="180">
+            <template slot-scope="scope">
+              {{ scope.row.create_time | dateTimeFormatter }}
+            </template>
+          </el-table-column>
+          <el-table-column label="更新时间" width="180">
+            <template slot-scope="scope">
+              {{ scope.row.update_time | dateTimeFormatter }}
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" fixed="right" width="200">
+            <template slot-scope="scope">
+              <!-- <el-button @click.stop="handleEditClick(scope.row.id)" type="primary" plain size="mini">编辑</el-button> -->
+              <el-popconfirm
+                v-if="scope.row.id"
+                title="确定删除该问卷吗？"
+                @onConfirm="handleDeleteClick(scope.row.id)"
+                style="margin-left: 10px"
+              >
+                <el-button slot="reference" type="danger" size="mini">删除</el-button>
+              </el-popconfirm>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          class="pagination"
+          v-if="questionnaireList.length > 0"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="currentPage"
+          :page-sizes="[10, 20, 50, 100]"
+          :page-size.sync="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalNum"
+        >
+        </el-pagination>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Class from '@/model/class'
+
+export default {
+  data() {
+    return {
+      questionnaireList: [],
+      totalNum: 0,
+      currentPage: 1,
+      pageSize: 10,
+      className: '正在获取班级名称',
+      loading: false,
+    }
+  },
+  async mounted() {
+    this.getClassDetail()
+    await this.getQuestionnaireList()
+  },
+  computed: {
+    currentClassId() {
+      return this.$store.state.currentClassId
+    },
+  },
+  methods: {
+    async getQuestionnaireList() {
+      try {
+        this.loading = true
+        const res = await Class.getQuestionnaireList(this.currentClassId, this.pageSize, this.currentPage - 1)
+        this.questionnaireList = res.items
+        this.loading = false
+        this.totalNum = res.total
+      } catch (e) {
+        this.loading = false
+        this.questionnaireList = []
+      }
+    },
+    // handleEditClick(id) {
+    //   this.handleEditQuestionnaire(id)
+    // },
+    fileSizeCompute(value) {
+      if (value === null || value === '') {
+        return 0
+      }
+      const srcsize = parseFloat(value)
+      const index = Math.floor(Math.log(srcsize) / Math.log(1024))
+      const size = srcsize / 1024 ** index
+      return Math.round(size)
+    },
+    fileSizeUnitCompute(value) {
+      if (value === null || value === '') {
+        return 0
+      }
+      const srcsize = parseFloat(value)
+      const index = Math.floor(Math.log(srcsize) / Math.log(1024))
+      return index
+    },
+    handleViewStudentClick(id) {
+      this.$router.push({ path: `/teacher/class/room/questionnaire/list/${id}` })
+    },
+    async handleDeleteClick(id) {
+      try {
+        this.loading = true
+        const res = await Class.deleteQuestionnaire(id)
+        if (res.code < window.MAX_SUCCESS_CODE) {
+          this.$message.success('问卷项目删除成功')
+          this.getQuestionnaireList()
+          this.loading = false
+        }
+      } catch (e) {
+        this.loading = false
+      }
+    },
+    handleCurrentChange() {
+      this.getQuestionnaireList()
+    },
+    handleSizeChange() {
+      this.getQuestionnaireList()
+    },
+    handleCreateQuestionnaire() {
+      this.$router.push({ path: '/teacher/class/room/questionnaire/edit/0' })
+    },
+    handleEditQuestionnaire(id) {
+      this.$router.push({ path: `/teacher/class/room/questionnaire/edit/${id}` })
+    },
+    async getClassDetail() {
+      const res = await Class.getClassDetail(this.currentClassId)
+      this.className = res.name
+    },
+    formatExtension() {
+      if (!this.questionnaireEditForm.fileExtension.length) {
+        return
+      }
+      const index = this.questionnaireEditForm.fileExtension.length - 1
+      const tmpStr = this.questionnaireEditForm.fileExtension[index].replace(/[^a-zA-Z0-9]/g, '').toUpperCase()
+      const tmpStrIndex = this.questionnaireEditForm.fileExtension.indexOf(tmpStr)
+      if (tmpStrIndex === index) {
+        this.questionnaireEditForm.fileExtension[index] = tmpStr
+      } else {
+        this.questionnaireEditForm.fileExtension.splice(index, 1)
+      }
+    },
+    async handleEditConfirm() {
+      this.dialogLoading = true
+      const form = JSON.parse(JSON.stringify(this.questionnaireEditForm))
+      form.fileSize *= 1024 ** form.fileSizeUnit
+      form.type = form.type ? 2 : 1
+      try {
+        let res
+        if (!form.id) {
+          res = await Class.createQuestionnaire(form, this.currentClassId)
+        } else {
+          res = await Class.updateQuestionnaire(form)
+        }
+        if (res.code < window.MAX_SUCCESS_CODE) {
+          this.dialogLoading = false
+          this.$message.success(res.message)
+          this.questionnaireEditModal.show = false
+          this.getQuestionnaireList()
+          this.resetForm()
+        }
+      } catch (e) {
+        this.dialogLoading = false
+      }
+    },
+    resetForm() {
+      this.questionnaireEditForm = {
+        id: null,
+        name: '',
+        info: '',
+        fileSize: 10,
+        fileSizeUnit: 2,
+        fileExtension: [],
+        endTime: null,
+        type: false,
+      }
+    },
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+.container {
+  padding: 0 30px;
+  color: #596c8e;
+
+  .header {
+    .title {
+      height: 59px;
+      line-height: 59px;
+      color: $parent-title-color;
+      font-size: 16px;
+      font-weight: 500;
+      text-indent: 40px;
+      border-bottom: 1px solid #dae1ec;
+    }
+  }
+
+  .create-button {
+    margin-top: 20px;
+    margin-left: 40px;
+  }
+
+  .text {
+    font-size: 14px;
+    word-break: break-all;
+  }
+
+  .item {
+    margin-bottom: 18px;
+    line-height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: '';
+  }
+  .clearfix:after {
+    clear: both;
+  }
+
+  .box-card {
+    margin: 20px;
+    width: 300px;
+    user-select: none;
+    cursor: pointer;
+    .box-header {
+      font-weight: 700;
+    }
+  }
+
+  .box-card:after {
+    display: block;
+    content: '';
+    width: 300px;
+    height: 0;
+  }
+
+  .wrapper {
+    margin-top: 20px;
+    .pagination {
+      margin: 10px 30px;
+    }
+  }
+}
+</style>
