@@ -36,7 +36,19 @@
             </div>
           </el-col>
           <el-col :span="18" class="right-col">
-            <el-scrollbar key="scrollbar" tag="ul">
+            <el-scrollbar key="scrollbar">
+              <div class="end-time-input">
+                结束时间：
+                <el-date-picker
+                  v-model="endTime"
+                  type="datetime"
+                  placeholder="选择日期时间"
+                  align="right"
+                  :editable="false"
+                  :picker-options="pickerOptions"
+                >
+                </el-date-picker>
+              </div>
               <draggable
                 class="list-group"
                 tag="ul"
@@ -46,7 +58,7 @@
                 @start="drag = true"
                 @end="drag = false"
               >
-                <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+                <transition-group type="transition" name="flip-list">
                   <li class="list-group-item" v-for="(element, index) in list" :key="`question-${index}`">
                     <i class="anticon icon-bars handle"
                       ><span class="order">{{ index + 1 }}.</span></i
@@ -127,6 +139,7 @@ export default {
     return {
       title: '',
       info: '',
+      endTime: null,
       loading: false,
       drag: false,
       dragOptions: {
@@ -134,6 +147,77 @@ export default {
         group: 'description',
         disabled: false,
         ghostClass: 'ghost',
+      },
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: '五分钟后',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() + 5 * 60 * 1000)
+              picker.$emit('pick', date)
+            },
+          },
+          {
+            text: '十分钟后',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() + 10 * 60 * 1000)
+              picker.$emit('pick', date)
+            },
+          },
+          {
+            text: '十五分钟后',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() + 15 * 60 * 1000)
+              picker.$emit('pick', date)
+            },
+          },
+          {
+            text: '三十分钟后',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() + 30 * 60 * 1000)
+              picker.$emit('pick', date)
+            },
+          },
+          {
+            text: '一小时后',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() + 3600 * 1000)
+              picker.$emit('pick', date)
+            },
+          },
+          {
+            text: '明天',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() + 3600 * 1000 * 24)
+              picker.$emit('pick', date)
+            },
+          },
+          {
+            text: '三天后',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() + 3600 * 1000 * 24 * 3)
+              picker.$emit('pick', date)
+            },
+          },
+          {
+            text: '一周后',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() + 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', date)
+            },
+          },
+        ],
+        disabledDate(date) {
+          return date.getTime() <= new Date().getTime() - 3600 * 1000 * 24
+        },
       },
       list: [
         {
@@ -246,6 +330,14 @@ export default {
 .flip-list-move {
   transition: transform 0.5s;
 }
+.flip-list-enter-active,
+.flip-list-leave-active {
+  transition: opacity 0.5s;
+}
+.flip-list-enter,
+.flip-list-leave-to {
+  opacity: 0;
+}
 .no-move {
   transition: transform 0s;
 }
@@ -327,6 +419,14 @@ export default {
       .right-col {
         height: 100%;
       }
+      .end-time-input {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #dae1ec;
+      }
       .list-group {
         min-height: 20px;
         width: 80%;
@@ -337,7 +437,7 @@ export default {
           align-items: center;
           margin: 15px 0;
           padding-bottom: 10px;
-          border-bottom: 1px solid #dae1ec;
+          border-bottom: 1px dashed #d5eae6;
           .handle {
             font-size: 20px;
             font-weight: 700;
