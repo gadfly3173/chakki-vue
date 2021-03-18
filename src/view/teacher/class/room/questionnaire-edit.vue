@@ -178,7 +178,7 @@ export default {
       })
     },
     removeOption(index, key) {
-      this.list[index].options[key].splice(index, 1)
+      this.list[index].options.splice(key, 1)
     },
     removeQuestion(index) {
       this.list.splice(index, 1)
@@ -339,9 +339,10 @@ export default {
           padding-bottom: 10px;
           border-bottom: 1px solid #dae1ec;
           .handle {
+            font-size: 20px;
             font-weight: 700;
             cursor: move;
-            padding: 10px 0;
+            padding: 20px 0;
             &:hover {
               transform: scale(1.2);
             }
@@ -353,6 +354,8 @@ export default {
             font-weight: 700;
             cursor: pointer;
             padding: 5px;
+            color: #c7485b;
+            font-size: 20px;
             &:hover {
               transform: scale(1.2);
             }
@@ -383,13 +386,13 @@ export default {
             padding-top: 10px;
             .iconfont {
               cursor: pointer;
-              font-size: 24px;
+              font-size: 20px;
               font-weight: 700;
               &.plus {
                 color: #3765b6;
               }
               &.minus {
-                font-size: 26px;
+                font-size: 22px;
                 color: #c7485b;
               }
             }
