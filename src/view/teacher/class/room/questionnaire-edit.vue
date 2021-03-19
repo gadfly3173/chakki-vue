@@ -22,7 +22,7 @@
         ></el-input>
       </div>
       <div class="questions">
-        <el-row :gutter="10">
+        <el-row>
           <el-col :span="6" class="toolbar">
             <div class="add-button">
               <el-button type="text" class="button" icon="el-icon-circle-plus-outline" @click="addTextQuestion"
@@ -36,7 +36,8 @@
             </div>
           </el-col>
           <el-col :span="18" class="right-col">
-            <el-scrollbar key="scrollbar">
+            <el-scrollbar key="scrollbar" class="scrollbar">
+              <div class="mask top-mask"></div>
               <div class="end-time-input">
                 结束时间：
                 <el-date-picker
@@ -122,6 +123,7 @@
                   </li>
                 </transition-group>
               </draggable>
+              <div class="mask bottom-mask"></div>
             </el-scrollbar>
           </el-col>
         </el-row>
@@ -370,11 +372,10 @@ export default {
   }
 
   .wrapper {
-    margin-top: 20px;
     height: calc(100% - 80px);
     .title-input {
       display: flex;
-      padding: 0 20px;
+      padding: 20px 20px 0;
       label {
         width: 120px;
         line-height: 36px;
@@ -382,15 +383,14 @@ export default {
     }
     .info-input {
       display: flex;
-      padding: 0 20px;
-      margin-top: 20px;
+      padding: 20px;
+      border-bottom: 1px dashed #dae1ec;
       label {
         width: 120px;
         line-height: 36px;
       }
     }
     .questions {
-      margin-top: 20px;
       height: calc(100% - 150px);
       /deep/ .el-row {
         height: 100%;
@@ -410,9 +410,9 @@ export default {
           }
         }
       }
-      /deep/ .el-scrollbar {
+      .scrollbar {
         height: 100%;
-        .el-scrollbar__wrap {
+        /deep/ .el-scrollbar__wrap {
           overflow-x: hidden;
         }
       }
@@ -423,13 +423,32 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 10px;
+        margin-top: 20px;
         padding-bottom: 20px;
         border-bottom: 1px solid #dae1ec;
+        /deep/ .el-input__inner {
+          cursor: pointer;
+        }
+      }
+      .mask {
+        position: absolute;
+        z-index: 100;
+        width: 100%;
+        height: 50px;
+        pointer-events: none;
+        &.top-mask {
+          top: 0;
+          background: linear-gradient(rgb(249, 250, 251), rgba(249, 250, 251, 0));
+        }
+        &.bottom-mask {
+          bottom: 0;
+          background: linear-gradient(rgba(249, 250, 251, 0), rgb(249, 250, 251));
+        }
       }
       .list-group {
         min-height: 20px;
-        width: 80%;
+        width: 90%;
+        padding: 0 20px;
         margin: 0 auto;
         .list-group-item {
           display: flex;
