@@ -318,6 +318,18 @@ class Class {
     })
     return res
   }
+
+  // 发布问卷
+  async createQuestionnaire(title, info, class_id, end_time, questions) {
+    const res = await post('v1/lesson/questionnaire/create', {
+      title,
+      info,
+      class_id,
+      end_time,
+      questions,
+    })
+    return res
+  }
 }
 
 export default new Class()

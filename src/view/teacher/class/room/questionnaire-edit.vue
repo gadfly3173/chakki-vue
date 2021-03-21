@@ -50,7 +50,11 @@
                 >
                 </el-date-picker>
               </div>
+              <div v-if="!list || list.length === 0" class="hint-box">
+                点击左侧按钮新建题目
+              </div>
               <draggable
+                v-else
                 class="list-group"
                 tag="ul"
                 v-model="list"
@@ -221,18 +225,7 @@ export default {
           return date.getTime() <= new Date().getTime() - 3600 * 1000 * 24
         },
       },
-      list: [
-        {
-          title: '',
-          type: 1,
-        },
-        {
-          title: '',
-          type: 2,
-          limit_max: 1,
-          options: [],
-        },
-      ],
+      list: [],
     }
   },
   components: {
@@ -270,6 +263,7 @@ export default {
       this.list.splice(index, 1)
     },
     async getQuestionnaireVO() {
+      // TODO 编辑问卷
       const res = await Class.getQuestionnaireVO(this.$route.params.id)
       this.title = res.title
     },
@@ -277,39 +271,24 @@ export default {
       try {
         this.loading = true
         if (this.$route.params.id === '0') {
-          // 发布正文
-          const res = await Class.createQuestionnaire(this.title, this.content, this.currentClassId)
-          // 无文件直接返回
-          if (this.$refs.uploader.uploadFiles.length === 0) {
+          // 发布问卷
+          const res = await Class.createQuestionnaire(
+            this.title,
+            this.info,
+            this.currentClassId,
+            this.end_time,
+            this.list,
+          )
+          if (res.code < window.MAX_SUCCESS_CODE) {
             this.loading = false
-            return this.$message.success('问卷发布成功')
-          }
-          // 发布文件
-          const res2 = await Class.updateQuestionnaireAttachment(res, this.$refs.uploader.uploadFiles[0].raw)
-          if (res2.code < window.MAX_SUCCESS_CODE) {
             this.$message.success('问卷发布成功')
-          } else {
-            this.$message.error(res2.message)
           }
         } else {
-          // 更新正文
+          // 更新问卷
           const res = await Class.updateQuestionnaire(this.$route.params.id, this.title, this.content)
           if (res.code < window.MAX_SUCCESS_CODE) {
-            // 无文件直接返回
-            if (this.$refs.uploader.uploadFiles.length === 0) {
-              this.loading = false
-              return this.$message.success('问卷修改成功')
-            }
-            // 发布文件
-            const res2 = await Class.updateQuestionnaireAttachment(
-              this.$route.params.id,
-              this.$refs.uploader.uploadFiles[0].raw,
-            )
-            if (res2.code < window.MAX_SUCCESS_CODE) {
-              this.$message.success('问卷修改成功')
-            } else {
-              this.$message.error(res2.message)
-            }
+            this.loading = false
+            this.$message.success('问卷修改成功')
           } else {
             this.$message.error(res.message)
           }
@@ -429,6 +408,11 @@ export default {
         /deep/ .el-input__inner {
           cursor: pointer;
         }
+      }
+      .hint-box {
+        text-align: center;
+        padding: 20vh 0;
+        color: #dcdfe6;
       }
       .mask {
         position: absolute;
