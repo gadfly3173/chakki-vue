@@ -48,6 +48,15 @@ const classRouter = [
         title: '公告列表',
         icon: 'anticon icon-book',
       },
+      {
+        route: '/class/room/questionnaire',
+        type: 'view',
+        name: Symbol('questionnaireList'),
+        filePath: 'view/class/room/questionnaire-list.vue',
+        inNav: true,
+        title: '问卷列表',
+        icon: 'anticon icon-profile',
+      },
     ],
   },
   {

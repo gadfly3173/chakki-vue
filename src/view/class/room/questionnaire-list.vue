@@ -5,13 +5,11 @@
       <div class="header">
         <div class="title">{{ className }} - 问卷项目列表</div>
       </div>
-      <el-button class="create-button" type="primary" @click.stop="handleCreateQuestionnaire">发起问卷</el-button>
       <div class="wrapper">
         <!-- 表格渲染 -->
         <el-table :data="questionnaireList" style="width: 100%">
           <el-table-column prop="title" label="标题"></el-table-column>
           <el-table-column prop="count" label="问题数量"></el-table-column>
-          <el-table-column prop="handed" label="已提交人数"></el-table-column>
           <el-table-column label="结束时间" width="180">
             <template slot-scope="scope">
               {{ scope.row.end_time | dateTimeFormatter }}
@@ -29,7 +27,6 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="200">
             <template slot-scope="scope">
-              <!-- <el-button @click.stop="handleEditClick(scope.row.id)" type="primary" plain size="mini">编辑</el-button> -->
               <el-popconfirm
                 v-if="scope.row.id"
                 title="确定删除该问卷吗？"
@@ -73,7 +70,7 @@ export default {
     }
   },
   async mounted() {
-    this.getClassDetail()
+    // this.getClassDetail()
     await this.getQuestionnaireList()
   },
   computed: {
@@ -85,7 +82,7 @@ export default {
     async getQuestionnaireList() {
       try {
         this.loading = true
-        const res = await Class.getQuestionnaireList(this.currentClassId, this.pageSize, this.currentPage - 1)
+        const res = await Class.getQuestionnaireListForStudent(this.currentClassId, this.pageSize, this.currentPage - 1)
         this.questionnaireList = res.items
         this.loading = false
         this.totalNum = res.total
@@ -94,36 +91,17 @@ export default {
         this.questionnaireList = []
       }
     },
-    handleViewStudentClick(id) {
-      this.$router.push({ path: `/teacher/class/room/questionnaire/list/${id}` })
-    },
-    async handleDeleteClick(id) {
-      try {
-        this.loading = true
-        const res = await Class.deleteQuestionnaire(id)
-        if (res.code < window.MAX_SUCCESS_CODE) {
-          this.$message.success('问卷项目删除成功')
-          this.getQuestionnaireList()
-          this.loading = false
-        }
-      } catch (e) {
-        this.loading = false
-      }
-    },
     handleCurrentChange() {
       this.getQuestionnaireList()
     },
     handleSizeChange() {
       this.getQuestionnaireList()
     },
-    handleCreateQuestionnaire() {
-      this.$router.push({ path: '/teacher/class/room/questionnaire/edit/0' })
-    },
-    handleEditQuestionnaire(id) {
-      this.$router.push({ path: `/teacher/class/room/questionnaire/edit/${id}` })
+    handleHandQuestionnaire(id) {
+      this.$router.push({ path: `/class/room/questionnaire/hand/${id}` })
     },
     async getClassDetail() {
-      const res = await Class.getClassDetail(this.currentClassId)
+      const res = await Class.getStudentClassDetail(this.currentClassId)
       this.className = res.name
     },
   },

@@ -330,6 +330,21 @@ class Class {
     })
     return res
   }
+
+  // 获取指定问卷
+  async getQuestionnaireVO(id) {
+    const res = await get(`v1/class/questionnaire/${id}`)
+    return res
+  }
+
+  async getQuestionnaireListForStudent(class_id, count, page) {
+    const res = await get('v1/class/questionnaire/list', {
+      class_id,
+      count,
+      page,
+    })
+    return res
+  }
 }
 
 export default new Class()
