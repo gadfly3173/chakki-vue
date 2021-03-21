@@ -1,14 +1,12 @@
 <template>
-  <div>
-    <div v-if="menuTabs.length || show">
-      <ul class="menu-tab">
-        <router-link :to="tab.path" v-for="tab in menuTabs" :key="tab.path" ref="menuTabs">
-          <li ref="tabList" class="menu-li">
-            <i :class="tab.icon" /> <span class="title">{{ tab.title | filterTitle }}</span>
-          </li>
-        </router-link>
-      </ul>
-    </div>
+  <div v-if="menuTabs.length || show" class="if-div">
+    <ul class="menu-tab">
+      <router-link :to="tab.path" v-for="tab in menuTabs" :key="tab.path" ref="menuTabs">
+        <li ref="tabList" class="menu-li">
+          <i :class="tab.icon" /> <span class="title">{{ tab.title | filterTitle }}</span>
+        </li>
+      </router-link>
+    </ul>
   </div>
 </template>
 
@@ -52,38 +50,41 @@ export default {
   background: black;
 }
 
-.menu-tab {
-  width: 100%;
+.if-div {
   height: 38px;
-  line-height: 38px;
-  background: $reuse-tab-item-background;
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(140, 152, 174, 1);
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-
-  .router-link-exact-active,
-  .router-link-active {
-    background: $appmain-background;
-    color: $theme;
-  }
-
-  .menu-li {
-    width: 120px;
+  .menu-tab {
+    width: 100%;
     height: 38px;
-    cursor: pointer;
+    line-height: 38px;
+    background: $reuse-tab-item-background;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(140, 152, 174, 1);
     display: flex;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: flex-start;
 
-    .imgIcon {
-      width: 16px;
-      height: 16px;
-      margin: 0 auto;
+    .router-link-exact-active,
+    .router-link-active {
+      background: $appmain-background;
+      color: $theme;
     }
-    .title {
-      margin-left: 5px;
+
+    .menu-li {
+      width: 120px;
+      height: 38px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+
+      .imgIcon {
+        width: 16px;
+        height: 16px;
+        margin: 0 auto;
+      }
+      .title {
+        margin-left: 5px;
+      }
     }
   }
 }

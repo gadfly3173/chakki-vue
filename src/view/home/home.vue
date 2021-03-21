@@ -237,6 +237,8 @@ export default {
   overflow-y: auto;
   position: relative;
   padding: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .backTop {

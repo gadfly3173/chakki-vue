@@ -67,7 +67,7 @@
                     <div class="question">
                       <span class="question-title">
                         <div class="label">
-                          问题标题：
+                          问题：
                         </div>
                         <el-input
                           class="title-input"
@@ -484,10 +484,10 @@ export default {
             align-items: center;
             margin: 10px 0;
             .label {
-              width: 100px;
+              width: 50px;
             }
             .title-input {
-              width: 300px;
+              width: 350px;
               padding: 0;
             }
           }

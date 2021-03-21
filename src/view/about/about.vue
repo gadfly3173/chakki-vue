@@ -216,12 +216,12 @@ export default {
 
 <style scoped lang="scss">
 .container {
-  padding: 20px;
+  padding: 0 20px;
   .lin-info {
+    padding-top: 20px;
     display: flex;
     flex: 1;
     height: 160px;
-    width: 100%;
     .lin-info-left {
       position: relative;
       width: 690px;
