@@ -31,7 +31,6 @@
             <template slot-scope="scope">
               <!-- <el-button @click.stop="handleEditClick(scope.row.id)" type="primary" plain size="mini">编辑</el-button> -->
               <el-popconfirm
-                v-if="scope.row.id"
                 title="确定删除该问卷吗？"
                 @onConfirm="handleDeleteClick(scope.row.id)"
                 style="margin-left: 10px"

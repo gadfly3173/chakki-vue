@@ -99,6 +99,7 @@
                           ></el-input-number>
                         </span>
                       </div>
+                      <!-- 选择题选项 -->
                       <div class="question-options" v-if="element.type === 2">
                         <i class="iconfont icon-jia plus" v-if="!element.options.length" @click="addOption(index)"></i>
                         <el-row class="option-row" v-for="(item, key) in element.options" :key="key">

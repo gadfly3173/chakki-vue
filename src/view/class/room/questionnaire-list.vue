@@ -27,14 +27,14 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="200">
             <template slot-scope="scope">
-              <el-popconfirm
-                v-if="scope.row.id"
-                title="确定删除该问卷吗？"
-                @onConfirm="handleDeleteClick(scope.row.id)"
-                style="margin-left: 10px"
+              <el-button
+                v-if="!scope.row.handed"
+                @click.stop="handleViewQuestionnaire(scope.row.id)"
+                type="primary"
+                plain
+                size="mini"
+                >查看</el-button
               >
-                <el-button slot="reference" type="danger" size="mini">删除</el-button>
-              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -70,7 +70,7 @@ export default {
     }
   },
   async mounted() {
-    // this.getClassDetail()
+    await this.getClassDetail()
     await this.getQuestionnaireList()
   },
   computed: {
@@ -97,8 +97,8 @@ export default {
     handleSizeChange() {
       this.getQuestionnaireList()
     },
-    handleHandQuestionnaire(id) {
-      this.$router.push({ path: `/class/room/questionnaire/hand/${id}` })
+    handleViewQuestionnaire(id) {
+      this.$router.push({ path: `/class/room/questionnaire/view/${id}` })
     },
     async getClassDetail() {
       const res = await Class.getStudentClassDetail(this.currentClassId)

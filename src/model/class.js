@@ -332,7 +332,7 @@ class Class {
   }
 
   // 获取指定问卷
-  async getQuestionnaireVO(id) {
+  async getQuestionnaireVOForStudent(id) {
     const res = await get(`v1/class/questionnaire/${id}`)
     return res
   }
