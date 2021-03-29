@@ -2,12 +2,12 @@
   <div class="user">
     <el-dropdown>
       <span class="el-dropdown-link">
-        <div class="nav-avatar"><img :src="user.avatar || defaultAvatar" alt="头像" /></div>
+        <div class="nav-avatar"><img :src="user.avatar || defaultAvatar" alt="头像" style="width:100%" /></div>
       </span>
       <el-dropdown-menu slot="dropdown" class="user-box">
         <div class="user-info">
           <div class="avatar">
-            <img :src="user.avatar || defaultAvatar" alt="头像" />
+            <img :src="user.avatar || defaultAvatar" alt="头像" style="width:100%" />
           </div>
           <div class="text">
             <div class="username" v-if="!nicknameChanged">{{ nickname }}</div>
