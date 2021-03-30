@@ -33,11 +33,25 @@ module.exports = {
       config.optimization.minimizer[0].options.terserOptions.compress.pure_funcs = ['console.log', 'console.error']
       return {
         plugins: [
+          // Gzip
           new CompressionPlugin({
+            filename: '[path][base].gz',
+            algorithm: 'gzip',
             test: /\.js$|\.html$|\.css$|\.jpg$|\.jpeg$|\.png/, // 需要压缩的文件类型
             threshold: 100, // 归档需要进行压缩的文件大小最小值
             deleteOriginalAssets: false, // 是否删除原文件
             minRatio: 0.8, //压缩率达到20%才会压缩
+          }),
+          // Brotli
+          new CompressionPlugin({
+            filename: '[path][base].br',
+            algorithm: 'brotliCompress',
+            test: /\.js$|\.html$|\.css$|\.jpg$|\.jpeg$|\.png/,
+            compressionOptions: {
+              level: 11,
+            },
+            threshold: 100,
+            minRatio: 0.8,
           }),
         ],
       }
