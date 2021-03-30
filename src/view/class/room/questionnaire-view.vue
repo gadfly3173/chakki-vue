@@ -37,7 +37,7 @@
               <div class="question-options" v-if="question.limit_max > 1 && question.type === 2">
                 <el-checkbox-group v-model="answer[index].multi_option_id" :max="question.limit_max" size="medium">
                   <div class="option" v-for="(option, order) in question.options" :key="`option-${index}-${order}`">
-                    <el-checkbox :label="order" border> 选项{{ order + 1 }}. {{ option.title }} </el-checkbox>
+                    <el-checkbox :label="order" border>选项{{ order + 1 }}. {{ option.title }}</el-checkbox>
                   </div>
                 </el-checkbox-group>
               </div>
@@ -75,15 +75,39 @@ export default {
       try {
         this.loading = true
         const res = await Class.getQuestionnaireVOForStudent(this.$route.params.id)
-        // eslint-disable-next-line no-new-object
-        this.answer = Array.from(new Array(res.questions.length), () => new Object())
-        console.log(this.answer[1])
+        res.questions = res.questions.sort(this.sortOrderAsc)
+        // 遍历问题
+        for (const [index, question] of res.questions.entries()) {
+          // 排序选项
+          if (question.options) question.options = question.options.sort(this.sortOrderAsc)
+          // 简答题value set
+          if (question.type === 1) {
+            this.$set(this.answer, index, {
+              answer: '',
+            })
+          }
+          // 选择题value set
+          if (question.limit_max === 1 && question.type === 2) {
+            this.$set(this.answer, index, {
+              single_option_id: null,
+            })
+          }
+          if (question.limit_max > 1 && question.type === 2) {
+            this.$set(this.answer, index, {
+              multi_option_id: [],
+            })
+          }
+        }
         this.questionnaire = res
+        console.log(this.questionnaire)
         this.loading = false
       } catch (e) {
-        this.loading = false
         this.questionnaire = {}
+        this.loading = false
       }
+    },
+    sortOrderAsc(a, b) {
+      return a.order - b.order
     },
     handleHandQuestionnaire(id) {
       this.$router.push({ path: `/class/room/questionnaire/hand/${id}` })
