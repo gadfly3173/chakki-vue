@@ -10,7 +10,12 @@
         <div class="attachment">
           <div class="title">
             已发布的附件：
-            <span v-if="announce.filename" class="filename" title="点击下载文件" @click="handleDownloadClick($route.params.id)">
+            <span
+              v-if="announce.filename"
+              class="filename"
+              title="点击下载文件"
+              @click="handleDownloadClick($route.params.id)"
+            >
               <i class="el-icon-download"></i>
               {{ announce.filename }} - {{ announce.filesize | byteFilter }}
             </span>
@@ -64,13 +69,17 @@ export default {
         message: '文件正在后台下载中，请勿离开或刷新本页面',
         duration: 0,
       })
-      const res = await Class.downloadStudentAnnouncementFile(id)
-      // 提取文件名
-      const filename = res.headers['content-disposition'].match(
-        /(?:.*filename\*|filename)=(?:([^'"]*)''|("))([^;]+)\2(?:[;`\n]|$)/,
-      )[3]
-      fileDownload(res.data, decodeURI(filename))
-      notify.close()
+      try {
+        const res = await Class.downloadStudentQuestionnaireReport(id)
+        // 提取文件名
+        const filename = res.headers['content-disposition'].match(
+          /(?:.*filename\*|filename)=(?:([^'"]*)''|("))([^;]+)\2(?:[;`\n]|$)/,
+        )[3]
+        fileDownload(res.data, decodeURI(filename))
+        notify.close()
+      } catch (e) {
+        notify.close()
+      }
     },
   },
   watch: {

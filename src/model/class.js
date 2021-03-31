@@ -350,6 +350,11 @@ class Class {
     const res = await post(`v1/class/questionnaire/${id}`, answer)
     return res
   }
+
+  async downloadStudentQuestionnaireReport(id) {
+    const res = await download(`cms/file/lesson/questionnaire/download/${id}`)
+    return res
+  }
 }
 
 export default new Class()

@@ -29,7 +29,9 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="200">
             <template slot-scope="scope">
-              <!-- <el-button @click.stop="handleEditClick(scope.row.id)" type="primary" plain size="mini">编辑</el-button> -->
+              <el-button @click.stop="handleDownloadReport(scope.row.id)" type="success" plain size="mini"
+                >下载报告</el-button
+              >
               <el-popconfirm
                 title="确定删除该问卷吗？"
                 @onConfirm="handleDeleteClick(scope.row.id)"
@@ -58,6 +60,7 @@
 </template>
 
 <script>
+import fileDownload from 'js-file-download'
 import Class from '@/model/class'
 
 export default {
@@ -120,6 +123,24 @@ export default {
     },
     handleEditQuestionnaire(id) {
       this.$router.push({ path: `/teacher/class/room/questionnaire/edit/${id}` })
+    },
+    async handleDownloadReport(id) {
+      const notify = this.$notify({
+        title: '提示',
+        message: '文件正在后台下载中，请勿离开或刷新本页面',
+        duration: 0,
+      })
+      try {
+        const res = await Class.downloadStudentQuestionnaireReport(id)
+        // 提取文件名
+        const filename = res.headers['content-disposition'].match(
+          /(?:.*filename\*|filename)=(?:([^'"]*)''|("))([^;]+)\2(?:[;`\n]|$)/,
+        )[3]
+        fileDownload(res.data, decodeURI(filename))
+        notify.close()
+      } catch (e) {
+        notify.close()
+      }
     },
     async getClassDetail() {
       const res = await Class.getClassDetail(this.currentClassId)
