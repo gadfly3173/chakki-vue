@@ -345,6 +345,11 @@ class Class {
     })
     return res
   }
+
+  async handStudentQuestionnaire(id, answer) {
+    const res = await post(`v1/class/questionnaire/${id}`, answer)
+    return res
+  }
 }
 
 export default new Class()

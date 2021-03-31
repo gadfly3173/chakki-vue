@@ -5,10 +5,10 @@
       <div class="header">
         <div class="title">{{ className }} - {{ questionnaire.title }}</div>
       </div>
-      <div class="wrapper">
+      <div class="wrapper" v-loading="loading">
         <!-- <el-button @click="test">ces</el-button> -->
-        <div class="questionnaire" v-for="(question, index) in questionnaire.questions" :key="`question-${index}`">
-          <div class="question">
+        <div class="questionnaire">
+          <div class="question" v-for="(question, index) in questionnaire.questions" :key="`question-${index}`">
             <div class="order">{{ index + 1 }}.</div>
             <div class="question-item">
               <div class="question-title">{{ question.title }}</div>
@@ -22,14 +22,14 @@
                 :autosize="{ minRows: 2 }"
                 v-model="answer[index].answer"
                 placeholder="请在此处输入答案"
-                :maxlength="60"
+                :maxlength="255"
                 show-word-limit
               ></el-input>
               <!-- 单选 -->
               <div class="question-options" v-if="question.limit_max === 1 && question.type === 2">
                 <el-radio-group v-model="answer[index].single_option_id" size="medium">
                   <div class="option" v-for="(option, order) in question.options" :key="`option-${index}-${order}`">
-                    <el-radio :label="order" border>选项{{ order + 1 }}. {{ option.title }}</el-radio>
+                    <el-radio :label="option.id" border>选项{{ order + 1 }}. {{ option.title }}</el-radio>
                   </div>
                 </el-radio-group>
               </div>
@@ -37,12 +37,13 @@
               <div class="question-options" v-if="question.limit_max > 1 && question.type === 2">
                 <el-checkbox-group v-model="answer[index].multi_option_id" :max="question.limit_max" size="medium">
                   <div class="option" v-for="(option, order) in question.options" :key="`option-${index}-${order}`">
-                    <el-checkbox :label="order" border>选项{{ order + 1 }}. {{ option.title }}</el-checkbox>
+                    <el-checkbox :label="option.id" border>选项{{ order + 1 }}. {{ option.title }}</el-checkbox>
                   </div>
                 </el-checkbox-group>
               </div>
             </div>
           </div>
+          <el-button class="confirm-button" type="primary" @click="handleHandQuestionnaire">提交回答</el-button>
         </div>
       </div>
     </div>
@@ -109,8 +110,36 @@ export default {
     sortOrderAsc(a, b) {
       return a.order - b.order
     },
-    handleHandQuestionnaire(id) {
-      this.$router.push({ path: `/class/room/questionnaire/hand/${id}` })
+    async handleHandQuestionnaire() {
+      try {
+        for (const [index, question] of this.questionnaire.questions.entries()) {
+          if (question.type === 1) {
+            if (this.answer[index].answer.trim().length === 0) {
+              return this.$message.error(`第${index + 1}题不得为空`)
+            }
+          }
+          if (question.limit_max === 1 && question.type === 2) {
+            if (this.answer[index].single_option_id === null) {
+              return this.$message.error(`第${index + 1}题不得为空`)
+            }
+          }
+          if (question.limit_max > 1 && question.type === 2) {
+            if (this.answer[index].multi_option_id.length === 0) {
+              return this.$message.error(`第${index + 1}题不得为空`)
+            }
+          }
+        }
+        this.loading = true
+        const res = await Class.handStudentQuestionnaire(this.$route.params.id, this.answer)
+        if (res.code < window.MAX_SUCCESS_CODE) {
+          this.$message.success(res.message)
+        } else {
+          this.$message.error(res.message)
+        }
+        this.loading = false
+      } catch (e) {
+        this.loading = false
+      }
     },
     async getClassDetail() {
       const res = await Class.getStudentClassDetail(this.currentClassId)
@@ -187,6 +216,9 @@ export default {
             }
           }
         }
+      }
+      .confirm-button {
+        margin: 20px 60px;
       }
     }
   }
