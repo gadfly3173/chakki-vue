@@ -155,6 +155,8 @@ _axios.interceptors.response.use(
           cache.url = url
           const refreshResult = await _axios('cms/user/refresh')
           saveAccessToken(refreshResult.access_token)
+          // 保存的config里的url已经包含了前缀，因此去除baseURL中的/api
+          res.config.baseURL = res.config.baseURL.substr(0, res.config.baseURL.length - 4)
           // 将上次失败请求重发
           const result = await _axios(res.config)
           return resolve(result)
