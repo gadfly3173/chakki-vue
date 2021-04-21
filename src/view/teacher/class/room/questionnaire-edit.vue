@@ -312,12 +312,10 @@ export default {
 .flip-list-move {
   transition: transform 0.5s;
 }
-.flip-list-enter-active,
-.flip-list-leave-active {
+.flip-list-enter-active {
   transition: opacity 0.5s;
 }
-.flip-list-enter,
-.flip-list-leave-to {
+.flip-list-enter {
   opacity: 0;
 }
 .no-move {
