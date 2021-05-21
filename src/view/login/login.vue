@@ -128,6 +128,7 @@ export default {
 .login {
   width: 100%;
   height: 100%;
+  background: #1b2c5f url('../../assets/image/login/login-ba.png') no-repeat center;
   background: #1b2c5f url('../../assets/image/login/login-ba.jpg') no-repeat center;
   background-size: cover;
 
