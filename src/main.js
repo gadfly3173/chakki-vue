@@ -33,9 +33,9 @@ app.use(LinNotify, {
 })
 
 // base 组件注册
-app.component('l-icon', LIcon)
-app.component('sticky-top', StickyTop)
-app.component('source-code', SourceCode)
+app.component('LIcon', LIcon)
+app.component('StickyTop', StickyTop)
+app.component('SourceCode', SourceCode)
 
 app.config.globalProperties.$filters = filters
 

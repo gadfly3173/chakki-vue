@@ -14,7 +14,7 @@
       </el-table-column>
     </el-table>
     <!-- 分组信息 -->
-    <el-dialog title="分组信息" :append-to-body="true" v-model="dialogFormVisible" :before-close="handleClose">
+    <!-- <el-dialog title="分组信息" :append-to-body="true" v-model="dialogFormVisible" :before-close="handleClose">
       <div style="margin-top:-25px;">
         <el-form
           ref="form"
@@ -40,15 +40,16 @@
           <el-button @click="resetForm">重 置</el-button>
         </div>
       </template>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGroupList, useEditGroup } from './use-group'
 
-export default {
+export default defineComponent({
   setup(props, ctx) {
     const router = useRouter()
     /**
@@ -75,7 +76,7 @@ export default {
     /**
      * 前往修改分组权限页
      */
-    const goToGroupEditPage = groupId => {
+    const goToGroupEditPage = (groupId: number) => {
       id.value = groupId
       router.push({ path: '/admin/group/edit', query: { id: groupId } })
     }
@@ -97,7 +98,7 @@ export default {
       dialogFormVisible,
     }
   },
-}
+})
 </script>
 
 <style lang="scss" scoped>

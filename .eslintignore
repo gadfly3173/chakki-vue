@@ -2,6 +2,6 @@
 /public/
 /dist/
 /script/.cache
-/*.js
+/*.config.js
 /node_modules/
 /tests/unit/LIcon.test.js
